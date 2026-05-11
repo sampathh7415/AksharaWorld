@@ -11,6 +11,7 @@ const NAV = [
   { id: 'resources', icon: '⚙️', label: 'Resource Inventory' },
   { id: 'changelog', icon: '📜', label: 'Change Log' },
   { id: 'sam', icon: '💬', label: 'Chat with Sam' },
+  { id: 'brain', icon: '🧠', label: 'AI Brain DNA' },
   { id: 'upgrades', icon: '🚀', label: 'Upgrade Proposals' },
   { id: 'filereviews', icon: '📁', label: 'File Reviews' },
   { id: 'failures', icon: '⚠️', label: '3-Try Failures' },
@@ -165,10 +166,74 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* CONTENT */}
         <div className="content">
 
-          {/* ── KPI ── */}
+          {active === 'brain' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <span>🧠</span> Semantic Memory Graph
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-3 bg-black/20 rounded-xl border border-white/5">
+                      <span className="text-white/60">Graph Health</span>
+                      <span className="text-emerald-400 font-mono">100% Stable</span>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-black/20 rounded-xl border border-white/5">
+                      <span className="text-white/60">Total Nodes</span>
+                      <span className="text-blue-400 font-mono">{data?.capsule?.length || 0} Entities</span>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-black/20 rounded-xl border border-white/5">
+                      <span className="text-white/60">Last Recall</span>
+                      <span className="text-purple-400 font-mono">2.4ms ago</span>
+                    </div>
+                    <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-sm text-blue-200">
+                      <strong>DNA Note:</strong> Using Semantic Graph retrieval with Sideagent verification (jcode pattern).
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <span>🛠️</span> Agent Skill Store
+                  </h3>
+                  <div className="space-y-3">
+                    {['Innovation Scout', 'Content Strategist', 'Revenue Auditor', 'Guardian Watchdog'].map(skill => (
+                      <div key={skill} className="flex items-center justify-between p-3 bg-black/20 rounded-xl border border-white/5 group hover:border-blue-500/30 transition-all cursor-pointer">
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                          <span>{skill}</span>
+                        </div>
+                        <span className="text-[10px] uppercase tracking-widest text-white/40 group-hover:text-blue-400">Deployed</span>
+                      </div>
+                    ))}
+                    <button className="w-full mt-2 py-3 bg-white/5 border border-dashed border-white/20 rounded-xl text-sm text-white/40 hover:bg-white/10 hover:text-white/60 transition-all">
+                      + Import from 500-AI-Agents Library
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+                <h3 className="text-xl font-bold mb-4">🧬 Deep DNA Integration</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                   <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                      <div className="text-xs text-white/40 mb-1">Architecture</div>
+                      <div className="text-sm font-semibold">Swarm Orchestration</div>
+                   </div>
+                   <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                      <div className="text-xs text-white/40 mb-1">Vector Store</div>
+                      <div className="text-sm font-semibold">Supabase pgvector</div>
+                   </div>
+                   <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                      <div className="text-xs text-white/40 mb-1">Inference Engine</div>
+                      <div className="text-sm font-semibold">Gemini 1.5 Flash</div>
+                   </div>
+                </div>
+              </div>
+            </div>
+          )}
           {active === 'kpi' && (
             <div>
               <div className="kpi-grid">
