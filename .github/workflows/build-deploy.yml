@@ -1,0 +1,60 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build main dashboard
+        run: |
+          cd dashboard
+          npm ci
+          npm run build
+      
+      - name: Build akshara dashboard
+        run: |
+          cd akshara-world-dashboard
+          npm ci
+          npm run build
+      
+      - name: Run linting
+        run: |
+          cd dashboard && npm run lint || true
+          cd ../akshara-world-dashboard && npm run lint || true
+      
+      - name: Deploy to Cloudflare Pages (Dashboard)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd dashboard
+          npm install -g wrangler
+          wrangler pages deploy out/
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      
+      - name: Deploy to Vercel (Akshara Dashboard)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd akshara-world-dashboard
+          npm install -g vercel
+          vercel deploy --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

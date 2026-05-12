@@ -1,1 +1,42 @@
-node_modules
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Environment files (NEVER commit secrets)
+.env
+.env.local
+.env.*.local
+*.env
+
+# System / OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Internal AI system files (not project code)
+brain/
+conversations/
+annotations/
+implicit/
+browser_recordings/
+installation_id
+*.png
+*.webp
+
+# Sensitive / system
+mcp_config.json

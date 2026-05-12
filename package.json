@@ -1,0 +1,10 @@
+{
+  "name": "akshara-world",
+  "main": "apps/dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "dashboard",
+    "akshara-world-dashboard"
+  ]
+}

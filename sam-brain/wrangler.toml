@@ -1,0 +1,19 @@
+name = "sam-ceo-brain"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+PROJECT_NAME = "Akshara World"
+OWNER_EMAIL = "owner@aksharaworld.in"
+
+# Secrets (set via: wrangler secret put GEMINI_API_KEY)
+# GEMINI_API_KEY
+# TELEGRAM_BOT_TOKEN
+# OWNER_CHAT_ID
+# DRIVE_FOLDER_ID
+# RAZORPAY_KEY_ID
+# RAZORPAY_KEY_SECRET
+
+# CRON: Innovation_Scout runs daily at 6 AM IST (00:30 UTC)
+[triggers]
+crons = ["30 0 * * *"]

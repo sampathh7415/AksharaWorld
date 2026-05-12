@@ -1,0 +1,25 @@
+name: Deploy Dashboards
+on:
+  push:
+    branches: [main, master]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build --workspace=dashboard
+      - run: npm run build --workspace=akshara-world-dashboard
+      - name: Deploy to Cloudflare Pages (Dashboard)
+        run: |
+          cd dashboard
+          npm run build
+          # Add Cloudflare deployment here
+      - name: Deploy to Vercel (Akshara Dashboard)
+        run: |
+          cd akshara-world-dashboard
+          npm run build
+          # Add Vercel deployment here
