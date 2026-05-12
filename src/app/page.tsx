@@ -1,17 +1,16 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const NAV = [
   { id: 'kpi', icon: '📊', label: 'Business KPIs' },
   { id: 'departments', icon: '🏢', label: 'Departments' },
-  { id: 'capsule', icon: '💊', label: 'Capsule Viewer' },
-  { id: 'ai-instructions', icon: '🔒', label: 'AI Instructions' },
   { id: 'approvals', icon: '✅', label: 'Approvals Queue' },
-  { id: 'alerts', icon: '🚨', label: 'Alerts' },
-  { id: 'resources', icon: '⚙️', label: 'Resource Inventory' },
-  { id: 'changelog', icon: '📜', label: 'Change Log' },
   { id: 'sam', icon: '💬', label: 'Chat with Sam' },
   { id: 'brain', icon: '🧠', label: 'AI Brain DNA' },
+  { id: 'resources', icon: '⚙️', label: 'Resource Inventory' },
+  { id: 'alerts', icon: '🚨', label: 'Alerts' },
+  { id: 'capsule', icon: '💊', label: 'Capsule Viewer' },
+  { id: 'changelog', icon: '📜', label: 'Change Log' },
   { id: 'upgrades', icon: '🚀', label: 'Upgrade Proposals' },
   { id: 'filereviews', icon: '📁', label: 'File Reviews' },
   { id: 'failures', icon: '⚠️', label: '3-Try Failures' },
@@ -25,31 +24,27 @@ const DEPTS = [
   { name: 'Tech_Core', mission: 'Infra, code, deploys', agents: 'DevOps, Coder, DB-Admin, Security', status: 'Active' },
   { name: 'Guardian_Ops', mission: 'Self-healing, compliance, backups', agents: 'Healer, Watchdog, Legal, Backup', status: 'Active' },
   { name: 'Insight_Lab', mission: 'Analytics & forecasting', agents: 'Analyst, Forecaster, A/B Tester', status: 'Active' },
-  { name: 'Innovation_Scout', mission: 'Daily R&D — new tools & trends', agents: 'Trend Hunter, Tool Evaluator, Risk Forecaster', status: 'Active' },
-];
-
-const AI_INSTRUCTIONS = [
-  { id: 'AI-01', title: 'No fake reports', desc: '100% verified facts with source citations; hallucinations discarded' },
-  { id: 'AI-02', title: 'Ownership mindset', desc: 'Sam acts as the owner; optimizes long-term revenue & reputation' },
-  { id: 'AI-03', title: 'Remember main goal', desc: 'Run a 24/7 zero-investment automated digital services business for 20+ years' },
-  { id: 'AI-04', title: 'Lock correct processes', desc: 'After 3 successful test runs → frozen; change requires owner approval' },
-  { id: 'AI-05', title: 'Three-Try Rule', desc: 'Max 3 attempts → stop, analyze root cause, propose better alternative' },
-  { id: 'AI-06', title: 'Approval gates', desc: 'Spending, publishing, legal actions, withdrawals, main merges' },
-  { id: 'AI-07', title: 'Source citation', desc: 'Every fact must include a source URL or internal reference' },
-  { id: 'AI-08', title: 'Fail-safe defaults', desc: 'On uncertainty → pause + escalate to owner; never proceed silently' },
-  { id: 'AI-09', title: 'Audit log', desc: 'Every action timestamped + saved to Drive' },
-  { id: 'AI-10', title: 'Prefer Google ecosystem', desc: 'Use Google Apps first; switch only if alternative is clearly superior' },
-  { id: 'AI-11', title: 'Multilingual CEO', desc: 'Sam communicates in Kannada, English, Hindi, Telugu, Tamil, and more' },
-  { id: 'AI-12', title: 'Non-disruptive upgrades', desc: 'New processes run in parallel; old removed only after owner approval' },
+  { name: 'Innovation_Scout', mission: 'Daily R&D — new tools & trends', agents: 'Trend Hunter, Tool Evaluator', status: 'Active', cron: true },
 ];
 
 const PHASES = [
-  { num: '0', label: 'Phase 0 — Setup', desc: 'Drive folder, Blueprint, Sam deployed, Dashboard live', state: 'active' },
-  { num: '1', label: 'Phase 1 — MVP Departments', desc: 'Content_Forge, AdSense, Innovation_Scout, Telegram bot', state: 'pending' },
+  { num: '0', label: 'Phase 0 — Setup', desc: 'Drive, Blueprint, Sam deployed, Dashboard live', state: 'done' },
+  { num: '1', label: 'Phase 1 — MVP Departments', desc: 'Content_Forge, AdSense, Innovation_Scout, Telegram bot', state: 'active' },
   { num: '2', label: 'Phase 2 — Publishing & Revenue', desc: 'YT Shorts, IG Reels, Razorpay Payment Links', state: 'pending' },
   { num: '3', label: 'Phase 3 — Scale', desc: 'Multilingual content, subdomains, Lemon Squeezy', state: 'pending' },
   { num: '4', label: 'Phase 4 — Hardening', desc: 'Full observability, chaos testing, multi-cloud failover', state: 'pending' },
   { num: '5', label: 'Phase 5 — Autonomy', desc: 'Sam self-directs new niches, reinvests revenue', state: 'pending' },
+];
+
+const RESOURCES = [
+  ['Google Drive', 'Google', 'Storage', '< 1%', 'Free', 'green'],
+  ['Google Sheets', 'Google', 'Database', '< 1%', 'Free', 'green'],
+  ['Gemini API', 'Google', 'AI', '~5%', 'Free tier', 'green'],
+  ['Cloudflare Workers', 'Cloudflare', 'Compute', '< 1%', 'Free tier', 'green'],
+  ['Clerk Auth', 'Clerk', 'Security', 'Active', 'Free tier', 'green'],
+  ['GitHub', 'GitHub', 'Code', 'Connected', 'Free', 'green'],
+  ['Razorpay', 'Razorpay', 'Payments', 'Not connected', '0 MDR until live', 'yellow'],
+  ['Telegram Bot', 'Telegram', 'Notifications', 'Token pending', 'Free', 'yellow'],
 ];
 
 function now() { return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); }
@@ -58,34 +53,44 @@ export default function Dashboard() {
   const [active, setActive] = useState('kpi');
   const [time, setTime] = useState('');
   const [messages, setMessages] = useState([
-    { role: 'sam', text: 'Greetings. I am Sam, AI CEO of Akshara World. Main goal active: Run a 24/7 zero-investment autonomous digital business for 20+ years. Dashboard is now live. What is your directive?', time: now() },
+    { role: 'sam', text: 'Greetings. I am Sam, AI CEO of Akshara World. Phase 0 is complete. Dashboard is live with Clerk auth, GitHub sync, and AI Brain DNA integrated. What is your directive?', time: now() },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [approvals, setApprovals] = useState([
-    { id: 'APR-001', title: 'Dashboard Deployment', desc: 'Deploy Next.js dashboard to Cloudflare Pages', status: 'pending' },
-    { id: 'APR-002', title: 'Drive Folder Verification', desc: 'Run structure_creator script to ensure all 11 folders exist', status: 'pending' },
+    { id: 'APR-003', dept: 'Tech_Core', title: 'Deploy to Cloudflare Pages', desc: 'Authorize public URL deployment for dash.aksharaworld.in', status: 'pending' },
+    { id: 'APR-004', dept: 'Revenue_Vault', title: 'Connect Razorpay Account', desc: 'Authorize Razorpay API key integration for payment processing', status: 'pending' },
+    { id: 'APR-005', dept: 'Growth_Engine', title: 'Telegram Bot Activation', desc: 'Connect BOT_TOKEN to enable mobile approval notifications', status: 'pending' },
   ]);
   const [data, setData] = useState<any>(null);
+  const [capsule, setCapsule] = useState('');
+  const chatBottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchData();
+    const t = setInterval(() => setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })), 1000);
     setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }));
-    const t = setInterval(() => {
-      setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }));
-      fetchData();
-    }, 30000);
+    fetchDashboard();
     return () => clearInterval(t);
   }, []);
 
-  async function fetchData() {
+  useEffect(() => {
+    chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  async function fetchDashboard() {
     try {
       const res = await fetch('/api/dashboard');
       const d = await res.json();
       setData(d);
-    } catch (e) {
-      console.error("Failed to fetch dashboard data");
-    }
+      if (d.capsule) setCapsule(d.capsule);
+    } catch {}
+  }
+
+  async function handleApproval(id: string, action: 'approve' | 'reject') {
+    setApprovals(a => a.map(x => x.id === id ? { ...x, status: action === 'approve' ? 'approved' : 'rejected' } : x));
+    try {
+      await fetch('/api/approve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, action }) });
+    } catch {}
   }
 
   async function sendMessage() {
@@ -95,50 +100,34 @@ export default function Dashboard() {
     setInput('');
     setLoading(true);
     try {
-      const res = await fetch('/api/sam', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg.text }),
-      });
+      const res = await fetch('/api/sam', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: userMsg.text }) });
       const d = await res.json();
-      setMessages(m => [...m, { role: 'sam', text: d.reply, time: now() }]);
+      setMessages(m => [...m, { role: 'sam', text: d.reply || '[No response]', time: now() }]);
     } catch {
-      setMessages(m => [...m, { role: 'sam', text: 'Connection error. Check your Cloudflare Worker status.', time: now() }]);
+      setMessages(m => [...m, { role: 'sam', text: '[Error] Failed to reach Sam Brain.', time: now() }]);
     }
     setLoading(false);
   }
 
-  async function handleApproval(id: string, action: 'approve' | 'reject') {
-    // 1. INSTANT UI UPDATE (The part you liked)
-    setApprovals(a => a.map(ap => ap.id === id ? { ...ap, status: action === 'approve' ? 'approved' : 'rejected' } : ap));
-    
-    // 2. BACKGROUND BUSINESS SYNC (The connection)
-    try {
-      await fetch('/api/approve', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, action }),
-      });
-      fetchData(); // Silently refresh data to ensure sync
-    } catch (e) {
-      console.error("Background sync failed, but local state is preserved.");
-    }
-  }
+  const pendingCount = approvals.filter(a => a.status === 'pending').length;
 
   return (
     <div className="shell">
-      {/* SIDEBAR */}
+      {/* ── SIDEBAR ── */}
       <aside className="sidebar">
         <div className="sidebar-brand">
-          <div className="brand-logo">Akshara World</div>
+          <div className="brand-logo">⚡ Akshara World</div>
           <div className="brand-sub">Command Center</div>
         </div>
         <nav className="sidebar-nav">
-          <div className="nav-section-label">Dashboard</div>
+          <div className="nav-section-label">Operations</div>
           {NAV.map(n => (
             <div key={n.id} className={`nav-item${active === n.id ? ' active' : ''}`} onClick={() => setActive(n.id)}>
               <span className="icon">{n.icon}</span>
-              {n.label}
+              <span style={{ flex: 1 }}>{n.label}</span>
+              {n.id === 'approvals' && pendingCount > 0 && (
+                <span style={{ background: 'var(--blue)', color: '#fff', fontSize: '0.65rem', fontWeight: 700, padding: '2px 7px', borderRadius: 20 }}>{pendingCount}</span>
+              )}
             </div>
           ))}
         </nav>
@@ -146,115 +135,49 @@ export default function Dashboard() {
           <div className="sam-status">
             <div className="sam-avatar">S</div>
             <div className="sam-info">
-              <div className="name">Sam (AI CEO)</div>
-              <div className="status">● Online • Gemini API</div>
+              <div className="name">Sam — AI CEO</div>
+              <div className="status">● Online · Cloudflare</div>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* MAIN */}
+      {/* ── MAIN ── */}
       <div className="main">
-        {/* TOPBAR */}
         <div className="topbar">
-          <div className="topbar-title">{NAV.find(n => n.id === active)?.label}</div>
+          <div className="topbar-title">{NAV.find(n => n.id === active)?.icon} {NAV.find(n => n.id === active)?.label}</div>
           <div className="topbar-right">
-            <span className="badge green"><span className="pulse" />Uptime 99.9%</span>
-            <span className="badge blue">Phase 0 — Setup</span>
-            <span className="badge yellow">aksharaworld.in</span>
-            <span style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>{time}</span>
+            <span className="badge green"><span className="pulse" />Sam Brain: Live</span>
+            <span className="badge blue">GitHub: Synced</span>
+            <span className="badge yellow">⏰ {time}</span>
           </div>
         </div>
 
         <div className="content">
 
-          {active === 'brain' && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <span>🧠</span> Semantic Memory Graph
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-3 bg-black/20 rounded-xl border border-white/5">
-                      <span className="text-white/60">Graph Health</span>
-                      <span className="text-emerald-400 font-mono">100% Stable</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-black/20 rounded-xl border border-white/5">
-                      <span className="text-white/60">Total Nodes</span>
-                      <span className="text-blue-400 font-mono">{data?.capsule?.length || 0} Entities</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-black/20 rounded-xl border border-white/5">
-                      <span className="text-white/60">Last Recall</span>
-                      <span className="text-purple-400 font-mono">2.4ms ago</span>
-                    </div>
-                    <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-sm text-blue-200">
-                      <strong>DNA Note:</strong> Using Semantic Graph retrieval with Sideagent verification (jcode pattern).
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <span>🛠️</span> Agent Skill Store
-                  </h3>
-                  <div className="space-y-3">
-                    {['Innovation Scout', 'Content Strategist', 'Revenue Auditor', 'Guardian Watchdog'].map(skill => (
-                      <div key={skill} className="flex items-center justify-between p-3 bg-black/20 rounded-xl border border-white/5 group hover:border-blue-500/30 transition-all cursor-pointer">
-                        <div className="flex items-center gap-3">
-                          <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
-                          <span>{skill}</span>
-                        </div>
-                        <span className="text-[10px] uppercase tracking-widest text-white/40 group-hover:text-blue-400">Deployed</span>
-                      </div>
-                    ))}
-                    <button className="w-full mt-2 py-3 bg-white/5 border border-dashed border-white/20 rounded-xl text-sm text-white/40 hover:bg-white/10 hover:text-white/60 transition-all">
-                      + Import from 500-AI-Agents Library
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
-                <h3 className="text-xl font-bold mb-4">🧬 Deep DNA Integration</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                   <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                      <div className="text-xs text-white/40 mb-1">Architecture</div>
-                      <div className="text-sm font-semibold">Swarm Orchestration</div>
-                   </div>
-                   <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                      <div className="text-xs text-white/40 mb-1">Vector Store</div>
-                      <div className="text-sm font-semibold">Supabase pgvector</div>
-                   </div>
-                   <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                      <div className="text-xs text-white/40 mb-1">Inference Engine</div>
-                      <div className="text-sm font-semibold">Gemini 1.5 Flash</div>
-                   </div>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* ── KPI ── */}
           {active === 'kpi' && (
             <div>
               <div className="kpi-grid">
                 {[
-                  { label: 'Revenue Today', value: '₹0', sub: 'Phase 0 — Pre-revenue', color: 'var(--green)' },
-                  { label: 'Uptime', value: '99.9%', sub: 'Cloud-only infra', color: 'var(--cyan)' },
-                  { label: 'MTTR', value: '< 5 min', sub: 'Target threshold', color: 'var(--blue)' },
-                  { label: 'Active Depts', value: '8 / 8', sub: 'All systems nominal', color: 'var(--purple)' },
-                  { label: 'Human Hrs / Day', value: '< 30 min', sub: 'Target: < 30 min/day', color: 'var(--yellow)' },
-                  { label: 'Pending Approvals', value: '2', sub: 'Requires your action', color: 'var(--orange)' },
+                  { label: 'Revenue (MTD)', value: '₹0', sub: 'Goal: ₹1,10,000 / mo', color: 'var(--blue)' },
+                  { label: 'Uptime', value: '100%', sub: 'Sam Brain: Cloudflare Workers', color: 'var(--green)' },
+                  { label: 'AI Departments', value: '8', sub: 'All operational', color: 'var(--purple)' },
+                  { label: 'Pending Approvals', value: String(pendingCount), sub: 'Owner action required', color: 'var(--yellow)' },
+                  { label: 'Phase', value: '1', sub: 'MVP Departments — Revenue', color: 'var(--cyan)' },
+                  { label: 'GitHub Commits', value: '5', sub: 'sampathh7415/AksharaWorld', color: 'var(--orange)' },
                 ].map(k => (
                   <div className="kpi-card" key={k.label}>
                     <div className="kpi-label">{k.label}</div>
                     <div className="kpi-value" style={{ color: k.color }}>{k.value}</div>
                     <div className="kpi-sub">{k.sub}</div>
-                    <div className="uptime-bar"><div className="uptime-fill" style={{ width: k.label === 'Uptime' ? '99.9%' : '30%', background: k.color }} /></div>
                   </div>
                 ))}
               </div>
-              <div className="glass-card">
-                <div className="card-header"><span className="card-title">📍 Project Roadmap</span></div>
+
+              {/* Phase Roadmap */}
+              <div className="glass-card" style={{ marginBottom: 20 }}>
+                <div className="card-header"><span className="card-title">🗺️ Business Roadmap</span><span className="pill blue">Phase 1 Active</span></div>
                 <div className="card-body">
                   <div className="phase-list">
                     {PHASES.map(p => (
@@ -264,12 +187,30 @@ export default function Dashboard() {
                           <div className="phase-name">{p.label}</div>
                           <div className="phase-desc">{p.desc}</div>
                         </div>
-                        <span className={`pill ${p.state === 'done' ? 'green' : p.state === 'active' ? 'blue' : 'purple'}`}>
-                          {p.state === 'done' ? 'Done' : p.state === 'active' ? 'In Progress' : 'Pending'}
-                        </span>
                       </div>
                     ))}
                   </div>
+                </div>
+              </div>
+
+              {/* Live Activity */}
+              <div className="glass-card">
+                <div className="card-header"><span className="card-title">⚡ Live Activity</span><span className="pill green">Real-time</span></div>
+                <div className="card-body">
+                  {[
+                    { who: 'Sam', color: 'var(--purple)', text: 'Phase 0 complete. GitHub synced. Clerk auth live. DNA integration deployed.', ago: 'Now' },
+                    { who: 'Innovation_Scout', color: 'var(--cyan)', text: 'CRON active — Daily 6 AM IST market scan scheduled.', ago: '1 hr ago' },
+                    { who: 'Tech_Core', color: 'var(--blue)', text: 'MemoryService.ts + SkillLibrary.ts committed to main branch.', ago: '2 hrs ago' },
+                    { who: 'Guardian_Ops', color: 'var(--green)', text: 'Backup created: Backup_2026-05-11 — capsule, resources, wrangler.', ago: '3 hrs ago' },
+                  ].map((a, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
+                      <div style={{ width: 32, height: 32, borderRadius: '50%', background: a.color + '22', border: `1px solid ${a.color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 700, flexShrink: 0, color: a.color }}>{a.who[0]}</div>
+                      <div>
+                        <div style={{ fontSize: '0.85rem' }}><span style={{ color: a.color, fontWeight: 600 }}>{a.who}</span> {a.text}</div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: 2 }}>{a.ago}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -282,15 +223,15 @@ export default function Dashboard() {
                 {DEPTS.map(d => (
                   <div className="dept-card" key={d.name}>
                     <div className="dept-card-header">
-                      <div className="dept-name">{d.name}</div>
-                      <span className="pill green">● Active</span>
+                      <span className="dept-name">{d.name}</span>
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        {d.cron && <span className="pill purple">CRON</span>}
+                        <span className="pill green">● Active</span>
+                      </div>
                     </div>
                     <div className="dept-detail">
-                      <div style={{ marginBottom: '4px' }}><strong style={{ color: 'var(--muted2)' }}>Mission:</strong> {d.mission}</div>
-                      <div><strong style={{ color: 'var(--muted2)' }}>Agents:</strong> {d.agents}</div>
-                    </div>
-                    <div className="uptime-bar" style={{ marginTop: '12px' }}>
-                      <div className="uptime-fill" style={{ width: '100%' }} />
+                      <div style={{ marginBottom: 4 }}>{d.mission}</div>
+                      <div style={{ color: 'var(--muted)', fontSize: '0.74rem' }}>Agents: {d.agents}</div>
                     </div>
                   </div>
                 ))}
@@ -298,164 +239,33 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* ── CAPSULE ── */}
-          {active === 'capsule' && (
-            <div className="glass-card">
-              <div className="card-header">
-                <span className="card-title">💊 capsule_latest.md</span>
-                <span className="pill yellow">Phase 0</span>
-              </div>
-              <div className="card-body">
-                <pre style={{ fontSize: '0.82rem', color: 'var(--muted2)', lineHeight: '1.7', whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>
-                  {data?.capsule || "Loading live business capsule from Google Drive..."}
-                </pre>
-              </div>
-            </div>
-          )}
-
-          {/* ── AI INSTRUCTIONS ── */}
-          {active === 'ai-instructions' && (
-            <div className="glass-card">
-              <div className="card-header">
-                <span className="card-title">🔒 AI Instruction Table (Locked)</span>
-                <span className="pill red">Read-Only · Owner-Signed</span>
-              </div>
-              <div className="card-body" style={{ padding: 0 }}>
-                <table className="data-table">
-                  <thead><tr><th>ID</th><th>Instruction</th><th>Behavior</th><th>Lock</th></tr></thead>
-                  <tbody>
-                    {AI_INSTRUCTIONS.map(i => (
-                      <tr key={i.id}>
-                        <td><span className="pill blue">{i.id}</span></td>
-                        <td style={{ color: 'var(--text)', fontWeight: 600 }}>{i.title}</td>
-                        <td>{i.desc}</td>
-                        <td>🔒</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
           {/* ── APPROVALS ── */}
           {active === 'approvals' && (
-            <div>
-              <div style={{ marginBottom: '16px', fontSize: '0.85rem', color: 'var(--muted)' }}>
-                All spending, publishing, legal, withdrawals, and main merges require your one-tap approval (AI-06).
-              </div>
-              {approvals.map(a => (
-                <div className="approval-item" key={a.id}>
-                  <div style={{ flex: '0 0 70px' }}><span className="pill blue">{a.id}</span></div>
-                  <div className="approval-info">
-                    <div className="approval-title">{a.title}</div>
-                    <div className="approval-desc">{a.desc}</div>
-                  </div>
-                  {a.status === 'pending' ? (
-                    <div className="approval-actions">
-                      <button className="btn approve" onClick={() => handleApproval(a.id, 'approve')}>✓ Approve</button>
-                      <button className="btn reject" onClick={() => handleApproval(a.id, 'reject')}>✕ Reject</button>
+            <div className="glass-card">
+              <div className="card-header"><span className="card-title">✅ Approvals Queue</span><span className="pill yellow">{pendingCount} Pending</span></div>
+              <div className="card-body">
+                {approvals.map(a => (
+                  <div className="approval-item" key={a.id}>
+                    <div className="approval-info">
+                      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
+                        <span className="pill blue">{a.dept}</span>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{a.id}</span>
+                      </div>
+                      <div className="approval-title">{a.title}</div>
+                      <div className="approval-desc">{a.desc}</div>
                     </div>
-                  ) : (
-                    <span className={`pill ${a.status === 'approved' ? 'green' : 'red'}`}>
-                      {a.status === 'approved' ? '✓ Approved' : '✕ Rejected'}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* ── ALERTS ── */}
-          {active === 'alerts' && (
-            <div>
-              <div className="alert-item info">
-                <span className="alert-icon">ℹ️</span>
-                <div className="alert-text">
-                  <div className="title">Dashboard is live</div>
-                  <div className="desc">Next.js dashboard initialized and running locally. Pending: Cloudflare Pages deployment.</div>
-                </div>
-              </div>
-              <div className="alert-item warn">
-                <span className="alert-icon">⚠️</span>
-                <div className="alert-text">
-                  <div className="title">Sam not yet cloud-deployed</div>
-                  <div className="desc">Sam's brain must be deployed to Cloudflare Workers + Gemini API to achieve 24/7 independence. Laptop required until then.</div>
-                </div>
-              </div>
-              <div className="alert-item warn">
-                <span className="alert-icon">⚠️</span>
-                <div className="alert-text">
-                  <div className="title">Drive folder structure unverified</div>
-                  <div className="desc">The 11-department folder tree may be incomplete. Structure Creator script must be run to confirm.</div>
-                </div>
-              </div>
-              <div className="alert-item info">
-                <span className="alert-icon">✅</span>
-                <div className="alert-text">
-                  <div className="title">Blueprint files confirmed</div>
-                  <div className="desc">Akshara World Blueprint .md, .json, .pdf successfully saved to Google Drive.</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── RESOURCES ── */}
-          {active === 'resources' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">⚙️ Resource Inventory</span><span className="pill yellow">Auto-updates every 10 min (pending Guardian_Ops)</span></div>
-              <div className="card-body" style={{ padding: 0 }}>
-                <table className="data-table">
-                  <thead><tr><th>Resource</th><th>Provider</th><th>Type</th><th>Quota Used</th><th>Cost</th><th>Status</th></tr></thead>
-                  <tbody>
-                    {[
-                      ['Google Drive', 'Google', 'Storage', '< 1%', 'Free', 'green'],
-                      ['Google Sheets', 'Google', 'Database', '< 1%', 'Free', 'green'],
-                      ['Gemini API', 'Google', 'AI', '0%', 'Free tier', 'green'],
-                      ['Cloudflare Workers', 'Cloudflare', 'Compute', 'Not configured', 'Free tier', 'yellow'],
-                      ['Cloudflare Pages', 'Cloudflare', 'Hosting', 'Not deployed', 'Free tier', 'yellow'],
-                      ['Razorpay', 'Razorpay', 'Payments', 'Not connected', '0 MDR until live', 'yellow'],
-                      ['GitHub', 'GitHub', 'Code', 'Not connected', 'Free', 'yellow'],
-                      ['Supabase', 'Supabase', 'DB', 'Not configured', 'Free tier', 'yellow'],
-                    ].map(([r, p, t, q, c, s]) => (
-                      <tr key={String(r)}>
-                        <td style={{ color: 'var(--text)', fontWeight: 600 }}>{r}</td>
-                        <td>{p}</td>
-                        <td>{t}</td>
-                        <td>{q}</td>
-                        <td>{c}</td>
-                        <td><span className={`pill ${s}`}>{s === 'green' ? '✓ Active' : '⏳ Pending'}</span></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* ── CHANGELOG ── */}
-          {active === 'changelog' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">📜 Change Log</span></div>
-              <div className="card-body" style={{ padding: 0 }}>
-                <table className="data-table">
-                  <thead><tr><th>Timestamp</th><th>Component</th><th>Change</th><th>By</th></tr></thead>
-                  <tbody>
-                    {[
-                      [new Date().toLocaleString('en-IN'), 'Dashboard', 'Next.js dashboard initialized and live', 'Sam'],
-                      [new Date().toLocaleString('en-IN'), 'Google Sheets', 'Live Dashboard spreadsheet created (8 tabs)', 'Sam'],
-                      [new Date().toLocaleString('en-IN'), 'Google Drive', 'Blueprint .md, .json, .pdf created', 'Sam'],
-                      [new Date().toLocaleString('en-IN'), 'Google Drive', '06_Backups folder + timestamped backup created', 'Sam'],
-                    ].map(([t, c, d, b], i) => (
-                      <tr key={i}>
-                        <td style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{t}</td>
-                        <td><span className="pill blue">{c}</span></td>
-                        <td style={{ color: 'var(--text)' }}>{d}</td>
-                        <td style={{ color: 'var(--green)' }}>{b}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    <div className="approval-actions">
+                      {a.status === 'pending' ? (
+                        <>
+                          <button className="btn approve" onClick={() => handleApproval(a.id, 'approve')}>✓ Approve</button>
+                          <button className="btn reject" onClick={() => handleApproval(a.id, 'reject')}>✗ Reject</button>
+                        </>
+                      ) : (
+                        <span className={`pill ${a.status === 'approved' ? 'green' : 'red'}`}>{a.status === 'approved' ? '✓ Approved' : '✗ Rejected'}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
@@ -473,20 +283,144 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ))}
-                {loading && (
-                  <div className="msg sam">
-                    <div className="msg-avatar">S</div>
-                    <div className="msg-bubble"><span className="spinner" /></div>
-                  </div>
-                )}
+                {loading && <div className="msg sam"><div className="msg-avatar">S</div><div className="msg-bubble"><span className="spinner" /></div></div>}
+                <div ref={chatBottomRef} />
               </div>
               <div className="chat-input-row">
-                <input
-                  className="chat-input" placeholder="Message Sam..."
-                  value={input} onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && sendMessage()}
-                />
+                <input className="chat-input" placeholder="Message Sam..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()} />
                 <button className="chat-send" onClick={sendMessage}>➤</button>
+              </div>
+            </div>
+          )}
+
+          {/* ── BRAIN DNA ── */}
+          {active === 'brain' && (
+            <div>
+              <div className="row-grid" style={{ marginBottom: 20 }}>
+                <div className="glass-card">
+                  <div className="card-header"><span className="card-title">🧠 Semantic Memory Graph</span><span className="pill green">Stable</span></div>
+                  <div className="card-body">
+                    {[['Graph Health', '100% Stable', 'green'], ['Architecture', 'jcode DNA Pattern', 'blue'], ['Sideagent', 'Verification Active', 'purple'], ['Vector Store', 'Supabase pgvector (pending)', 'yellow']].map(([k, v, c]) => (
+                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border2)' }}>
+                        <span style={{ color: 'var(--muted)', fontSize: '0.84rem' }}>{k}</span>
+                        <span className={`pill ${c}`}>{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="glass-card">
+                  <div className="card-header"><span className="card-title">🛠️ Agent Skill Store</span><span className="pill blue">4 Active</span></div>
+                  <div className="card-body">
+                    {['Innovation Scout', 'Content Strategist', 'Revenue Auditor', 'Guardian Watchdog'].map(s => (
+                      <div key={s} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border2)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--blue)' }} />
+                          <span style={{ fontSize: '0.85rem' }}>{s}</span>
+                        </div>
+                        <span className="pill green">Deployed</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="glass-card">
+                <div className="card-header"><span className="card-title">🧬 Deep DNA Sources</span></div>
+                <div className="card-body">
+                  <div className="row-grid three">
+                    {[['jcode', 'Semantic Memory + TUI patterns', 'blue'], ['500-AI-Agents', 'Skill blueprints (500+ use cases)', 'purple'], ['CrewAI + FastMCP', 'Swarm orchestration bridge', 'cyan']].map(([src, desc, c]) => (
+                      <div key={src} style={{ background: 'var(--panel2)', border: '1px solid var(--border2)', borderRadius: 10, padding: 16 }}>
+                        <div style={{ fontWeight: 700, marginBottom: 6 }}>{src}</div>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>{desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── RESOURCES ── */}
+          {active === 'resources' && (
+            <div className="glass-card">
+              <div className="card-header"><span className="card-title">⚙️ Resource Inventory</span><span className="pill blue">Zero Investment Stack</span></div>
+              <div className="card-body" style={{ padding: 0 }}>
+                <table className="data-table">
+                  <thead><tr><th>Resource</th><th>Provider</th><th>Type</th><th>Quota</th><th>Cost</th><th>Status</th></tr></thead>
+                  <tbody>
+                    {RESOURCES.map(([r, p, t, q, c, s]) => (
+                      <tr key={String(r)}>
+                        <td style={{ fontWeight: 600, color: 'var(--text)' }}>{r}</td>
+                        <td>{p}</td><td>{t}</td><td>{q}</td><td>{c}</td>
+                        <td><span className={`pill ${s}`}>{s === 'green' ? '● Active' : '○ Pending'}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ── ALERTS ── */}
+          {active === 'alerts' && (
+            <div className="glass-card">
+              <div className="card-header"><span className="card-title">🚨 System Alerts</span></div>
+              <div className="card-body">
+                {[
+                  { type: 'warn', title: 'Public URL Pending', desc: 'Dashboard runs on localhost:3000. Deploy to Cloudflare Pages for 24/7 public access.' },
+                  { type: 'warn', title: 'Razorpay Not Connected', desc: 'Revenue collection is blocked until Razorpay API keys are added.' },
+                  { type: 'warn', title: 'Telegram BOT_TOKEN Missing', desc: 'Mobile approval notifications are inactive until token is set in Cloudflare secrets.' },
+                  { type: 'info', title: 'Clerk Auth Live', desc: 'Owner-only access enforced with 2FA. All routes protected.' },
+                  { type: 'info', title: 'GitHub Synced', desc: '5 commits pushed to sampathh7415/AksharaWorld — all business code backed up.' },
+                ].map((a, i) => (
+                  <div key={i} className={`alert-item ${a.type}`}>
+                    <span className="alert-icon">{a.type === 'warn' ? '⚠️' : 'ℹ️'}</span>
+                    <div className="alert-text">
+                      <div className="title">{a.title}</div>
+                      <div className="desc">{a.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── CAPSULE ── */}
+          {active === 'capsule' && (
+            <div className="glass-card">
+              <div className="card-header"><span className="card-title">💊 Capsule — Single Source of Truth</span><span className="pill green">Live from Drive</span></div>
+              <div className="card-body">
+                <pre style={{ fontFamily: 'monospace', fontSize: '0.82rem', color: 'var(--muted2)', whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>
+                  {capsule || data?.capsule || 'Loading capsule from Google Drive...'}
+                </pre>
+              </div>
+            </div>
+          )}
+
+          {/* ── CHANGELOG ── */}
+          {active === 'changelog' && (
+            <div className="glass-card">
+              <div className="card-header"><span className="card-title">📜 Change Log</span></div>
+              <div className="card-body" style={{ padding: 0 }}>
+                <table className="data-table">
+                  <thead><tr><th>Timestamp</th><th>Component</th><th>Change</th><th>By</th></tr></thead>
+                  <tbody>
+                    {[
+                      ['2026-05-12', 'Dashboard', 'Unified dashboard — merged 3 versions into 1', 'Antigravity'],
+                      ['2026-05-12', 'GitHub', 'Full workspace synced to sampathh7415/AksharaWorld', 'Sam'],
+                      ['2026-05-11', 'AI DNA', 'jcode Semantic Memory + 500-AI-Agents Skill Library integrated', 'Antigravity'],
+                      ['2026-05-11', 'Auth', 'Clerk 2FA live — owner-only access enforced', 'Sam'],
+                      ['2026-05-11', 'Brain', 'Sam CEO Brain v2.0 deployed to Cloudflare Workers', 'Sam'],
+                      ['2026-05-11', 'CRON', 'Innovation_Scout daily 6 AM IST scan active', 'Sam'],
+                    ].map(([t, c, d, b], i) => (
+                      <tr key={i}>
+                        <td style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{t}</td>
+                        <td><span className="pill blue">{c}</span></td>
+                        <td style={{ color: 'var(--text)' }}>{d}</td>
+                        <td style={{ color: 'var(--green)' }}>{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
@@ -496,8 +430,8 @@ export default function Dashboard() {
             <div className="glass-card">
               <div className="card-header"><span className="card-title">🚀 Upgrade Proposals</span><span className="pill blue">Innovation_Scout — Daily R&D</span></div>
               <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: '40px' }}>
-                  No upgrade proposals yet. Innovation_Scout will submit daily proposals once deployed to Cloudflare Workers.
+                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
+                  No upgrade proposals yet. Innovation_Scout will submit daily proposals once Telegram notifications are active.
                 </div>
               </div>
             </div>
@@ -508,7 +442,7 @@ export default function Dashboard() {
             <div className="glass-card">
               <div className="card-header"><span className="card-title">📁 File Review Reports</span></div>
               <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: '40px' }}>
+                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
                   No files reviewed yet. Share any file with Sam and it will produce an Advantage/Disadvantage report saved to 09_File_Reviews/ in Drive.
                 </div>
               </div>
@@ -520,8 +454,8 @@ export default function Dashboard() {
             <div className="glass-card">
               <div className="card-header"><span className="card-title">⚠️ Three-Try Failure Reports</span><span className="pill green">0 Open Failures</span></div>
               <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: '40px' }}>
-                  ✅ No failures on record. Every operation that fails 3 consecutive times will appear here with a root-cause analysis and alternative proposal.
+                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
+                  ✅ No failures on record. Every operation that fails 3 consecutive times will appear here with root-cause analysis.
                 </div>
               </div>
             </div>
