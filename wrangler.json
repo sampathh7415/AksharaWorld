@@ -1,0 +1,22 @@
+{
+  "name": "akshara-dashboard",
+  "type": "javascript",
+  "account_id": "",
+  "workers_dev": true,
+  "routes": [],
+  "build": {
+    "command": "npm run build",
+    "cwd": "."
+  },
+  "env": {
+    "production": {
+      "name": "akshara-dashboard-prod",
+      "routes": [
+        {
+          "pattern": "dash.aksharaworld.in",
+          "zone_name": "aksharaworld.in"
+        }
+      ]
+    }
+  }
+}
