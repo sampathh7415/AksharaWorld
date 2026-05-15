@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../globals.css'
+import '../globals.css'
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn, UserButton } from '@clerk/nextjs'
 
 export default function DashboardLayout({
