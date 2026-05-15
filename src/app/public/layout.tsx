@@ -10,7 +10,12 @@ export default function PublicLayout({
     <html lang="en">
       <head>
         <title>Akshara World — Autonomous Business Hub</title>
-        <meta name="description" content="Akshara World - A 24/7 autonomous business ecosystem managed by Sam AI CEO." />
+        <meta name="description" content="Akshara World - A 24/7 autonomous business ecosystem managed by Sam AI CEO. Explore the future of digital services." />
+        <meta property="og:title" content="Akshara World — Autonomous Business Hub" />
+        <meta property="og:description" content="24/7 Autonomous Digital Services powered by SAM AI CEO." />
+        <meta property="og:image" content="https://aksharaworld.in/og-image.png" />
+        <meta property="og:url" content="https://aksharaworld.in" />
+        <meta name="twitter:card" content="summary_large_image" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9728864343029052" crossOrigin="anonymous"></script>
       </head>
       <body className="bg-[#050505] text-white selection:bg-cyan-500/30">

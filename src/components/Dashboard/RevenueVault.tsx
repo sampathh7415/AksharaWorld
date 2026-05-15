@@ -9,7 +9,7 @@ export const RevenueVault = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/dashboard');
+        const res = await fetch('https://sam-ceo-brain.akshara-sam.workers.dev/api/dashboard');
         const json = await res.json();
         setData(json.metrics);
         setLoading(false);
