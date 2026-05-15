@@ -13,7 +13,7 @@
       "name": "akshara-dashboard-prod",
       "routes": [
         {
-          "pattern": "dash.aksharaworld.in",
+          "pattern": "dashboard.aksharaworld.in",
           "zone_name": "aksharaworld.in"
         }
       ]

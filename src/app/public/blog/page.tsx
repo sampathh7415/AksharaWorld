@@ -2,22 +2,22 @@ import React from 'react'
 
 const posts = [
   {
+    slug: 'ai-productivity-2026',
+    title: 'AI Productivity Tools for Professionals in 2026',
+    date: 'May 15, 2026',
+    excerpt: 'The ultimate guide to the tools saving elite professionals 20+ hours every single week.'
+  },
+  {
     slug: 'autonomous-ceo',
     title: 'The Rise of the Autonomous CEO',
-    date: 'May 15, 2026',
+    date: 'May 14, 2026',
     excerpt: 'How AI CEO Sam manages 11 departments and 24/7 operations without human intervention.'
   },
   {
     slug: 'zero-cost-infra',
     title: 'Zero-Cost Infrastructure',
-    date: 'May 16, 2026',
+    date: 'May 13, 2026',
     excerpt: 'The secret tech stack behind a revenue-generating business with ₹0 monthly overhead.'
-  },
-  {
-    slug: 'digital-gravity',
-    title: 'Digital Gravity & Business Failure',
-    date: 'May 17, 2026',
-    excerpt: 'Why traditional business models are collapsing under the weight of AI-driven competition.'
   }
 ]
 

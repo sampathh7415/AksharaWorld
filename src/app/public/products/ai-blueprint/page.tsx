@@ -1,44 +1,64 @@
 import React from 'react'
 
-export default function AIProductPage() {
+export default function ProductPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-24">
-      <div className="p-1 rounded-3xl bg-gradient-to-r from-cyan-500 to-purple-600 mb-12">
-        <div className="bg-[#050505] rounded-[1.4rem] p-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-black mb-6">
-            AI PRODUCTIVITY <br />
-            <span className="text-cyan-400">BLUEPRINT</span>
-          </h1>
-          <p className="text-xl text-gray-400 mb-10">
-            Master the autonomous workflows used by Akshara World to run a 24/7 digital business with zero human labor.
-          </p>
-          <div className="text-5xl font-bold mb-10">
-            ₹499 <span className="text-sm text-gray-500 line-through">₹2,999</span>
-          </div>
-          <a 
-            href="https://rzp.io/rzp/9O1zMeI" 
-            className="inline-block px-12 py-5 rounded-full bg-cyan-500 text-black font-black text-xl hover:bg-cyan-400 transition-all shadow-[0_0_40px_rgba(34,211,238,0.4)]"
-          >
-            GET INSTANT ACCESS
-          </a>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-100">
+      <div className="max-w-6xl mx-auto px-6 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-tight text-blue-600 bg-blue-50 rounded-full">
+              PHASE 2 REVENUE ACTIVATED
+            </div>
+            <h1 className="text-6xl font-black mb-8 leading-[1.1] tracking-tighter text-slate-900">
+              AI Productivity <br />
+              <span className="text-blue-600">Blueprint v1.0</span>
+            </h1>
+            <p className="text-xl text-slate-500 leading-relaxed mb-10">
+              The exact system used to run Akshara World at zero cost. 
+              Learn how to automate 90% of your business operations using 
+              autonomous AI agents.
+            </p>
+            
+            <div className="space-y-6 mb-12">
+              {[
+                "15+ Automated Agent Workflows",
+                "Zero-Cost Tech Stack Blueprint",
+                "Sam CEO Architecture (Cloudflare Workers)",
+                "Real-time Dashboard Templates"
+              ].map((feature) => (
+                <div key={feature} className="flex items-center gap-4">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-sm">✓</div>
+                  <span className="text-slate-700 font-medium">{feature}</span>
+                </div>
+              ))}
+            </div>
 
-      <div className="grid md:grid-cols-2 gap-12 mt-20">
-        <div>
-          <h2 className="text-2xl font-bold mb-6">What's Inside?</h2>
-          <ul className="space-y-4 text-gray-400">
-            <li className="flex gap-3">✅ <span><strong>The Sam Engine:</strong> How to build your own AI CEO.</span></li>
-            <li className="flex gap-3">✅ <span><strong>Autonomous Depts:</strong> Setting up self-healing workflows.</span></li>
-            <li className="flex gap-3">✅ <span><strong>Zero-Cost Stack:</strong> The exact tools we use for ₹0 overhead.</span></li>
-            <li className="flex gap-3">✅ <span><strong>The Antigravity Loop:</strong> Continuous revenue scaling.</span></li>
-          </ul>
-        </div>
-        <div className="bg-white/5 rounded-3xl p-8 border border-white/10">
-          <h2 className="text-2xl font-bold mb-6">Guaranteed Results</h2>
-          <p className="text-gray-400 leading-relaxed">
-            This isn't just a course. It's the blueprint we used to launch Akshara World. If you can't automate at least 50% of your work within 7 days, we'll refund your ₹499 immediately.
-          </p>
+            <div className="flex items-center gap-8">
+              <a 
+                href="https://rzp.io/rzp/9O1zMeI" 
+                target="_blank"
+                className="px-10 py-5 bg-blue-600 text-white font-black rounded-3xl hover:bg-blue-700 transition-all shadow-2xl shadow-blue-200 text-center"
+              >
+                GET ACCESS NOW — ₹499
+              </a>
+              <div className="text-slate-400 text-sm font-medium">
+                <span className="text-slate-900 font-bold italic">pay_SpWo4cBzuUNOVU</span> <br />
+                Verified Test Payment
+              </div>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="aspect-square rounded-[4rem] bg-gradient-to-br from-blue-600 to-indigo-700 shadow-3xl flex items-center justify-center p-20 transform hover:scale-[1.02] transition-transform">
+              <div className="text-white text-9xl font-black opacity-20">AKSHARA</div>
+              <div className="absolute inset-0 flex items-center justify-center text-center">
+                <div className="space-y-2">
+                  <div className="text-white text-5xl font-black">2026</div>
+                  <div className="text-white/50 font-bold tracking-[0.5em]">EDITION</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
