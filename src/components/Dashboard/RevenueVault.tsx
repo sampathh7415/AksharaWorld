@@ -36,17 +36,17 @@ export const RevenueVault = () => {
                 <Activity className="w-3 h-3" />
                 Live Revenue Vault
             </div>
-            <div className="text-5xl font-black text-white mb-2">₹{data.revenue.total || '0.00'}</div>
+            <div className="text-5xl font-black text-white mb-2">₹{data.revenue?.total || '0.00'}</div>
             <div className="text-xs text-gray-500 font-bold uppercase tracking-widest">Total Verified Revenue</div>
             
             <div className="mt-8 flex items-center gap-6">
                 <div>
-                    <div className="text-xl font-black text-white">₹{data.revenue.today || '1.00'}</div>
+                    <div className="text-xl font-black text-white">₹{data.revenue?.today || '0.00'}</div>
                     <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-tighter">Today</div>
                 </div>
                 <div className="w-px h-8 bg-white/10" />
                 <div>
-                    <div className="text-xl font-black text-white">₹{data.revenue.month || '1.00'}</div>
+                    <div className="text-xl font-black text-white">₹{data.revenue?.month || '0.00'}</div>
                     <div className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter">This Month</div>
                 </div>
             </div>
@@ -58,7 +58,7 @@ export const RevenueVault = () => {
              <div className="space-y-6">
                 <div className="flex justify-between items-end">
                     <div>
-                        <div className="text-2xl font-black text-white">{data.transactions || 2}</div>
+                        <div className="text-2xl font-black text-white">{data.transactions || 0}</div>
                         <div className="text-[10px] text-gray-500 font-bold uppercase">Successful Txns</div>
                     </div>
                     <div className="text-right">
@@ -72,7 +72,7 @@ export const RevenueVault = () => {
                     <div className="h-full bg-emerald-500 w-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                 </div>
                 <div className="flex justify-between items-center text-[10px] font-black text-gray-500 uppercase tracking-tighter">
-                    <span>AOV: ₹{data.aov || '0.50'}</span>
+                    <span>AOV: ₹{data.aov || '0.00'}</span>
                     <span>Churn: 0%</span>
                 </div>
              </div>
