@@ -1,96 +1,59 @@
-function createDashboardSheet() {
-  const FOLDER_ID = '17lcOvG7lVxN7FZvuBGsKYX-vQgr6Dt7q';
-  const folder = DriveApp.getFolderById(FOLDER_ID);
-  
-  // Create Spreadsheet
-  const ss = SpreadsheetApp.create('Akshara World - Live Dashboard');
-  
-  // Define sheets and headers
-  const sheetsConfig = {
-    'Business KPIs': ['Date', 'Uptime (%)', 'MTTR (min)', 'Human Intervention (hrs)', 'Total Revenue (INR)', 'Traffic (Daily)', 'Notes'],
-    'Department Grid': ['Department', 'Status', 'Last Heartbeat', 'Active Tasks', 'Alerts'],
-    'Approvals Queue': ['ID', 'Date', 'Type', 'Description', 'Action Required', 'Status', 'Owner Approval'],
-    'Resource Inventory': ['Resource Name', 'Type', 'Provider', 'Quota Used (%)', 'Cost', 'Status', 'Last Checked'],
-    'Change Log': ['Timestamp', 'Component', 'Change Type', 'Description', 'Rollback Plan'],
-    'Three-Try Failures': ['Date', 'Task', 'Department', 'Error Root Cause', 'Standard Alternative Proposed', 'Status'],
-    'Upgrade Proposals': ['Proposal ID', 'Date', 'New Tool', 'Department', 'Impact', 'Owner Status'],
-    'File Review Reports': ['Date', 'Filename', 'Department', 'Recommendation', 'Action Taken']
-  };
+// AKSHARA WORLD — GOOGLE SHEETS DASHBOARD SYNC (Apps Script)
+// Instructions:
+// 1. Go to Google Sheets -> Create a new sheet "Akshara World - Live Dashboard"
+// 2. Extensions -> Apps Script
+// 3. Paste this code.
+// 4. Run `setupDashboard()` once to create the headers.
+// 5. Deploy -> New Deployment -> Web app -> Execute as: Me, Access: Anyone -> Deploy.
+// 6. Copy the Web App URL and add it to sam-brain wrangler.toml as GOOGLE_SHEETS_WEBHOOK_URL.
 
-  // Setup each sheet
-  let firstSheet = ss.getSheets()[0];
-  let isFirst = true;
-
-  for (const [sheetName, headers] of Object.entries(sheetsConfig)) {
-    let currentSheet;
-    if (isFirst) {
-      currentSheet = firstSheet;
-      currentSheet.setName(sheetName);
-      isFirst = false;
-    } else {
-      currentSheet = ss.insertSheet(sheetName);
-    }
-    
-    // Set headers
-    if (headers.length > 0) {
-      currentSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-      currentSheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-      currentSheet.getRange(1, 1, 1, headers.length).setBackground('#f3f3f3');
-      currentSheet.setFrozenRows(1);
-    }
+function setupDashboard() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. Revenue Log Sheet
+  let revenueSheet = ss.getSheetByName("Revenue_Log");
+  if (!revenueSheet) {
+    revenueSheet = ss.insertSheet("Revenue_Log");
+    revenueSheet.appendRow(["Timestamp", "Payment ID", "Amount (INR)", "Status", "Notes"]);
+    revenueSheet.getRange("A1:E1").setFontWeight("bold").setBackground("#d9ead3");
   }
 
-  // Initial Data
-  const deptSheet = ss.getSheetByName('Department Grid');
-  const depts = [
-    ['Content_Forge', '🟢 Active', new Date(), '0', 'None'],
-    ['Media_Studio', '🟢 Active', new Date(), '0', 'None'],
-    ['Growth_Engine', '🟢 Active', new Date(), '0', 'None'],
-    ['Revenue_Vault', '🟢 Active', new Date(), '0', 'None'],
-    ['Tech_Core', '🟢 Active', new Date(), '0', 'None'],
-    ['Guardian_Ops', '🟢 Active', new Date(), '0', 'None'],
-    ['Insight_Lab', '🟢 Active', new Date(), '0', 'None'],
-    ['Innovation_Scout', '🟢 Active', new Date(), '0', 'None']
-  ];
-  deptSheet.getRange(2, 1, depts.length, 5).setValues(depts);
-
-  // Move the file into the Akshara World folder -> 03_Dashboard
-  const fileId = ss.getId();
-  const file = DriveApp.getFileById(fileId);
-  
-  // Find or create 03_Dashboard folder
-  let dashboardFolder;
-  const folders = folder.getFoldersByName('03_Dashboard');
-  if (folders.hasNext()) {
-    dashboardFolder = folders.next();
-  } else {
-    dashboardFolder = folder.createFolder('03_Dashboard');
-  }
-  
-  dashboardFolder.addFile(file);
-  DriveApp.getRootFolder().removeFile(file); // Remove from root
-
-  // Create link text file
-  const linkFile = dashboardFolder.getFilesByName('google_sheets_link.txt');
-  if (linkFile.hasNext()) {
-    linkFile.next().setContent(ss.getUrl());
-  } else {
-    dashboardFolder.createFile('google_sheets_link.txt', ss.getUrl(), MimeType.PLAIN_TEXT);
+  // 2. AI Action Log Sheet
+  let aiLogSheet = ss.getSheetByName("Sam_Action_Log");
+  if (!aiLogSheet) {
+    aiLogSheet = ss.insertSheet("Sam_Action_Log");
+    aiLogSheet.appendRow(["Timestamp", "Action ID", "Decision", "Details"]);
+    aiLogSheet.getRange("A1:D1").setFontWeight("bold").setBackground("#c9daf8");
   }
 
-  // Ensure owner only
-  const OWNER_EMAIL = Session.getActiveUser().getEmail();
+  // 3. Summary Dashboard Sheet
+  let summarySheet = ss.getSheetByName("Command_Center");
+  if (!summarySheet) {
+    summarySheet = ss.insertSheet("Command_Center", 0);
+    summarySheet.getRange("A1").setValue("AKSHARA WORLD — COMMAND CENTER").setFontSize(16).setFontWeight("bold");
+    summarySheet.getRange("A3").setValue("Total Revenue:");
+    summarySheet.getRange("B3").setFormula('=SUM(Revenue_Log!C:C)');
+    summarySheet.getRange("A4").setValue("Total AI Actions:");
+    summarySheet.getRange("B4").setFormula('=COUNTA(Sam_Action_Log!A:A)-1');
+  }
+}
+
+// Webhook listener for Sam Brain
+function doPost(e) {
   try {
-    file.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
-    file.getEditors().forEach(ed => {
-      if(ed.getEmail() !== OWNER_EMAIL) file.removeEditor(ed);
-    });
-    file.getViewers().forEach(v => {
-      if(v.getEmail() !== OWNER_EMAIL) file.removeViewer(v);
-    });
-  } catch (e) {
-    Logger.log('Permissions error: ' + e);
-  }
+    const data = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  Logger.log('Dashboard Sheet created successfully! Link: ' + ss.getUrl());
+    if (data.type === "revenue") {
+      const sheet = ss.getSheetByName("Revenue_Log");
+      sheet.appendRow([new Date(), data.paymentId, data.amount, data.status, data.notes]);
+    } else if (data.type === "action") {
+      const sheet = ss.getSheetByName("Sam_Action_Log");
+      sheet.appendRow([new Date(), data.actionId, data.decision, data.details]);
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({ status: "success" })).setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: error.toString() })).setMimeType(ContentService.MimeType.JSON);
+  }
 }

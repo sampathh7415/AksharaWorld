@@ -39,15 +39,48 @@ export default {
 
     // ── 3. Dashboard Data ────────────────────────────────────────────────────
     if (url.pathname === '/api/dashboard' && request.method === 'GET') {
-      return json({
-        status: 'online',
-        timestamp: new Date().toISOString(),
-        phase: 'Phase 0 — Setup',
-        departments: 8,
-        revenue: { today: 0, currency: 'INR' },
-        uptime: '99.9%',
-        cost: 0,
-      });
+      try {
+        const auth = btoa(`${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`);
+        const rzpRes = await fetch('https://api.razorpay.com/v1/payments?count=100', {
+          headers: { Authorization: `Basic ${auth}` }
+        });
+        const rzpData = await rzpRes.json();
+        
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000;
+        const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime() / 1000;
+
+        let totalRevenue = 0;
+        let todayRevenue = 0;
+        let monthRevenue = 0;
+
+        (rzpData.items || []).forEach((p) => {
+          if (p.status === 'captured') {
+            const amount = p.amount / 100;
+            totalRevenue += amount;
+            if (p.created_at >= today) todayRevenue += amount;
+            if (p.created_at >= thisMonth) monthRevenue += amount;
+          }
+        });
+
+        return json({
+          metrics: {
+            revenue: {
+              total: totalRevenue.toFixed(2),
+              today: todayRevenue.toFixed(2),
+              month: monthRevenue.toFixed(2),
+              currency: 'INR'
+            },
+            transactions: rzpData.count || 0,
+            aov: rzpData.count ? (totalRevenue / rzpData.count).toFixed(2) : '0.00',
+            phase: 'Phase 1 — Operational MVP (Active)',
+            departments: 8,
+            uptime: '100%'
+          }
+        });
+      } catch (e) {
+        return json({ metrics: { revenue: { total: '0.00', today: '0.00', month: '0.00' }, transactions: 0, aov: '0.00' }, error: e.message });
+      }
     }
 
     // ── 4. Approval Engine ───────────────────────────────────────────────────
