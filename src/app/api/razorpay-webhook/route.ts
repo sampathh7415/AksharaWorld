@@ -6,7 +6,17 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
     const signature = req.headers.get('x-razorpay-signature')
-    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || 'akshara_secret_2026'
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET
+
+    if (!secret) {
+      console.error('⚠️ RAZORPAY_WEBHOOK_SECRET is not configured')
+      return NextResponse.json({ error: 'Webhook secret is not configured' }, { status: 500 })
+    }
+
+    if (!signature) {
+      console.warn('⚠️ Razorpay Webhook Signature is missing')
+      return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
+    }
 
     // Verify Signature
     const expectedSignature = crypto
@@ -15,8 +25,8 @@ export async function POST(req: Request) {
       .digest('hex')
 
     if (signature !== expectedSignature) {
-      console.warn('⚠️ Razorpay Webhook Signature Mismatch (Check secret)')
-      // In production, we should return 400, but for initial setup we might skip strict check
+      console.warn('⚠️ Razorpay Webhook Signature Mismatch')
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
     }
 
     const event = body.event
@@ -37,8 +47,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ received: true })
-  } catch (error: any) {
-    console.error('Webhook Error:', error.message)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Webhook Error:', errorMessage)
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
