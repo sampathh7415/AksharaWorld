@@ -28,14 +28,14 @@ export async function GET() {
     const links = await paymentLinksRes.json()
 
     // 2. Real Aggregation
-    const totalRevenue = (payments.items || []).reduce((acc: number, p: any) => {
+    const totalRevenue = (payments.items || []).reduce((acc: number, p: { status: string; amount: number }) => {
       return p.status === 'captured' ? acc + (p.amount / 100) : acc
     }, 0)
 
     const metrics = {
       revenue: totalRevenue,
       transactions: payments.count || 0,
-      activeLinks: (links.items || []).filter((l: any) => l.status === 'active').length,
+      activeLinks: (links.items || []).filter((l: { status: string }) => l.status === 'active').length,
       status: 'Live'
     }
 
@@ -46,9 +46,10 @@ export async function GET() {
       systemHealth: 'Optimal',
       timestamp: new Date().toISOString()
     })
-  } catch (error: any) {
-    console.error('Data API Error:', error)
-    await sendTelegramAlert(`🚨 <b>Guardian_Ops Alert</b>\nData API Failure: ${error.message}`)
+  } catch (error) {
+    const err = error as Error;
+    console.error('Data API Error:', err)
+    await sendTelegramAlert(`🚨 <b>Guardian_Ops Alert</b>\nData API Failure: ${err.message}`)
     return NextResponse.json({ error: 'Failed to aggregate live data' }, { status: 500 })
   }
 }
