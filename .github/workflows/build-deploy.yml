@@ -25,25 +25,17 @@ jobs:
       
       - name: Build main dashboard
         run: |
-          cd dashboard
-          npm ci --legacy-peer-deps
-          npm run build
-      
-      - name: Build akshara dashboard
-        run: |
-          cd akshara-world-dashboard
           npm ci --legacy-peer-deps
           npm run build
       
       - name: Run linting
         run: |
-          cd dashboard && npm run lint || true
-          cd ../akshara-world-dashboard && npm run lint || true
+          npm run lint || true
       
       - name: Deploy to Cloudflare Pages (Dashboard)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          cd dashboard
+          cd .
           npm install -g wrangler
           wrangler pages deploy out/
         env:
@@ -53,7 +45,7 @@ jobs:
       - name: Deploy to Vercel (Akshara Dashboard)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          cd akshara-world-dashboard
+          cd .
           npm install -g vercel
           vercel deploy --prod
         env:
