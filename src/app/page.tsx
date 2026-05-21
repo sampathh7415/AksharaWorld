@@ -1,4 +1,5 @@
 'use client';
+export const runtime = 'edge';
 import { useState, useEffect, useRef } from 'react';
 import { resilientFetch } from '../lib/resilience';
 
@@ -68,13 +69,14 @@ export default function Dashboard() {
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const t = setInterval(() => setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })), 1000);
-    setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }));
     fetchDashboard();
+    const t = setInterval(() => setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })), 1000);
+
     return () => clearInterval(t);
   }, []);
 
   useEffect(() => {
+    fetchDashboard();
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 

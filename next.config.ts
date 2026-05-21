@@ -2,16 +2,17 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  webpack: (config) => {
-    config.cache = false;
-    return config;
-  },
+  serverExternalPackages: ['fs', 'crypto'],
+  webpack: (config, { isServer, nextRuntime }) => {
+    if (isServer && nextRuntime === 'edge') {
+        config.resolve.fallback = {
+            ...config.resolve.fallback,
+            fs: false,
+            crypto: false,
+        }
+    }
+    return config
+  }
 };
 
 export default nextConfig;

@@ -1,5 +1,5 @@
 export default {
-  async fetch(request, env) {
+  async fetch(request: any, env: any) {
     const url = new URL(request.url);
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
@@ -25,7 +25,7 @@ export default {
         });
         const rzpData = await rzpRes.json();
         
-        const totalRevenue = (rzpData.items || []).reduce((acc, p) => {
+        const totalRevenue = (rzpData.items || []).reduce((acc: any, p: any) => {
           return p.status === 'captured' ? acc + (p.amount / 100) : acc
         }, 0);
 
@@ -48,7 +48,7 @@ export default {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       } catch (err) {
-        return new Response(JSON.stringify({ error: err.message }), {
+        return new Response(JSON.stringify({ error: (err as any).message }), {
           status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
