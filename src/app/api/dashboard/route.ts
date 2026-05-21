@@ -8,6 +8,8 @@ interface RazorpayPayment {
   created_at: number;
 }
 
+export const runtime = 'edge';
+
 export async function GET() {
   const result: any = { timestamp: new Date().toISOString() };
 
