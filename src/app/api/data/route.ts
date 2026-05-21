@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { sendTelegramAlert } from '@/lib/telegram'
+import { sendTelegramAlert } from '../../../lib/telegram'
 
 export const dynamic = 'force-dynamic'
 

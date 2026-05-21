@@ -107,8 +107,20 @@ export default {
       // Log payment events
       console.log(`[Razorpay] Event: ${event}`, JSON.stringify(payload));
       if (event === 'payment.captured') {
-        const amount = payload.payload?.payment?.entity?.amount / 100;
+        const paymentEntity = payload.payload?.payment?.entity;
+        const amount = paymentEntity ? paymentEntity.amount / 100 : 0;
+        const paymentId = paymentEntity ? paymentEntity.id : 'unknown';
+        const description = paymentEntity ? paymentEntity.description : 'Razorpay Direct';
         await notifyTelegram(`💰 Payment Received: ₹${amount}`, env);
+        
+        // Sync with Google Sheets Apps Script
+        await syncToGoogleSheets({
+          type: 'revenue',
+          paymentId: paymentId,
+          amount: amount,
+          status: 'captured',
+          notes: description
+        }, env);
       }
       return json({ received: true });
     }
@@ -140,6 +152,15 @@ async function executeApproval(actionId, decision, context, env) {
 
   if (decision !== 'approve') {
     await notifyTelegram(`❌ Action ${actionId} rejected by owner.`, env);
+    
+    // Sync rejection with Google Sheets Apps Script
+    await syncToGoogleSheets({
+      type: 'action',
+      actionId: actionId,
+      decision: decision,
+      details: 'Action rejected by owner.'
+    }, env);
+    
     return { ...log, message: 'Action rejected. No changes made.' };
   }
 
@@ -159,6 +180,15 @@ async function executeApproval(actionId, decision, context, env) {
   }
 
   await notifyTelegram(`✅ Action ${actionId} APPROVED and executed by Sam.`, env);
+  
+  // Sync execution with Google Sheets Apps Script
+  await syncToGoogleSheets({
+    type: 'action',
+    actionId: actionId,
+    decision: decision,
+    details: log.message
+  }, env);
+
   return log;
 }
 
@@ -173,5 +203,23 @@ async function notifyTelegram(message, env) {
     });
   } catch (e) {
     console.error('[Telegram] Notify failed:', e.message);
+  }
+}
+
+// ─── GOOGLE SHEETS SYNC SYNCER ───────────────────────────────────────────────
+async function syncToGoogleSheets(data, env) {
+  if (!env.GOOGLE_SHEETS_WEBHOOK_URL) {
+    console.log('[Google Sheets] Webhook URL not configured. Skipping sync.');
+    return;
+  }
+  try {
+    const res = await fetch(env.GOOGLE_SHEETS_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    console.log(`[Google Sheets] Sync status: ${res.status}`);
+  } catch (e) {
+    console.error('[Google Sheets] Sync failed:', e.message);
   }
 }

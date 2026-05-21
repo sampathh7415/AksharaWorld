@@ -39,3 +39,24 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Antigravity/Gemini System Files
+/brain/
+/conversations/
+/browser_recordings/
+/implicit/
+/knowledge/
+/scratch/
+/antigravity-app/
+/node_modules_old_*/
+/mcp_config.json
+/installation_id
+/annotations/
+/html_artifacts/
+*.png
+*.jpg
+*.jpeg
+*.gif
+/docker-compose.yml
+/Dockerfile
+/nginx.conf

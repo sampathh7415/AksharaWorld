@@ -13,6 +13,7 @@ OWNER_EMAIL = "owner@aksharaworld.in"
 # DRIVE_FOLDER_ID
 # RAZORPAY_KEY_ID
 # RAZORPAY_KEY_SECRET
+# GOOGLE_SHEETS_WEBHOOK_URL
 
 # CRON: Innovation_Scout runs daily at 6 AM IST (00:30 UTC)
 [triggers]

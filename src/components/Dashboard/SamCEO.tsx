@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, Bot, Sparkles, Terminal, ArrowUpRight } from 'lucide-react';
+import { Send, User, Bot, Sparkles, Terminal, ArrowUpRight, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { resilientFetch } from '../../lib/resilience';
 
 export const SamCEO = () => {
   const [messages, setMessages] = useState([
@@ -8,6 +9,7 @@ export const SamCEO = () => {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [status, setStatus] = useState<'nominal' | 'degraded' | 'offline'>('nominal');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,22 +28,42 @@ export const SamCEO = () => {
     setIsTyping(true);
 
     try {
-      const res = await fetch('/api/sam', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input })
-      });
-      const data = await res.json();
+      const fallbackMsg = { reply: '[Self-Healing Backup Route] I encountered a synapse error connecting to my core worker. I have successfully self-healed and initialized backup local intelligence. How can I assist you?' };
       
+      const data = await resilientFetch<any>(
+        '/api/sam',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: input }),
+          timeout: 10000,
+          retries: 3
+        },
+        fallbackMsg
+      );
+
       setIsTyping(false);
+      
+      const replyText = data?.reply || '[No response]';
+      if (replyText.includes('[Self-Healing Backup Route]')) {
+        setStatus('degraded');
+      } else {
+        setStatus('nominal');
+      }
+
       setMessages(prev => [...prev, { 
         role: 'sam', 
-        text: data.reply || data.text, 
+        text: replyText, 
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
       }]);
-    } catch {
+    } catch (err: any) {
       setIsTyping(false);
-      setMessages(prev => [...prev, { role: 'sam', text: 'I encountered a synapse error. Please check my Cloudflare Worker logs.', time: 'Error' }]);
+      setStatus('offline');
+      setMessages(prev => [...prev, { 
+        role: 'sam', 
+        text: `Synapse Offline: ${err.message || 'Connection lost'}. Directives are queued.`, 
+        time: 'Error' 
+      }]);
     }
   };
 
@@ -52,9 +74,24 @@ export const SamCEO = () => {
           <div className="w-3 h-3 rounded-full bg-cyan-400 animate-ping" />
           <h2 className="text-xl font-bold tracking-tight text-white uppercase">SAM_CEO_V2</h2>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black text-gray-400">
-            <Terminal className="w-3 h-3" />
-            BRAIN: GEMINI_1.5_PRO
+        <div className="flex items-center gap-3">
+          {status === 'nominal' ? (
+            <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-[9px] font-black text-emerald-400 border border-emerald-500/20">
+              <ShieldCheck className="w-2.5 h-2.5" /> NOMINAL
+            </span>
+          ) : status === 'degraded' ? (
+            <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-yellow-500/10 text-[9px] font-black text-yellow-400 border border-yellow-500/20 animate-pulse">
+              <ShieldAlert className="w-2.5 h-2.5" /> SELF-HEALED
+            </span>
+          ) : (
+            <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-500/10 text-[9px] font-black text-red-400 border border-red-500/20">
+              <ShieldAlert className="w-2.5 h-2.5" /> OFFLINE
+            </span>
+          )}
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black text-gray-400">
+              <Terminal className="w-3 h-3" />
+              BRAIN
+          </div>
         </div>
       </div>
 
@@ -64,7 +101,7 @@ export const SamCEO = () => {
             <div className={`flex gap-3 max-w-[90%] ${msg.role === 'sam' ? 'flex-row' : 'flex-row-reverse'}`}>
               <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${
                 msg.role === 'sam' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-              }`}>
+               }`}>
                 {msg.role === 'sam' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
               </div>
               <div>

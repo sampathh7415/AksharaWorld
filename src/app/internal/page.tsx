@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { AIInstructions } from '@/components/Dashboard/AIInstructions';
-import { DepartmentMatrix } from '@/components/Dashboard/DepartmentMatrix';
-import { SamCEO } from '@/components/Dashboard/SamCEO';
-import { RevenueVault } from '@/components/Dashboard/RevenueVault';
-import { AlertsPanel } from '@/components/Dashboard/AlertsPanel';
-import { TrafficMonitor } from '@/components/Dashboard/TrafficMonitor';
-import { GoogleMerchant } from '@/components/Dashboard/GoogleMerchant';
+import { AIInstructions } from '../../components/Dashboard/AIInstructions';
+import { DepartmentMatrix } from '../../components/Dashboard/DepartmentMatrix';
+import { SamCEO } from '../../components/Dashboard/SamCEO';
+import { RevenueVault } from '../../components/Dashboard/RevenueVault';
+import { AlertsPanel } from '../../components/Dashboard/AlertsPanel';
+import { TrafficMonitor } from '../../components/Dashboard/TrafficMonitor';
+import { GoogleMerchant } from '../../components/Dashboard/GoogleMerchant';
 import { 
   Zap, 
   Activity, 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import crypto from 'crypto'
-import { sendTelegramAlert } from '@/lib/telegram'
+import { sendTelegramAlert } from '../../../lib/telegram'
 
 export async function POST(req: Request) {
   try {

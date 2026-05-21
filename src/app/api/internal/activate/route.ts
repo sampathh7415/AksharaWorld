@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { sendTelegramAlert } from '@/lib/telegram'
-import { runInnovationScan } from '@/lib/scout'
+import { sendTelegramAlert } from '../../../../lib/telegram'
+import { runInnovationScan } from '../../../../lib/scout'
 
 export async function POST(req: Request) {
   try {

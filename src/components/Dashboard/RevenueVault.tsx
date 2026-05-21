@@ -1,20 +1,47 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, CreditCard, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react';
+import { DollarSign, TrendingUp, CreditCard, ArrowUpRight, ArrowDownRight, Activity, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { resilientFetch } from '../../lib/resilience';
 
 export const RevenueVault = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState<'nominal' | 'degraded' | 'offline'>('nominal');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('https://sam-ceo-brain.akshara-sam.workers.dev/api/dashboard');
-        const json = await res.json();
-        setData(json.metrics);
+        const fallback = {
+          revenue: { total: '0.00', today: '0.00', month: '0.00', currency: 'INR' },
+          transactions: 0,
+          aov: '0.00',
+          phase: 'Phase 1 — Operational MVP (Active)',
+          departments: 8,
+          uptime: '100%'
+        };
+
+        const json = await resilientFetch<any>(
+          'https://sam-ceo-brain.akshara-sam.workers.dev/api/dashboard',
+          { timeout: 6000, retries: 2 },
+          { metrics: fallback }
+        );
+
+        if (json && json.metrics) {
+          setData(json.metrics);
+          // Check if data is mock/fallback
+          if (json.metrics.revenue.total === '0.00' && json.metrics.transactions === 0) {
+            setStatus('degraded');
+          } else {
+            setStatus('nominal');
+          }
+        } else {
+          setStatus('offline');
+        }
         setLoading(false);
       } catch (e) {
         console.error('Failed to fetch revenue', e);
+        setStatus('offline');
+        setLoading(false);
       }
     };
     fetchData();
@@ -22,10 +49,23 @@ export const RevenueVault = () => {
     return () => clearInterval(interval);
   }, []);
 
-  if (loading) return <div className="h-64 flex items-center justify-center text-cyan-400">CONNECTING_TO_VAULT...</div>;
+  if (loading) return <div className="h-64 flex items-center justify-center text-cyan-400 font-mono tracking-widest animate-pulse">CONNECTING_TO_VAULT...</div>;
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between px-2">
+        <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Financial Operations</h2>
+        {status === 'nominal' ? (
+          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-[9px] font-black text-emerald-400 border border-emerald-500/20">
+            <ShieldCheck className="w-3 h-3 animate-pulse" /> NOMINAL (SOLID-STATE)
+          </span>
+        ) : (
+          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-500/10 text-[9px] font-black text-yellow-400 border border-yellow-500/20">
+            <ShieldAlert className="w-3 h-3 animate-bounce" /> SELF-HEALING (DEGRADED)
+          </span>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
@@ -36,7 +76,7 @@ export const RevenueVault = () => {
                 <Activity className="w-3 h-3" />
                 Live Revenue Vault
             </div>
-            <div className="text-5xl font-black text-white mb-2">₹{data.revenue?.total || '0.00'}</div>
+            <div className="text-5xl font-black text-white mb-2">₹{data?.revenue?.total || '0.00'}</div>
             <div className="text-xs text-gray-500 font-bold uppercase tracking-widest">Total Verified Revenue</div>
             
             <div className="mt-8 flex items-center gap-6">
