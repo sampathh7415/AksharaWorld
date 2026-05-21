@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   console.log(`[APPROVAL SYSTEM] Processing ${id} - Action: ${action}`);
 
   try {
-    let capsule = fs.readFileSync(capsulePath, 'utf8');
+    let capsule = await fs.promises.readFile(capsulePath, 'utf8');
     
     if (action === 'approve') {
       // Robust Regex to find the line regardless of minor spacing differences
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         capsule = capsule.replace(approvalRegex, `- ✅ ${id} (Approved by Owner - ${new Date().toLocaleString()})`);
         capsule = capsule.replace(inProgressRegex, `- ✅ ${id === 'APR-001' ? 'Deploy dashboard' : 'Complete Drive folder'} (Ready)`);
         
-        fs.writeFileSync(capsulePath, capsule);
+        await fs.promises.writeFile(capsulePath, capsule);
         console.log(`[APPROVAL SYSTEM] Successfully saved to Drive.`);
         return NextResponse.json({ success: true, message: `Approved ${id}` });
       } else {
