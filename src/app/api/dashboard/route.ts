@@ -5,7 +5,7 @@ const SAM_BRAIN_URL = process.env.NEXT_PUBLIC_SAM_BRAIN_URL || 'https://sam-ceo-
 export async function GET() {
   const result: any = { timestamp: new Date().toISOString() };
 
-  // 1. Business DNA (Static for now to prevent Edge Runtime crash)
+  // 1. Business DNA
   result.capsule = 'Akshara World - Autonomous Business Hub. SAM AI CEO version 2.0.';
 
   // 2. Ping Sam Brain for live status
