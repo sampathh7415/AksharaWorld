@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     if (signature !== expectedSignature) {
       console.warn('⚠️ Razorpay Webhook Signature Mismatch (Check secret)')
-      // In production, we should return 400, but for initial setup we might skip strict check
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
     }
 
     const event = body.event
@@ -38,8 +38,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ received: true })
-  } catch (error: any) {
-    console.error('Webhook Error:', error.message)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    console.error('Webhook Error:', errorMessage)
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
