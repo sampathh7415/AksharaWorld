@@ -6,41 +6,22 @@ export class SemanticMemory {
   constructor(env) {
     this.env = env;
     this.memories = new Map(); // In-memory cache for this Worker invocation
-    this.invertedIndex = new Map(); // Inverted index mapping word -> Set of memory IDs
     this.sheetId = env.MEMORY_SHEET_ID;
   }
 
   async store(category, content, context = {}) {
     // Store a memory with metadata
-    const embedding = this.getSimpleEmbedding(content);
-    let magnitudeSq = 0;
-    for (const count of embedding.values()) {
-      magnitudeSq += count * count;
-    }
-    const embeddingMagnitude = Math.sqrt(magnitudeSq);
-
     const memory = {
       id: this.generateId(),
       category, // 'conversation', 'decision', 'capability', 'failure'
       content,
       timestamp: new Date().toISOString(),
       context, // { department, action, owner_decision, etc }
-      embedding, // Phase 1: keyword-based
-      embeddingMagnitude,
+      embedding: this.getSimpleEmbedding(content), // Phase 1: keyword-based
     };
 
     // Cache in memory
     this.memories.set(memory.id, memory);
-
-    // Update inverted index
-    for (const word of embedding.keys()) {
-      let docIds = this.invertedIndex.get(word);
-      if (!docIds) {
-        docIds = new Set();
-        this.invertedIndex.set(word, docIds);
-      }
-      docIds.add(memory.id);
-    }
 
     // Save to Google Sheets
     if (this.sheetId) {
@@ -55,55 +36,13 @@ export class SemanticMemory {
     const { limit = 3, category = null, minScore = 0.3 } = options;
 
     const queryEmbedding = this.getSimpleEmbedding(query);
-
-    // Calculate query magnitude
-    let queryMagSq = 0;
-    for (const count of queryEmbedding.values()) {
-      queryMagSq += count * count;
-    }
-    const queryMagnitude = Math.sqrt(queryMagSq);
-
-    const candidateIds = new Set();
-
-    // Collect candidate IDs from inverted index
-    for (const word of queryEmbedding.keys()) {
-      const docIds = this.invertedIndex.get(word);
-      if (docIds) {
-        for (const id of docIds) {
-          candidateIds.add(id);
-        }
-      }
-    }
-
     const results = [];
 
-    // Evaluate candidates
-    for (const id of candidateIds) {
-      const memory = this.memories.get(id);
-      if (!memory) continue; // Should not happen, but safe check
+    // Search in-memory cache
+    for (const [id, memory] of this.memories.entries()) {
       if (category && memory.category !== category) continue;
 
-      // Faster cosine similarity with precalculated magnitudes
-      let dotProduct = 0;
-      for (const [word, queryCount] of queryEmbedding.entries()) {
-        const memoryCount = memory.embedding.get(word);
-        if (memoryCount) {
-          dotProduct += queryCount * memoryCount;
-        }
-      }
-
-      // Fallback in case magnitude isn't cached (e.g. legacy data)
-      let memMag = memory.embeddingMagnitude;
-      if (memMag === undefined) {
-        let memMagSq = 0;
-        for (const count of memory.embedding.values()) {
-          memMagSq += count * count;
-        }
-        memMag = Math.sqrt(memMagSq);
-      }
-
-      const score = (queryMagnitude === 0 || memMag === 0) ? 0 : (dotProduct / (queryMagnitude * memMag));
-
+      const score = this.cosineSimilarity(queryEmbedding, memory.embedding);
       if (score >= minScore) {
         results.push({ ...memory, relevanceScore: score });
       }
@@ -134,26 +73,23 @@ export class SemanticMemory {
 
   cosineSimilarity(embedding1, embedding2) {
     // Calculate cosine similarity between two embeddings
-    // Used externally or when magnitude is not precalculated
     let dotProduct = 0;
-    let magnitudeSq1 = 0;
-    let magnitudeSq2 = 0;
+    let magnitude1 = 0;
+    let magnitude2 = 0;
 
-    // Only iterate over the smaller embedding to calculate dot product
-    const [smaller, larger] = embedding1.size < embedding2.size ? [embedding1, embedding2] : [embedding2, embedding1];
+    const allWords = new Set([...embedding1.keys(), ...embedding2.keys()]);
 
-    for (const [word, v1] of smaller.entries()) {
-      const v2 = larger.get(word);
-      if (v2) {
-        dotProduct += v1 * v2;
-      }
+    for (const word of allWords) {
+      const v1 = embedding1.get(word) || 0;
+      const v2 = embedding2.get(word) || 0;
+
+      dotProduct += v1 * v2;
+      magnitude1 += v1 * v1;
+      magnitude2 += v2 * v2;
     }
 
-    for (const v1 of embedding1.values()) magnitudeSq1 += v1 * v1;
-    for (const v2 of embedding2.values()) magnitudeSq2 += v2 * v2;
-
-    if (magnitudeSq1 === 0 || magnitudeSq2 === 0) return 0;
-    return dotProduct / (Math.sqrt(magnitudeSq1) * Math.sqrt(magnitudeSq2));
+    if (magnitude1 === 0 || magnitude2 === 0) return 0;
+    return dotProduct / (Math.sqrt(magnitude1) * Math.sqrt(magnitude2));
   }
 
   async saveToSheet(memory) {
