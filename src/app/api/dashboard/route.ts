@@ -2,8 +2,43 @@ import { NextResponse } from 'next/server';
 
 const SAM_BRAIN_URL = process.env.NEXT_PUBLIC_SAM_BRAIN_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';
 
+export interface DashboardResponse {
+  timestamp: string;
+  capsule?: string;
+  samBrain?: {
+    status: string;
+    reason?: string;
+    [key: string]: any;
+  };
+  metrics?: {
+    revenue: {
+      total: string;
+      today: string;
+      month: string;
+      currency: string;
+    };
+    transactions: number;
+    aov: string;
+    phase: string;
+    departments: number;
+    uptime: string;
+    error?: string;
+    traffic: {
+      activeVisitors: number;
+      sessionDuration: string;
+      bounceRate: string;
+      conversionRate: string;
+      channels: {
+        organic: string;
+        social: string;
+        direct: string;
+      };
+    };
+  };
+}
+
 export async function GET() {
-  const result: any = { timestamp: new Date().toISOString() };
+  const result: DashboardResponse = { timestamp: new Date().toISOString() };
 
   // 1. Business DNA (Static for now to prevent Edge Runtime crash)
   result.capsule = 'Akshara World - Autonomous Business Hub. SAM AI CEO version 2.0.';
