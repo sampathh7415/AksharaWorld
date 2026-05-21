@@ -1,0 +1,22 @@
+{
+  "maxDailyApprovals": 2,
+  "prioritizedDepartments": [
+    "Growth_Engine",
+    "Revenue_Vault",
+    "Guardian_Ops"
+  ],
+  "deferredDepartments": [
+    "Innovation_Scout"
+  ],
+  "cronDirectivePolicy": {
+    "maxDirectivesPerRun": 8,
+    "actionableOnly": true,
+    "requireHumanApprovalFor": [
+      "payment",
+      "publish",
+      "delete",
+      "external_send"
+    ]
+  },
+  "notes": "Cap operator approvals at 2/day during 30-day launch. Lower-priority departments still log to SystemLog but skip approve queue unless revenue-linked."
+}
