@@ -1,0 +1,8 @@
+name = "sam-brain-api"
+main = "index.ts"
+compatibility_date = "2024-05-01"
+
+[vars]
+# We'll set these via wrangler secrets later or just use them for now if possible
+RAZORPAY_KEY_ID = "rzp_live_SpWOha5NSAiMqi"
+RAZORPAY_KEY_SECRET = "N9uTJDRPpsbAwMOiUGwCa1Za"

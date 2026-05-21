@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌟 Akshara World – Command Center
 
-## Getting Started
+**The 24/7 Autonomous Digital Business Dashboard**
 
-First, run the development server:
+Akshara World is an enterprise-grade autonomous business platform powered by **Sam (AI CEO)**. This repository contains the unified dashboard for real-time operations, KPI tracking, and department management.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Key Features
+
+- ✅ **Unified Command Center**: Real-time business monitoring and control.
+- ✅ **Sam AI Integration**: Resilient AI CEO connection with automatic Gemini fallback.
+- ✅ **Solid-State Architecture**: 3-retry exponential backoff and circuit breaker patterns.
+- ✅ **Professional Lite Mode**: Sleek, high-performance light interface.
+- ✅ **8 AI Departments**: Tech_Core, Innovation_Scout, Revenue_Vault, Growth_Engine, Content_Forge, Media_Studio, Guardian_Ops, Insight_Lab.
+
+## 📂 Project Structure
+
+```text
+akshara-dashboard/
+├── src/app/          # Next.js 16 Unified Dashboard (Root)
+│   ├── api/          # Consolidated API Layer (Sam, Data, Approvals)
+│   ├── internal/     # Management Dashboard UI
+│   └── public/       # Public-facing routes (Blog, Products)
+├── sam-brain/        # Cloudflare Worker (AI Brain)
+├── docs/             # Technical Documentation & Setup Guides
+├── scripts/          # Automation & Maintenance Scripts
+├── public/           # Static Assets
+└── next.config.ts    # Production Optimization Config
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚡ Quick Start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Install Dependencies**:
+   ```powershell
+   npm install --legacy-peer-deps
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Run Development Server**:
+   ```powershell
+   npm run dev
+   ```
+   Access at: [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+3. **Production Build**:
+   ```powershell
+   npm run build
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+## 📋 Documentation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For detailed guides, please refer to the `docs/` directory:
+- [System Status](docs/SYSTEM_STATUS.md)
+- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
+- [Technical Implementation](docs/TECHNICAL_IMPLEMENTATION.md)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Status**: ✅ Production Ready  
+**AI CEO**: Sam  
+**Version**: 2.0.0 (Consolidated)
