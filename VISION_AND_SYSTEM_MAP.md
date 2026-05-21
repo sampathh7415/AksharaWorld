@@ -1,145 +1,226 @@
-# 🗺️ Akshara World: Vision & Autonomous System Map
+# 🐙 Akshara World: Vision, Octopus Strategy & Autonomous System Map
 
-Welcome to the central corporate manifest and system architecture map of **Akshara World**. This document serves as the single source of truth explaining the overarching business goals, omnichannel software directory, custom operating guidelines, and the phased roadmap toward full automation.
-
----
-
-## 🎯 1. Our Main Goal
-The primary objective of **Akshara World** is to establish, operate, and scale a highly profitable digital business empire with **exactly ₹0 (Zero) recurring capital expenditures** (no hosting fees, no database subscriptions, and no active payroll).
-
-The entire ecosystem is run by a decentralized swarm of specialized AI agents directed by a serverless AI CEO named **Sam**.
+Welcome to the central corporate manifest of **Akshara World**. This document serves as the absolute single source of truth explaining the **Octopus Business Strategy**, the 8 specialized AI departments (tentacles) revolving around our AI CEO **Sam**, individual departmental roadmaps, zero-cost Google products clusters, and the complete Google Drive folder directory map. 
 
 ---
 
-## ⚙️ 2. The Omnichannel Stack: What, Why & Alternatives
+## 🎯 1. The Core Vision & Starting Point
 
-Every component in our tech stack has been specifically selected to satisfy three core criteria: **100% Free Tiers**, **Edge Performance**, and **Scalable Autonomy**.
+The primary objective of **Akshara World** is to operate, scale, and optimize a highly profitable digital business empire with **exactly ₹0 recurring capital expenditures** (no hosting costs, no paid database subscriptions, and no active payroll).
 
-### A. The Core Application Stack
-
-| Software / Tool | Exact Purpose | Key Alternatives | Why It Is the Absolute Best |
-| :--- | :--- | :--- | :--- |
-| **Next.js 15 (App Router)** | Full-stack framework to build and host your Unified Command Center dashboard. | Remix, Astro, Vite | Edge-runtime optimized, compiles beautifully to Cloudflare Pages, and offers native SEO speed benefits with zero cold starts. |
-| **React 19 & Tailwind CSS v4** | Dynamic UI rendering and sleek, high-fidelity dark-mode layout widgets. | React 18, Material UI, Bootstrap | Tailwind CSS v4 is incredibly lightweight with native CSS variables. React 19 provides concurrent rendering suited for dynamic edge pages. |
-| **Cloudflare Pages & Workers** | **Pages:** Hosts the Next.js frontend globally with unlimited bandwidth.<br>**Workers:** Hosts Sam CEO's backend worker brain (`sam-brain/`). | Vercel, Netlify, AWS Lambda | **100% Free.** Cloudflare gives us unlimited bandwidth and 1 million serverless requests/day on a decentralized global edge network. |
-| **Clerk Auth (with 2FA)** | Enterprise-grade secure authentication enforcing owner-only sign-ins for the dashboard. | Auth.js, Supabase Auth, Auth0 | Free up to **10,000 monthly active users** and provides pre-built, secure components requiring zero custom database setup. |
-| **Razorpay** | Processing revenue transactions and feeding real-time captured payment webhooks. | Stripe, Paytm, Paypal | Standard payment gateway in India (UPI, Netbanking, Cards) featuring 0% MDR startup programs for newly registered businesses. |
-| **Google Gemini 2.0 Flash** | Central AI engine driving Sam CEO's autonomous intelligence and decision loop. | OpenAI GPT-4o, Anthropic Claude | 100% free developer tier, lightning-fast response times, and a massive **1-million-token context window** to digest the entire repository. |
+### 🖥️ Start with Dashboard
+Our entire business operations start, sync, and present through our **Unified Command Center Dashboard** (`/internal`). The dashboard serves as our primary control panel:
+*   **For Humans**: Offers real-time observability of transactions, asset libraries, traffic telemetry, and pending authorizations.
+*   **For AI CEO (Sam)**: Acts as the physical synapse where Sam reads department logs, posts operational directives, and queues files for user approval.
 
 ---
 
-### B. The Google "Zero-Cost" Database & Asset Vault
+## 🐙 2. The Octopus Strategy
 
-To maintain our zero-cost commitment, we utilize Google's free-tier office software as our production database and storage layers.
-
-#### 🗃️ Google Sheets API (Zero-Cost Database)
-* **Purpose:** Acts as our primary relational database, storing customer emails, content queues, and system health status.
-* **Why it's best:** Free up to **10 million cells**, acts as a visual interface you can view and edit directly from your phone, and has no database connection pool overhead.
-* **Alternatives rejected:** Supabase Postgres / MongoDB (Free tiers automatically pause or delete files after a short period of inactivity).
-
-#### 🗄️ Google Drive API (Digital Asset Vault)
-* **Purpose:** File vault for storing media assets, generated scripts, blog articles, and system backups.
-* **Why it's best:** **15 GB of 100% free storage** that mounts directly as a virtual drive (`G:\`) on your local PC, bridging AI assets with your desktop files instantly.
-* **Alternatives rejected:** AWS S3 / Cloudflare R2 (Charge per-gigabyte and per read/write API requests, which grows expensive during heavy content generation).
-
----
-
-### C. Omnichannel Traffic & SEO Engines
-
-#### 📈 Google Search Console & Analytics APIs
-* **Purpose:** Feeds live impressions, organic keywords, and visitor telemetry back to the dashboard.
-* **Why it's best:** Standard market-leading telemetry. It enables our `Insight_Lab` and `Content_Forge` departments to read what search terms are trending and automatically write or edit articles to self-heal SEO ranking drops.
-* **Alternatives rejected:** Ahrefs / Plausible Analytics (Require costly monthly subscriptions).
-
-#### 🛍️ Google Merchant Center Product Feed
-* **Purpose:** Dynamically generates a shopping XML feed to index digital products across Google search queries for free.
-* **Why it's best:** Completely automated; requires zero manual entry or advertisement budget.
-
----
-
-### D. Local Staging & Version Control
-
-#### 💻 Ollama
-* **Purpose:** Running high-performance open-source large language models (like Llama 3) locally on your PC.
-* **Why it's best:** **100% private, off-grid (no internet required), and has zero token charges.** Ideal for running local tests before pushing to the cloud.
-* **Alternatives rejected:** Paid local hosting applications.
-
-#### 🚀 GitHub
-* **Purpose:** Version control and continuous deployment (CD).
-* **Why it's best:** Native integration with Cloudflare. **The moment code is pushed to GitHub, Cloudflare automatically builds and deploys it globally.**
-* **Alternatives rejected:** GitLab / Bitbucket (Cloudflare Pages setup is slightly more complex).
-
-#### 📁 Robocopy (Windows Utility)
-* **Purpose:** Fast, multi-threaded folder synchronization between the virtual Google Drive and local SSD staging.
-* **Why it's best:** Built-in, high-speed (`/MT:16`), resilient, and successfully bypasses Google Drive real-time file sync locks.
-
----
-
-## 🛡️ 3. Core Business Rules & Custom Guidelines
-
-Every developer, AI agent, and subagent working on Akshara World must strictly adhere to these core operational guidelines:
-
-### 🥇 Rule 1: The Zero-Cost Standard
-Under no circumstances should any paid or subscription service be integrated. If a feature requires payment, an open-source, self-hosted, or free-tier alternative must be identified and integrated instead.
-
-### 📁 Rule 2: Local SSD Staging Build Protocol
-Doing high-frequency file reads/writes directly in a real-time cloud synced folder (like Google Drive `G:\`) triggers `EPERM` locks and Webpack invalid filesystem write crashes. Developers must use the **Staging Build Pattern**:
-1. Copy changes to the local SSD staging folder: `C:\Users\Lenovo\.gemini\antigravity\scratch\node_modules_build`.
-2. Execute the npm installation and production build in local SSD:
-   ```bash
-   npm run build
-   ```
-3. Sync compiled production outputs back to `G:\My Drive\Antigravity`.
-4. Keep the repository clean by excluding all local developer cache, node modules, and heavy media logs in `.gitignore`.
-
-### ⚡ Rule 3: Webpack Path Alias Bypass
-To guarantee compilation compatibility across local staging folders and global edge runtime servers:
-* **Always use relative paths** (e.g. `../../components` or `../../../lib`) for all page-level and route-level file imports.
-* **Avoid `@/` path aliases** inside files that undergo edge compilations.
-
-### 🛡️ Rule 4: The 3-Try Resilience & Telegram Alerts Protocol
-All remote API requests must run through our custom resilience client (`src/lib/resilience.ts`):
-* If an API fails, it must automatically retry **3 times** using exponential backoff.
-* If a task fails on the 3rd attempt, it must trigger a Telegram alert to you (@Sampathh7) via the Bot API, register under the "3-Try Failures" dashboard, and roll back or fall back gracefully to a cached offline store.
-
-### 👥 Rule 5: Human-in-the-Loop Approval Queue
-While the AI CEO has administrative autonomy to schedule tasks, **critical system operations** (deploying code changes, updating API tokens, or spending budget) **must be held in the Dashboard Approvals Queue** (`approvals` tab) for manual verification and confirmation by you.
-
----
-
-## 🗺️ 4. Phase Roadmap to Complete Autonomy
+In the **Octopus Strategy**, the business operates as a unified organism. **Sam (AI CEO)** is the central head (the brain), and the **8 specialized AI departments** are the tentacles. 
 
 ```mermaid
 graph TD
-    P0[Phase 0: Base Command Center] -->|Completed| P1[Phase 1: Operational MVP]
-    P1 -->|Current| P2[Phase 2: Google Integrations]
-    P2 -->|Next| P3[Phase 3: Chron Loop Swarm]
-    P3 -->|Scale| P4[Phase 4: Observability & Healing]
+    subgraph Central Brain
+        SAM[🧠 SAM: Serverless AI CEO]
+    end
+
+    subgraph Tentacles: The 8 Departments
+        C_Forge[✍️ Content_Forge]
+        M_Studio[🎨 Media_Studio]
+        G_Engine[📣 Growth_Engine]
+        R_Vault[💰 Revenue_Vault]
+        T_Core[💻 Tech_Core]
+        G_Ops[🛡️ Guardian_Ops]
+        I_Lab[📈 Insight_Lab]
+        I_Scout[🔎 Innovation_Scout]
+    end
+
+    SAM <-->|Directs & Audits| C_Forge
+    SAM <-->|Directs & Audits| M_Studio
+    SAM <-->|Directs & Audits| G_Engine
+    SAM <-->|Directs & Audits| R_Vault
+    SAM <-->|Directs & Audits| T_Core
+    SAM <-->|Directs & Audits| G_Ops
+    SAM <-->|Directs & Audits| I_Lab
+    SAM <-->|Directs & Audits| I_Scout
+
+    HIL[👤 Human-in-the-Loop] <-->|Approves / Adjusts| SAM
 ```
 
-### 📍 Phase 0 — Core Architecture (100% Completed)
-- Mount virtual Google Drive staging directory.
-- Scaffold Next.js dashboard UI and console scripts.
-- Integrate Clerk 2FA authorization security.
-- Scaffold `/sam-brain` serverless synapse on Cloudflare Workers.
+### How the Swarm Collaborates:
+*   **Directives Flow Outward**: Sam constantly evaluates business KPIs and assigns micro-tasks to each department.
+*   **Feedback Loops Inward**: Each department runs its scripts, processes files, updates database sheets, and reports results back to Sam.
+*   **Human-in-the-Loop (HIL)**: Critical actions (code releases, budget, major upgrades) are sent to the dashboard's **Approvals Queue** for manual owner verification.
 
-### 📍 Phase 1 — Operational MVP (Current — 65% Completed)
-- Resolve Webpack Google Drive EPERM lockouts via SSD Staging and disable production disk caching.
-- Convert absolute imports to robust, edge-compatible relative imports.
-- Integrate real-time Razorpay payments tracking and webhook endpoints.
-- Configure clean `.gitignore` files to keep repository light and compile times under 1 minute.
-- Set up offline-resilient backup storage and basic Telegram alerting bot.
+---
 
-### 📍 Phase 2 — Omnichannel Google Integrations (Next Preference)
-- Build backend controllers for `googleSheets.ts` (zero-cost database) and `googleDrive.ts` (archival asset storage).
-- Build `googleAnalytics.ts` endpoint to feed live SEO impressions and keyword traffic metrics back to dashboard widgets.
-- Write dynamic XML generators to feed e-commerce digital products to Google Merchant Center for free indexing.
+## 🏢 3. The 8 Departments & Custom Roadmaps
 
-### 📍 Phase 3 — Chron Loop Swarm
-- Implement central Cron scheduler APIs to run automated daily pipelines at **6:00 AM IST** without human intervention.
-- Enable `Content_Forge` (SEO content engine) and `Growth_Engine` (social media publishing queues).
+Every department has a clear roadmap, specialized Google tools, and defined inputs/outputs:
 
-### 📍 Phase 4 — Edge Observability & Self-Healing
-- Build automated script rollback via GitHub API if production edge builds fail.
-- Trigger automatic file recovery during database sheet corruption.
-- Complete system hardening for absolute hands-off, self-sustaining profitability.
+---
+
+### 1. ✍️ Content_Forge (SEO Content Engine)
+*   **Mission**: Conduct niche research, draft SEO articles, self-heal search rankings, and publish content.
+*   **Google Apps**: Google Docs (writing), Google Fonts (typography styling), Google Translate (multilingual adaptation), Google Trends (keyword discovery), Google Illuminate (audio abstracts), and Google Pomelli (ad copywriting).
+*   **Inputs**: Google Trends keywords and GA4 search performance declines.
+*   **Outputs**: Fully formatted blog posts written in Google Docs and Blogger posts.
+*   **Clear Roadmap**:
+    1.  **Weekly Keyword Scouting**: Fetch high-volume, ₹0 startup-related keywords from Google Trends.
+    2.  **Drafting Phase**: Write long-form articles in Google Docs, styled with Google Fonts.
+    3.  **Experimental Audio Adaptation**: Run Google Illuminate to convert text drafts into high-quality podcast-style summaries.
+    4.  **Copywriting Campaigns**: Generate ad copy and landing page text using Google Pomelli for promotional campaigns.
+
+---
+
+### 2. 🎨 Media_Studio (Visual Assets Studio)
+*   **Mission**: Generate high-fidelity graphic drawings, YouTube videos, podcast audio, and thumbnails.
+*   **Google Apps**: YouTube (hosting), Google Photos (asset libraries), Google Drawings (assets/diagrams), and Google Vids/Flow (generative AI filmmaking/Veo models).
+*   **Inputs**: Scripts drafted by Content_Forge and image prompts.
+*   **Outputs**: Uploaded MP4 videos on YouTube, asset graphics in Google Photos, and structural SVGs.
+*   **Clear Roadmap**:
+    1.  **Storyboard Design**: Build vector wireframes and visual diagrams using Google Drawings.
+    2.  **Generative Filmmaking**: Run Gemini Flow/Vids prompts to render short videos using the Veo model.
+    3.  **Media Archiving**: Automatically sync all render outputs, raw images, and sound effects to Google Photos folders.
+    4.  **Social Publishing**: Upload formatted videos directly to YouTube Shorts and video playlists.
+
+---
+
+### 3. 📣 Growth_Engine (Social Distribution & Outreach)
+*   **Mission**: Build customer newsletters, run community threads, publish posts, and scale traffic.
+*   **Google Apps**: Gmail (email outreach), Google Chat & Groups (community discussion), Blogger (blog publishing), and Google Sites (landing pages).
+*   **Inputs**: Blog posts from Content_Forge and videos from Media_Studio.
+*   **Outputs**: Sent newsletters via Gmail, discussion topics in Google Chat, Blogger articles, and micro-sites.
+*   **Clear Roadmap**:
+    1.  **Blog Syncing**: Pull finished Google Docs drafts and publish them directly to Blogger.
+    2.  **Landing Scaffolding**: Spin up rapid campaign pages on Google Sites with no hosting fees.
+    3.  **Community Engagement**: Share links, answer questions, and start discussions in Google Groups and Google Chat.
+    4.  **Newsletter Blast**: Send weekly progress updates, tutorials, and product links to subscribers using Gmail campaigns.
+
+---
+
+### 4. 💰 Revenue_Vault (Monetization & Bookkeeping)
+*   **Mission**: Handle transaction capturing, ledger database balancing, ad networks, and shopping networks.
+*   **Google Apps**: Google Sheets (database ledger), Google AdSense (blog advertising), and Google Merchant Center (product feeds).
+*   **Inputs**: Razorpay payment webhooks and digital product listings.
+*   **Outputs**: Real-time transaction tables inside Google Sheets and compiled product feeds.
+*   **Clear Roadmap**:
+    1.  **Transaction Logging**: Record every Razorpay payout, invoice, and purchase in the central Google Sheets database.
+    2.  **Shopping Feeds**: Automatically convert product listings into dynamic XML feeds and index them on Google Merchant Center for free.
+    3.  **Ad Optimization**: Place and configure Google AdSense placements on Blogger and Google Sites to monetize organic impressions.
+    4.  **Audit Ledger**: Weekly audits comparing sheets records with Razorpay payouts, flagging discrepancies immediately.
+
+---
+
+### 5. 💻 Tech_Core (Engineering & Infrastructure)
+*   **Mission**: Scaffold frontend files, handle API gateways, database hosting, and write test suites.
+*   **Google Apps**: Google App Engine & Firebase (dynamic DB hosting), Google for Developers APIs, Flutter (mobile app), and Google Jules (asynchronous AI coding agent), and Google Stitch (generative UI canvas).
+*   **Inputs**: Development instructions, bugs list, and feature requests.
+*   **Outputs**: Deployed Cloudflare Pages edge build, Firebase data records, and Flutter builds.
+*   **Clear Roadmap**:
+    1.  **UI Prototyping**: Describe interface layouts on the Google Stitch infinite canvas and export layouts into code.
+    2.  **Asynchronous Coding**: Delegate bug-fixing, linting, and automated unit testing to the Google Jules agent.
+    3.  **Dynamic Infrastructure**: Host micro-databases on Google Firebase and set up custom API connectors via Google Developers.
+    4.  **Edge Compiling**: Sync built files using SSD Staging and deploy globally on Cloudflare Pages Workers.
+
+---
+
+### 6. 🛡️ Guardian_Ops (Security, Resilience & Healing)
+*   **Mission**: Manage user security, dashboard protection, data backups, and health alerts.
+*   **Google Apps**: Google Authenticator (dashboard 2FA), Safe Browsing & reCAPTCHA (security layers), Google Drive for Desktop (sync backup), Google Cloud DNS, and Google Activity logs.
+*   **Inputs**: System health metrics, login requests, and API logs.
+*   **Outputs**: Blocked bot attacks, 2FA authorizations, and hourly zip backups.
+*   **Clear Roadmap**:
+    1.  **Access Hardening**: Protect owner logins with Clerk + Google Authenticator 2-Factor authentication.
+    2.  **Portal Defense**: Implement reCAPTCHA and Safe Browsing security layers on all customer checkout forms.
+    3.  **Continuous Backups**: Set up Google Drive for Desktop to sync repository builds to cloud vaults hourly.
+    4.  **Self-Healing Loop**: Scan edge APIs continuously. If an endpoint fails, route users to local-cache stores.
+
+---
+
+### 7. 📈 Insight_Lab (Telemetry & Analytics)
+*   **Mission**: Pull keyword ranks, visitor sessions, design charts, and track conversion models.
+*   **Google Apps**: Google Search Console (GSC), Google Analytics (GA4), Looker Studio, and Google Charts (data visualizations).
+*   **Inputs**: Live website clicks, organic impressions, and user session lengths.
+*   **Outputs**: Sleek dashboard analytical charts, custom report dashboards, and A/B test logs.
+*   **Clear Roadmap**:
+    1.  **Telemetry Aggregation**: Query GA4 for active sessions and channels and Search Console for indexing.
+    2.  **Visual Telemetry**: Compile statistics into highly readable visual grids using Google Charts.
+    3.  **Business Intelligence**: Create dynamic dashboard reports inside Looker Studio to track monthly profit lines.
+    4.  **A/B Conversion Tests**: Monitor which landing pages convert highest and direct Sam to prioritize those templates.
+
+---
+
+### 8. 🔎 Innovation_Scout (Daily R&D Swarm)
+*   **Mission**: Scan global markets, identify rising zero-cost digital niches, and submit upgrade proposals.
+*   **Google Apps**: Google News (trend scouting), Google Patents (intellectual property research), and Google Scholar (academic scanning).
+*   **Inputs**: Global market feeds, trend indices, and academic lists.
+*   **Outputs**: Upgrade proposal records saved inside Google Drive and alert notifications.
+*   **Clear Roadmap**:
+    1.  **Daily Scouting**: Scan Google News every morning at 6:00 AM IST for new, emerging tools and niches.
+    2.  **Intellectual Research**: Validate system ideas by searching Google Patents to bypass legal obstacles.
+    3.  **Scientific Auditing**: Audit deep learning papers on Google Scholar to discover open-source models for Sam.
+    4.  **Proposal Submission**: Queue recommended niches into the dashboard Upgrades Proposals panel for owner approval.
+
+---
+
+## 📂 4. The Google Drive Folder Structure (SOT Mapping)
+
+To ensure the entire business can be managed, reviewed, and audited directly from the GitHub repository, our virtual Google Drive (`G:\My Drive\Akshara World\`) folders and contents are completely mapped below:
+
+```
+📁 G:\My Drive\Akshara World\
+├── 📁 01_Capsule\
+│   └── 📄 capsule_latest.md             <- The Single Source of Truth database & system state
+│
+├── 📁 02_Content_Forge\
+│   ├── 📁 01_Keywords\                  <- Google Trends search outputs & priority lists
+│   ├── 📁 02_Docs_Drafts\               <- Google Docs blog posts and translated copies
+│   └── 📁 03_Audio_Abstracts\           <- Google Illuminate audio podcast MP3 recordings
+│
+├── 📁 03_Media_Studio\
+│   ├── 📁 01_Drawings\                  <- Google Drawings diagrams, assets, and SVGs
+│   ├── 📁 02_Photos_Library\            <- Media folders, product images, and overlays
+│   └── 📁 03_Videos_Queue\              <- Gemini Flow/Vids generated MP4s & YouTube uploads
+│
+├── 📁 04_Growth_Engine\
+│   ├── 📁 01_Blogger_Articles\          <- Rendered articles, scheduled posts, and blogger backups
+│   ├── 📁 02_Sites_Landing\             <- Scaffolding links and wireframes for Google Sites
+│   └── 📁 03_Newsletter_Gmail\          <- Outbound email templates and customer lists
+│
+├── 📁 05_Revenue_Vault\
+│   ├── 📁 01_Sheets_Database\           <- Google Sheets files (Sales, Customers, System logs)
+│   ├── 📁 02_AdSense_Ads\               <- Advertisement scripts, placements, and monthly billing
+│   └── 📁 03_Merchant_Center\           <- Dynamic product shopping feed XMLs
+│
+├── 📁 06_Tech_Core\
+│   ├── 📁 01_Stitch_Designs\            <- Google Stitch UI canvases, JSON mockups, and layout exports
+│   ├── 📁 02_Firebase_AppEngine\        <- Dynamic database configurations & server configurations
+│   └── 📁 03_Jules_TestSuites\          <- Automatic scripts, lint logs, and code reports
+│
+├── 📁 07_Guardian_Ops\
+│   ├── 📁 01_Security_2FA\              <- Auth credentials, reCAPTCHA keys, Safe Browsing logs
+│   ├── 📁 02_CloudDNS_Domain\           <- Cloudflare domain details, dns templates, Cloud DNS details
+│   └── 📁 03_System_Backups\            <- Weekly zip folder backups of the repository
+│
+├── 📁 08_Insight_Lab\
+│   ├── 📁 01_SearchConsole_Impressions\ <- Historical SEO index CSV files and impressions curves
+│   ├── 📁 02_GA4_TrafficReports\        <- Active visitor charts, Acquisition reports
+│   └── 📁 03_Looker_Dashboards\         <- Connected business reports and Looker frames
+│
+├── 📁 09_File_Reviews\
+│   └── 📄 advantage_disadvantage_files  <- Sam CEO's AI analysis logs of uploaded files
+│
+└── 📁 10_Upgrade_Proposals\
+    └── 📄 daily_scout_proposals.md       <- Daily 6:00 AM IST scout proposals from Innovation_Scout
+```
+
+---
+
+## ⚡ 5. Execution Rules
+
+*   **Rule 1: The Zero-Cost Standard**: No recurring fees. All services utilize free tiers.
+*   **Rule 2: SSD Staging Build Protocol**: To avoid Webpack virtual drive EPERM errors, do not compile inside the virtual `G:\` Drive. Compile locally in the SSD staging folder (`C:\Users\Lenovo\.gemini\antigravity\scratch\node_modules_build`) and sync back compiled outputs.
+*   **Rule 3: Webpack Path Alias Bypass**: Always use standard relative imports (`../../lib`) inside Next.js components to ensure seamless cross-OS compiling.
+*   **Rule 4: Telegram & 3-Try Resilience**: All critical APIs run via our circuit breaker, auto-retrying 3 times before failing gracefully to local cache and notifying you on Telegram.
