@@ -1,6 +1,6 @@
 export const runtime = 'edge';
 import { NextRequest, NextResponse } from 'next/server';
-import { SheetsDb } from '../../../../lib/google/sheetsDb';
+import { SheetsDb } from '../../../lib/google/sheetsDb';
 
 // Sam ops-config: max 2 owner approvals per day (30-day launch policy)
 const MAX_DAILY_APPROVALS = 2;
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       await SheetsDb.addSystemLog({
         department: department || 'Guardian_Ops',
         message: `REJECTED: ${id} — "${title || id}" rejected by owner.`,
-        status: 'warning',
+        status: 'warn',
       });
       return NextResponse.json({ success: true, message: `Rejected ${id}` });
     }

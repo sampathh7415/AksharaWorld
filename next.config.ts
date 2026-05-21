@@ -1,15 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   serverExternalPackages: ['fs', 'crypto'],
   webpack: (config, { isServer, nextRuntime }) => {
     if (isServer && nextRuntime === 'edge') {
-        config.resolve.fallback = {
-            ...config.resolve.fallback,
-            fs: false,
-            crypto: false,
-        }
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        crypto: false,
+      }
     }
     return config
   }
