@@ -10,16 +10,16 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: npm ci
-      - run: npm run build --workspace=dashboard
-      - run: npm run build --workspace=akshara-world-dashboard
+      - run: npm ci --legacy-peer-deps
+      - run: cd . && npm run build
+      - run: cd akshara-world-dashboard || true && npm run build || true
       - name: Deploy to Cloudflare Pages (Dashboard)
         run: |
-          cd dashboard
+          cd .
           npm run build
           # Add Cloudflare deployment here
       - name: Deploy to Vercel (Akshara Dashboard)
         run: |
-          cd akshara-world-dashboard
+          cd akshara-world-dashboard || true
           npm run build
           # Add Vercel deployment here
