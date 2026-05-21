@@ -1,20 +1,44 @@
+export const runtime = 'edge';
 import { NextResponse } from 'next/server'
-import crypto from 'crypto'
 import { sendTelegramAlert } from '../../../lib/telegram'
+
+// Helper function to create HMAC SHA256 using Web Crypto API
+async function verifySignature(payloadString: string, signature: string, secret: string) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['verify']
+  );
+
+  // Convert hex signature to Uint8Array for Web Crypto API
+  const signatureBytes = new Uint8Array(signature.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || []);
+
+  return await crypto.subtle.verify(
+    'HMAC',
+    key,
+    signatureBytes,
+    enc.encode(payloadString)
+  );
+}
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
+    const rawBody = await req.text()
+    const body = JSON.parse(rawBody)
     const signature = req.headers.get('x-razorpay-signature')
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET || 'akshara_secret_2026'
 
-    // Verify Signature
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(JSON.stringify(body))
-      .digest('hex')
+    if (!signature) {
+      return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
+    }
 
-    if (signature !== expectedSignature) {
+    // Verify Signature
+    const isValid = await verifySignature(rawBody, signature, secret);
+
+    if (!isValid) {
       console.warn('⚠️ Razorpay Webhook Signature Mismatch (Check secret)')
       // In production, we should return 400, but for initial setup we might skip strict check
     }

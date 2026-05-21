@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import React from 'react'
 import Script from 'next/script'
 import '../globals.css'
