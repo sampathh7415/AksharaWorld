@@ -11,10 +11,14 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message }),
     });
+
+    if (!res.ok) {
+      throw new Error(`Worker failed with status ${res.status}`);
+    }
+
     const data = await res.json();
     return NextResponse.json({ reply: data.reply });
-  } catch (e: any) {
-    // Fallback: call Gemini directly if Worker is unreachable
+  } catch (error: unknown) {
     try {
       const API_KEY = process.env.GEMINI_API_KEY;
       if (!API_KEY) throw new Error('No API key');
@@ -34,9 +38,10 @@ export async function POST(req: NextRequest) {
       const data = await res.json();
       const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '[No response]';
       return NextResponse.json({ reply: `[Direct Gemini] ${reply}` });
-    } catch (fallbackErr: any) {
+    } catch {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return NextResponse.json({
-        reply: `[Error] Both Sam Brain and direct Gemini failed. Check connections. Error: ${e.message}`,
+        reply: `[Error] Both Sam Brain and direct Gemini failed. Check connections. Error: ${errorMessage}`,
       });
     }
   }
