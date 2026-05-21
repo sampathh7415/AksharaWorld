@@ -1,18 +1,34 @@
+export const runtime = 'edge';
 import { NextResponse } from 'next/server'
-import crypto from 'crypto'
 import { sendTelegramAlert } from '../../../lib/telegram'
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
+    const rawBody = await req.text()
+    const body = JSON.parse(rawBody)
     const signature = req.headers.get('x-razorpay-signature')
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET || 'akshara_secret_2026'
 
-    // Verify Signature
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(JSON.stringify(body))
-      .digest('hex')
+    // Verify Signature using Web Crypto API for Edge compatibility
+    const encoder = new TextEncoder()
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    )
+
+    const signatureBuffer = await crypto.subtle.sign(
+      'HMAC',
+      key,
+      encoder.encode(rawBody)
+    )
+
+    // Convert ArrayBuffer to hex string
+    const expectedSignature = Array.from(new Uint8Array(signatureBuffer))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('')
 
     if (signature !== expectedSignature) {
       console.warn('⚠️ Razorpay Webhook Signature Mismatch (Check secret)')

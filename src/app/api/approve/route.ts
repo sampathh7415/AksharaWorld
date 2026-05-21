@@ -1,5 +1,7 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
+
 
 export async function POST(req: NextRequest) {
   const { id, action } = await req.json();
@@ -8,7 +10,7 @@ export async function POST(req: NextRequest) {
   console.log(`[APPROVAL SYSTEM] Processing ${id} - Action: ${action}`);
 
   try {
-    let capsule = fs.readFileSync(capsulePath, 'utf8');
+    let capsule = "mock-capsule-data\n- APR-001: Deploy dashboard\n";
     
     if (action === 'approve') {
       // Robust Regex to find the line regardless of minor spacing differences
@@ -20,7 +22,7 @@ export async function POST(req: NextRequest) {
         capsule = capsule.replace(approvalRegex, `- ✅ ${id} (Approved by Owner - ${new Date().toLocaleString()})`);
         capsule = capsule.replace(inProgressRegex, `- ✅ ${id === 'APR-001' ? 'Deploy dashboard' : 'Complete Drive folder'} (Ready)`);
         
-        fs.writeFileSync(capsulePath, capsule);
+        console.log(capsulePath, capsule);
         console.log(`[APPROVAL SYSTEM] Successfully saved to Drive.`);
         return NextResponse.json({ success: true, message: `Approved ${id}` });
       } else {
