@@ -13,6 +13,10 @@ export class GoogleDriveManager {
       backups: '06_Backups',
       reviews: '09_File_Reviews',
     };
+
+    // In-memory cache for file content
+    this.contentCache = new Map();
+    this.cacheTTL = 5 * 60 * 1000; // 5 minutes in milliseconds
   }
 
   async authenticate() {
@@ -108,11 +112,19 @@ export class GoogleDriveManager {
   }
 
   async getFileContent(fileId, auth) {
+    const now = Date.now();
+    const cached = this.contentCache.get(fileId);
+    if (cached && now - cached.timestamp < this.cacheTTL) {
+      return cached.content;
+    }
+
     try {
       const response = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
         headers: { 'Authorization': `Bearer ${auth.token || auth.key}` },
       });
-      return await response.text();
+      const content = await response.text();
+      this.contentCache.set(fileId, { content, timestamp: now });
+      return content;
     } catch (e) {
       console.error('[Drive] Content fetch failed:', e.message);
       return null;
