@@ -7,11 +7,9 @@ export class BackupService {
   public static async saveToDrive(folder: string, filename: string, content: string): Promise<void> {
     try {
       const targetDir = path.join(this.DRIVE_PATH, folder);
-      if (!fs.existsSync(targetDir)) {
-        fs.mkdirSync(targetDir, { recursive: true });
-      }
+      await fs.promises.mkdir(targetDir, { recursive: true });
       const targetPath = path.join(targetDir, filename);
-      fs.writeFileSync(targetPath, content);
+      await fs.promises.writeFile(targetPath, content);
       console.log(`[BackupService] Successfully saved to Drive: ${targetPath}`);
     } catch (e) {
       console.error(`[BackupService] Failed to save to Drive`, e);
