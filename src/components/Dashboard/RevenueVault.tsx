@@ -3,15 +3,33 @@ import React, { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp, CreditCard, ArrowUpRight, ArrowDownRight, Activity, ShieldAlert, ShieldCheck } from 'lucide-react';
 import { resilientFetch } from '../../lib/resilience';
 
+export interface RevenueMetrics {
+  revenue: {
+    total: string;
+    today: string;
+    month: string;
+    currency: string;
+  };
+  transactions: number;
+  aov: string;
+  phase: string;
+  departments: number;
+  uptime: string;
+}
+
+export interface DashboardResponse {
+  metrics: RevenueMetrics;
+}
+
 export const RevenueVault = () => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<RevenueMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<'nominal' | 'degraded' | 'offline'>('nominal');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fallback = {
+        const fallback: RevenueMetrics = {
           revenue: { total: '0.00', today: '0.00', month: '0.00', currency: 'INR' },
           transactions: 0,
           aov: '0.00',
@@ -20,7 +38,7 @@ export const RevenueVault = () => {
           uptime: '100%'
         };
 
-        const json = await resilientFetch<any>(
+        const json = await resilientFetch<DashboardResponse>(
           'https://sam-ceo-brain.akshara-sam.workers.dev/api/dashboard',
           { timeout: 6000, retries: 2 },
           { metrics: fallback }
@@ -81,12 +99,12 @@ export const RevenueVault = () => {
             
             <div className="mt-8 flex items-center gap-6">
                 <div>
-                    <div className="text-xl font-black text-white">₹{data.revenue?.today || '0.00'}</div>
+                    <div className="text-xl font-black text-white">₹{data?.revenue?.today || '0.00'}</div>
                     <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-tighter">Today</div>
                 </div>
                 <div className="w-px h-8 bg-white/10" />
                 <div>
-                    <div className="text-xl font-black text-white">₹{data.revenue?.month || '0.00'}</div>
+                    <div className="text-xl font-black text-white">₹{data?.revenue?.month || '0.00'}</div>
                     <div className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter">This Month</div>
                 </div>
             </div>
@@ -98,7 +116,7 @@ export const RevenueVault = () => {
              <div className="space-y-6">
                 <div className="flex justify-between items-end">
                     <div>
-                        <div className="text-2xl font-black text-white">{data.transactions || 0}</div>
+                        <div className="text-2xl font-black text-white">{data?.transactions || 0}</div>
                         <div className="text-[10px] text-gray-500 font-bold uppercase">Successful Txns</div>
                     </div>
                     <div className="text-right">
@@ -112,7 +130,7 @@ export const RevenueVault = () => {
                     <div className="h-full bg-emerald-500 w-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                 </div>
                 <div className="flex justify-between items-center text-[10px] font-black text-gray-500 uppercase tracking-tighter">
-                    <span>AOV: ₹{data.aov || '0.00'}</span>
+                    <span>AOV: ₹{data?.aov || '0.00'}</span>
                     <span>Churn: 0%</span>
                 </div>
              </div>
