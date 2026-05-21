@@ -43,9 +43,10 @@ export class MemoryService {
    * Future: Use Cosine Similarity on vectors
    */
   public async retrieveRelevantContext(query: string, department?: string): Promise<MemoryNode[]> {
+    const lowerQuery = query.toLowerCase();
     return this.nodes.filter(n => 
       (department ? n.metadata.department === department : true) &&
-      (n.content.toLowerCase().includes(query.toLowerCase()))
+      (n.content.toLowerCase().includes(lowerQuery))
     ).slice(0, 5);
   }
 
