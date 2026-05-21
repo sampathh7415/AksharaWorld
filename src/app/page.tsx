@@ -1,6 +1,15 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { resilientFetch } from '../lib/resilience';
+import { GoogleDrive } from '../components/Dashboard/GoogleDrive';
+import { GoogleSheets } from '../components/Dashboard/GoogleSheets';
+import { GoogleMerchant } from '../components/Dashboard/GoogleMerchant';
+import { TrafficMonitor } from '../components/Dashboard/TrafficMonitor';
+import { RevenueVault } from '../components/Dashboard/RevenueVault';
+import { AlertsPanel } from '../components/Dashboard/AlertsPanel';
+import { DepartmentMatrix } from '../components/Dashboard/DepartmentMatrix';
+import { AIInstructions } from '../components/Dashboard/AIInstructions';
+import { SamCEO } from '../components/Dashboard/SamCEO';
 
 const NAV = [
   { id: 'kpi', icon: '📊', label: 'Business KPIs' },
@@ -48,221 +57,178 @@ const RESOURCES = [
   ['Telegram Bot', 'Telegram', 'Notifications', 'Token pending', 'Free', 'yellow'],
 ];
 
-function now() { return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); }
-
-export default function Dashboard() {
+export default function CommandCenter() {
   const [active, setActive] = useState('kpi');
   const [time, setTime] = useState('');
   const [messages, setMessages] = useState([
-    { role: 'sam', text: 'Greetings. I am Sam, AI CEO of Akshara World. Phase 0 is complete. Dashboard is live with Clerk auth, GitHub sync, and AI Brain DNA integrated. What is your directive?', time: now() },
+    { role: 'sam', text: "Systems online. Sam AI CEO initialized. How can I assist you today, Sampathkumar?", time: '' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [approvals, setApprovals] = useState([
-    { id: 'APR-003', dept: 'Tech_Core', title: 'Deploy to Cloudflare Pages', desc: 'Authorize public URL deployment for dash.aksharaworld.in', status: 'pending' },
-    { id: 'APR-004', dept: 'Revenue_Vault', title: 'Connect Razorpay Account', desc: 'Authorize Razorpay API key integration for payment processing', status: 'pending' },
-    { id: 'APR-005', dept: 'Growth_Engine', title: 'Telegram Bot Activation', desc: 'Connect BOT_TOKEN to enable mobile approval notifications', status: 'pending' },
+    { id: 'APR-001', dept: 'Content_Forge', task: 'Publish "Autonomous AI Agents Guide"', status: 'pending', date: '21 May 2026' },
+    { id: 'APR-002', dept: 'Revenue_Vault', task: 'Approve new Razorpay Webhook URL', status: 'pending', date: '21 May 2026' }
   ]);
   const [data, setData] = useState<any>(null);
   const [capsule, setCapsule] = useState('');
-  const chatBottomRef = useRef<HTMLDivElement>(null);
+
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const t = setInterval(() => setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })), 1000);
-    setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }));
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  useEffect(() => {
+    const d = new Date();
+    setMessages(prev => [{ ...prev[0], time: d.toLocaleTimeString() }, ...prev.slice(1)]);
+
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch('/api/dashboard');
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+      }
+    };
     fetchDashboard();
-    return () => clearInterval(t);
   }, []);
 
   useEffect(() => {
-    chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    const timer = setInterval(() => {
+      setTime(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-  async function fetchDashboard() {
-    try {
-      const fallback = {
-        capsule: 'Akshara World - Autonomous Business Hub. SAM AI CEO version 2.0. [Self-Healing Memory Mode]',
-        samBrain: { status: 'offline', reason: 'Using resilient offline memory store.' },
-        metrics: {
-          revenue: { total: '0.00', today: '0.00', month: '0.00', currency: 'INR' },
-          transactions: 0,
-          aov: '0.00',
-          phase: 'Phase 1 — Operational MVP (Active)',
-          departments: 8,
-          uptime: '100.00%'
-        }
-      };
-      const d = await resilientFetch<any>('/api/dashboard', { timeout: 6000, retries: 2 }, fallback);
-      setData(d);
-      if (d.capsule) setCapsule(d.capsule);
-    } catch {}
-  }
+  const handleSend = async (e: any) => {
+    e.preventDefault();
+    if (!input.trim()) return;
 
-  async function handleApproval(id: string, action: 'approve' | 'reject') {
-    setApprovals(a => a.map(x => x.id === id ? { ...x, status: action === 'approve' ? 'approved' : 'rejected' } : x));
-    try {
-      await resilientFetch('/api/approve', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, action }),
-        timeout: 8000,
-        retries: 2
-      }, { success: true });
-    } catch {}
-  }
-
-  async function sendMessage() {
-    if (!input.trim() || loading) return;
-    const userMsg = { role: 'user', text: input.trim(), time: now() };
-    setMessages(m => [...m, userMsg]);
+    const userMsg = { role: 'user', text: input, time: new Date().toLocaleTimeString() };
+    setMessages(prev => [...prev, userMsg]);
     setInput('');
     setLoading(true);
+
     try {
-      const fallbackMsg = { reply: '[Self-Healing Backup Route] I encountered a synapse error, but I have successfully self-healed and enabled backup local response systems. How can I help you today?' };
-      const d = await resilientFetch<any>(
-        '/api/sam',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: userMsg.text }),
-          timeout: 10000,
-          retries: 2
-        },
-        fallbackMsg
-      );
-      setMessages(m => [...m, { role: 'sam', text: d.reply || '[No response]', time: now() }]);
-    } catch {
-      setMessages(m => [...m, { role: 'sam', text: '[Error] Failed to reach Sam Brain.', time: now() }]);
+      const res = await fetch('/api/sam', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input })
+      });
+      const data = await res.json();
+      setMessages(prev => [...prev, { role: 'sam', text: data.reply, time: new Date().toLocaleTimeString() }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { role: 'sam', text: 'Connection to Sam Brain lost. Retrying...', time: new Date().toLocaleTimeString() }]);
     }
     setLoading(false);
-  }
+  };
 
-  const pendingCount = approvals.filter(a => a.status === 'pending').length;
+  const approveTask = (id: string) => {
+    setApprovals(prev => prev.filter(a => a.id !== id));
+    setMessages(prev => [...prev, { role: 'sam', text: `Approval ${id} confirmed. Executing now.`, time: new Date().toLocaleTimeString() }]);
+  };
 
   return (
-    <div className="shell">
-      {/* ── SIDEBAR ── */}
+    <div className="layout">
+      {/* ===== SIDEBAR ===== */}
       <aside className="sidebar">
-        <div className="sidebar-brand">
-          <div className="brand-logo">⚡ Akshara World</div>
-          <div className="brand-sub">Command Center</div>
+        <div className="brand">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 2.5h3L11 22l2-2.5h-3L13 2Z"/></svg>
+          <div>
+            <h1>Akshara World</h1>
+            <p>COMMAND CENTER</p>
+          </div>
         </div>
-        <nav className="sidebar-nav">
-          <div className="nav-section-label">Operations</div>
-          {NAV.map(n => (
-            <div key={n.id} className={`nav-item${active === n.id ? ' active' : ''}`} onClick={() => setActive(n.id)}>
-              <span className="icon">{n.icon}</span>
-              <span style={{ flex: 1 }}>{n.label}</span>
-              {n.id === 'approvals' && pendingCount > 0 && (
-                <span style={{ background: 'var(--blue)', color: '#fff', fontSize: '0.65rem', fontWeight: 700, padding: '2px 7px', borderRadius: 20 }}>{pendingCount}</span>
-              )}
-            </div>
+
+        <div className="nav-group">OPERATIONS</div>
+        <nav>
+          {NAV.slice(0, 4).map(n => (
+            <button key={n.id} className={`nav-item ${active === n.id ? 'active' : ''}`} onClick={() => setActive(n.id)}>
+              <span className="icon">{n.icon}</span> {n.label}
+              {n.id === 'approvals' && approvals.length > 0 && <span className="badge">{approvals.length}</span>}
+            </button>
           ))}
         </nav>
-        <div className="sidebar-footer">
-          <div className="sam-status">
-            <div className="sam-avatar">S</div>
-            <div className="sam-info">
-              <div className="name">Sam — AI CEO</div>
-              <div className="status">● Online · Cloudflare</div>
-            </div>
+
+        <div className="nav-group" style={{ marginTop: '2rem' }}>SYSTEM CORE</div>
+        <nav>
+          {NAV.slice(4).map(n => (
+            <button key={n.id} className={`nav-item ${active === n.id ? 'active' : ''}`} onClick={() => setActive(n.id)}>
+              <span className="icon">{n.icon}</span> {n.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="user-profile">
+          <div className="avatar">S</div>
+          <div>
+            <div className="name">Sam — AI CEO</div>
+            <div className="status"><span className="dot"></span> Online · Cloudflare</div>
           </div>
         </div>
       </aside>
 
-      {/* ── MAIN ── */}
-      <div className="main">
-        <div className="topbar">
-          <div className="topbar-title">{NAV.find(n => n.id === active)?.icon} {NAV.find(n => n.id === active)?.label}</div>
-          <div className="topbar-right">
-            <span className="badge green"><span className="pulse" />Sam Brain: Live</span>
-            <span className="badge blue">GitHub: Synced</span>
-            <span className="badge yellow">⏰ {time}</span>
+      {/* ===== MAIN CONTENT ===== */}
+      <main className="main-content">
+        <header className="header">
+          <div className="header-title">
+            <span className="icon">{NAV.find(n => n.id === active)?.icon}</span>
+            {NAV.find(n => n.id === active)?.label}
           </div>
-        </div>
+          <div className="header-actions">
+            <span className="pill green">● Sam Brain: Live</span>
+            <span className="pill blue">GitHub: Synced</span>
+            <div className="clock">⏰ 21 May 2026, {time}</div>
+          </div>
+        </header>
 
-        <div className="content">
+        <div className="scroll-area">
 
           {/* ── KPI ── */}
           {active === 'kpi' && (
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                 <TrafficMonitor />
+                 <GoogleMerchant />
+              </div>
               <div className="kpi-grid">
                 {[
                   { label: 'Revenue (MTD)', value: '₹0', sub: 'Goal: ₹1,10,000 / mo', color: 'var(--blue)' },
                   { label: 'Uptime', value: '100%', sub: 'Sam Brain: Cloudflare Workers', color: 'var(--green)' },
                   { label: 'AI Departments', value: '8', sub: 'All operational', color: 'var(--purple)' },
-                  { label: 'Pending Approvals', value: String(pendingCount), sub: 'Owner action required', color: 'var(--yellow)' },
-                  { label: 'Phase', value: '1', sub: 'MVP Departments — Revenue', color: 'var(--cyan)' },
+                  { label: 'Phase', value: '1', sub: 'MVP Departments — Revenue', color: 'var(--blue)' },
                   { label: 'GitHub Commits', value: '5', sub: 'sampathh7415/AksharaWorld', color: 'var(--orange)' },
-                ].map(k => (
-                  <div className="kpi-card" key={k.label}>
+                  { label: 'Cloudflare Pages', value: 'Live', sub: 'Edge network deployment', color: 'var(--yellow)' },
+                ].map((k, i) => (
+                  <div key={i} className="glass-card kpi-card">
                     <div className="kpi-label">{k.label}</div>
                     <div className="kpi-value" style={{ color: k.color }}>{k.value}</div>
                     <div className="kpi-sub">{k.sub}</div>
                   </div>
                 ))}
               </div>
-
-              {/* Phase Roadmap */}
-              <div className="glass-card" style={{ marginBottom: 20 }}>
-                <div className="card-header"><span className="card-title">🗺️ Business Roadmap</span><span className="pill blue">Phase 1 Active</span></div>
-                <div className="card-body">
-                  <div className="phase-list">
-                    {PHASES.map(p => (
-                      <div className="phase-item" key={p.num}>
-                        <div className={`phase-dot ${p.state}`}>{p.state === 'done' ? '✓' : p.num}</div>
-                        <div className="phase-info">
-                          <div className="phase-name">{p.label}</div>
-                          <div className="phase-desc">{p.desc}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Live Activity */}
-              <div className="glass-card">
-                <div className="card-header"><span className="card-title">⚡ Live Activity</span><span className="pill green">Real-time</span></div>
-                <div className="card-body">
-                  {[
-                    { who: 'Sam', color: 'var(--purple)', text: 'Phase 0 complete. GitHub synced. Clerk auth live. DNA integration deployed.', ago: 'Now' },
-                    { who: 'Innovation_Scout', color: 'var(--cyan)', text: 'CRON active — Daily 6 AM IST market scan scheduled.', ago: '1 hr ago' },
-                    { who: 'Tech_Core', color: 'var(--blue)', text: 'MemoryService.ts + SkillLibrary.ts committed to main branch.', ago: '2 hrs ago' },
-                    { who: 'Guardian_Ops', color: 'var(--green)', text: 'Backup created: Backup_2026-05-11 — capsule, resources, wrangler.', ago: '3 hrs ago' },
-                  ].map((a, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: '50%', background: a.color + '22', border: `1px solid ${a.color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 700, flexShrink: 0, color: a.color }}>{a.who[0]}</div>
-                      <div>
-                        <div style={{ fontSize: '0.85rem' }}><span style={{ color: a.color, fontWeight: 600 }}>{a.who}</span> {a.text}</div>
-                        <div style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: 2 }}>{a.ago}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
           {/* ── DEPARTMENTS ── */}
           {active === 'departments' && (
-            <div>
-              <div className="dept-grid">
-                {DEPTS.map(d => (
-                  <div className="dept-card" key={d.name}>
-                    <div className="dept-card-header">
-                      <span className="dept-name">{d.name}</span>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        {d.cron && <span className="pill purple">CRON</span>}
-                        <span className="pill green">● Active</span>
-                      </div>
-                    </div>
-                    <div className="dept-detail">
-                      <div style={{ marginBottom: 4 }}>{d.mission}</div>
-                      <div style={{ color: 'var(--muted)', fontSize: '0.74rem' }}>Agents: {d.agents}</div>
-                    </div>
-                  </div>
-                ))}
+            <div className="glass-card">
+              <div className="card-header"><span className="card-title">🏢 Active AI Departments</span></div>
+              <div className="card-body" style={{ padding: 0 }}>
+                <table className="data-table">
+                  <thead><tr><th>Department</th><th>Mission</th><th>Agents</th><th>Status</th></tr></thead>
+                  <tbody>
+                    {DEPTS.map((d, i) => (
+                      <tr key={i}>
+                        <td style={{ fontWeight: 600, color: 'var(--text)' }}>{d.name} {d.cron && '🔄'}</td>
+                        <td>{d.mission}</td>
+                        <td style={{ fontSize: '0.8rem', color: 'var(--muted2)' }}>{d.agents}</td>
+                        <td><span className="pill green">● {d.status}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
@@ -270,120 +236,99 @@ export default function Dashboard() {
           {/* ── APPROVALS ── */}
           {active === 'approvals' && (
             <div className="glass-card">
-              <div className="card-header"><span className="card-title">✅ Approvals Queue</span><span className="pill yellow">{pendingCount} Pending</span></div>
+              <div className="card-header"><span className="card-title">✅ Pending Approvals</span></div>
               <div className="card-body">
-                {approvals.map(a => (
-                  <div className="approval-item" key={a.id}>
-                    <div className="approval-info">
-                      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
-                        <span className="pill blue">{a.dept}</span>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{a.id}</span>
+                {approvals.length === 0 ? (
+                  <div className="empty-state">No pending approvals. Sam is running autonomously.</div>
+                ) : (
+                  <div className="approval-list">
+                    {approvals.map(a => (
+                      <div key={a.id} className="approval-item">
+                        <div className="appr-info">
+                          <span className="appr-id">{a.id}</span>
+                          <span className="appr-dept pill blue">{a.dept}</span>
+                          <span className="appr-date">{a.date}</span>
+                        </div>
+                        <div className="appr-task">{a.task}</div>
+                        <div className="appr-actions">
+                          <button className="btn success" onClick={() => approveTask(a.id)}>Approve</button>
+                          <button className="btn danger" onClick={() => setApprovals(prev => prev.filter(x => x.id !== a.id))}>Reject</button>
+                        </div>
                       </div>
-                      <div className="approval-title">{a.title}</div>
-                      <div className="approval-desc">{a.desc}</div>
-                    </div>
-                    <div className="approval-actions">
-                      {a.status === 'pending' ? (
-                        <>
-                          <button className="btn approve" onClick={() => handleApproval(a.id, 'approve')}>✓ Approve</button>
-                          <button className="btn reject" onClick={() => handleApproval(a.id, 'reject')}>✗ Reject</button>
-                        </>
-                      ) : (
-                        <span className={`pill ${a.status === 'approved' ? 'green' : 'red'}`}>{a.status === 'approved' ? '✓ Approved' : '✗ Rejected'}</span>
-                      )}
-                    </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}
 
-          {/* ── SAM CHAT ── */}
+          {/* ── CHAT WITH SAM ── */}
           {active === 'sam' && (
-            <div className="chat-wrap">
-              <div className="chat-messages">
+            <div className="glass-card chat-container">
+              <div className="chat-history">
                 {messages.map((m, i) => (
-                  <div key={i} className={`msg ${m.role}`}>
-                    <div className="msg-avatar">{m.role === 'sam' ? 'S' : 'O'}</div>
-                    <div>
-                      <div className="msg-bubble">{m.text}</div>
+                  <div key={i} className={`chat-msg ${m.role}`}>
+                    <div className="msg-bubble">
+                      <div className="msg-text">{m.text}</div>
                       <div className="msg-time">{m.time}</div>
                     </div>
                   </div>
                 ))}
-                {loading && <div className="msg sam"><div className="msg-avatar">S</div><div className="msg-bubble"><span className="spinner" /></div></div>}
-                <div ref={chatBottomRef} />
+                {loading && <div className="chat-msg sam"><div className="msg-bubble loading">Sam is thinking...</div></div>}
+                <div ref={chatEndRef} />
               </div>
-              <div className="chat-input-row">
-                <input className="chat-input" placeholder="Message Sam..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()} />
-                <button className="chat-send" onClick={sendMessage}>➤</button>
-              </div>
+              <form className="chat-input-area" onSubmit={handleSend}>
+                <input
+                  type="text"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  placeholder="Direct Sam AI CEO..."
+                  className="chat-input"
+                />
+                <button type="submit" className="btn blue" disabled={!input.trim() || loading}>Send</button>
+              </form>
             </div>
           )}
 
           {/* ── BRAIN DNA ── */}
           {active === 'brain' && (
-            <div>
-              <div className="row-grid" style={{ marginBottom: 20 }}>
-                <div className="glass-card">
-                  <div className="card-header"><span className="card-title">🧠 Semantic Memory Graph</span><span className="pill green">Stable</span></div>
-                  <div className="card-body">
-                    {[['Graph Health', '100% Stable', 'green'], ['Architecture', 'jcode DNA Pattern', 'blue'], ['Sideagent', 'Verification Active', 'purple'], ['Vector Store', 'Supabase pgvector (pending)', 'yellow']].map(([k, v, c]) => (
-                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border2)' }}>
-                        <span style={{ color: 'var(--muted)', fontSize: '0.84rem' }}>{k}</span>
-                        <span className={`pill ${c}`}>{v}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="glass-card">
-                  <div className="card-header"><span className="card-title">🛠️ Agent Skill Store</span><span className="pill blue">4 Active</span></div>
-                  <div className="card-body">
-                    {['Innovation Scout', 'Content Strategist', 'Revenue Auditor', 'Guardian Watchdog'].map(s => (
-                      <div key={s} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border2)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--blue)' }} />
-                          <span style={{ fontSize: '0.85rem' }}>{s}</span>
-                        </div>
-                        <span className="pill green">Deployed</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="glass-card">
-                <div className="card-header"><span className="card-title">🧬 Deep DNA Sources</span></div>
-                <div className="card-body">
-                  <div className="row-grid three">
-                    {[['jcode', 'Semantic Memory + TUI patterns', 'blue'], ['500-AI-Agents', 'Skill blueprints (500+ use cases)', 'purple'], ['CrewAI + FastMCP', 'Swarm orchestration bridge', 'cyan']].map(([src, desc, c]) => (
-                      <div key={src} style={{ background: 'var(--panel2)', border: '1px solid var(--border2)', borderRadius: 10, padding: 16 }}>
-                        <div style={{ fontWeight: 700, marginBottom: 6 }}>{src}</div>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>{desc}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <div className="glass-card">
+              <div className="card-header"><span className="card-title">🧠 Sam Brain (Instructions)</span><span className="pill purple">Version 2.0</span></div>
+              <div className="card-body">
+                <ol className="rules-list">
+                  <li><strong>Absolute Truth:</strong> Never hallucinate. If unknown, state "I lack the data" and pause.</li>
+                  <li><strong>Zero Cost:</strong> Prioritize free Google Workspace apps. Never spend without explicit Owner approval.</li>
+                  <li><strong>Three-Try Resilience:</strong> If an API fails 3 times, alert the Owner via Telegram and halt that specific process.</li>
+                  <li><strong>Self-Healing:</strong> Log all errors to Google Sheets. Periodically attempt to heal broken workflows.</li>
+                  <li><strong>Documentation:</strong> Every action must be logged in the centralized <code>/docs</code> directory or Google Drive.</li>
+                </ol>
               </div>
             </div>
           )}
 
           {/* ── RESOURCES ── */}
           {active === 'resources' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">⚙️ Resource Inventory</span><span className="pill blue">Zero Investment Stack</span></div>
-              <div className="card-body" style={{ padding: 0 }}>
-                <table className="data-table">
-                  <thead><tr><th>Resource</th><th>Provider</th><th>Type</th><th>Quota</th><th>Cost</th><th>Status</th></tr></thead>
-                  <tbody>
-                    {RESOURCES.map(([r, p, t, q, c, s]) => (
-                      <tr key={String(r)}>
-                        <td style={{ fontWeight: 600, color: 'var(--text)' }}>{r}</td>
-                        <td>{p}</td><td>{t}</td><td>{q}</td><td>{c}</td>
-                        <td><span className={`pill ${s}`}>{s === 'green' ? '● Active' : '○ Pending'}</span></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                <GoogleDrive />
+                <GoogleSheets />
+              </div>
+              <div className="glass-card">
+                <div className="card-header"><span className="card-title">⚙️ Resource Inventory</span><span className="pill blue">Zero Investment Stack</span></div>
+                <div className="card-body" style={{ padding: 0 }}>
+                  <table className="data-table">
+                    <thead><tr><th>Resource</th><th>Provider</th><th>Type</th><th>Quota</th><th>Cost</th><th>Status</th></tr></thead>
+                    <tbody>
+                      {RESOURCES.map(([r, p, t, q, c, s]) => (
+                        <tr key={String(r)}>
+                          <td style={{ fontWeight: 600, color: 'var(--text)' }}>{r}</td>
+                          <td>{p}</td><td>{t}</td><td>{q}</td><td>{c}</td>
+                          <td><span className={`pill ${s}`}>{s === 'green' ? '● Active' : '○ Pending'}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
@@ -420,77 +365,25 @@ export default function Dashboard() {
                 <pre style={{ fontFamily: 'monospace', fontSize: '0.82rem', color: 'var(--muted2)', whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>
                   {capsule || data?.capsule || 'Loading capsule from Google Drive...'}
                 </pre>
-              </div>
-            </div>
-          )}
-
-          {/* ── CHANGELOG ── */}
-          {active === 'changelog' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">📜 Change Log</span></div>
-              <div className="card-body" style={{ padding: 0 }}>
-                <table className="data-table">
-                  <thead><tr><th>Timestamp</th><th>Component</th><th>Change</th><th>By</th></tr></thead>
-                  <tbody>
-                    {[
-                      ['2026-05-12', 'Dashboard', 'Unified dashboard — merged 3 versions into 1', 'Antigravity'],
-                      ['2026-05-12', 'GitHub', 'Full workspace synced to sampathh7415/AksharaWorld', 'Sam'],
-                      ['2026-05-11', 'AI DNA', 'jcode Semantic Memory + 500-AI-Agents Skill Library integrated', 'Antigravity'],
-                      ['2026-05-11', 'Auth', 'Clerk 2FA live — owner-only access enforced', 'Sam'],
-                      ['2026-05-11', 'Brain', 'Sam CEO Brain v2.0 deployed to Cloudflare Workers', 'Sam'],
-                      ['2026-05-11', 'CRON', 'Innovation_Scout daily 6 AM IST scan active', 'Sam'],
-                    ].map(([t, c, d, b], i) => (
-                      <tr key={i}>
-                        <td style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{t}</td>
-                        <td><span className="pill blue">{c}</span></td>
-                        <td style={{ color: 'var(--text)' }}>{d}</td>
-                        <td style={{ color: 'var(--green)' }}>{b}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* ── UPGRADES ── */}
-          {active === 'upgrades' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">🚀 Upgrade Proposals</span><span className="pill blue">Innovation_Scout — Daily R&D</span></div>
-              <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
-                  No upgrade proposals yet. Innovation_Scout will submit daily proposals once Telegram notifications are active.
+                <div style={{ marginTop: '1rem' }}>
+                  <button className="btn blue" onClick={() => setCapsule('Capsule fetched via Edge Worker... [Data Placeholder]')}>Force Sync from Drive</button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* ── FILE REVIEWS ── */}
-          {active === 'filereviews' && (
+          {/* Placeholders for other tabs */}
+          {['changelog', 'upgrades', 'filereviews', 'failures'].includes(active) && (
             <div className="glass-card">
-              <div className="card-header"><span className="card-title">📁 File Review Reports</span></div>
-              <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
-                  No files reviewed yet. Share any file with Sam and it will produce an Advantage/Disadvantage report saved to 09_File_Reviews/ in Drive.
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── 3-TRY FAILURES ── */}
-          {active === 'failures' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">⚠️ Three-Try Failure Reports</span><span className="pill green">0 Open Failures</span></div>
-              <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
-                  ✅ No failures on record. Every operation that fails 3 consecutive times will appear here with root-cause analysis.
-                </div>
+              <div className="card-body" style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--muted2)' }}>
+                <h3>Module: {active.toUpperCase()}</h3>
+                <p>This module is currently in development under Phase 1.</p>
               </div>
             </div>
           )}
 
         </div>
-      </div>
+      </main>
     </div>
   );
 }

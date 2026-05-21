@@ -1,0 +1,42 @@
+
+> dashboard@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+ ⚠ Port 3001 is in use, trying 3002 instead.
+ ⚠ Port 3002 is in use, trying 3003 instead.
+   ▲ Next.js 15.0.3
+   - Local:        http://localhost:3003
+
+ ✓ Starting...
+ ✓ Ready in 1825ms
+ ○ Compiling /src/middleware ...
+ ✓ Compiled /src/middleware in 1349ms (201 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 6.8s (1043 modules)
+
+[35m
+[Clerk]:[0m You are running in keyless mode.
+You can [35mclaim your keys[0m by visiting https://dashboard.clerk.com/apps/claim?framework=nextjs&token=1iv2z5837tg44khryanj5uneg5rd10eo1ef7laxw&return_url=http%3A%2F%2Flocalhost%3A3003%2F
+
+ GET / 200 in 7875ms
+ ✓ Compiled /_not-found in 446ms (1032 modules)
+ GET / 200 in 729ms
+ GET /api/dashboard 404 in 1044ms
+ POST / 303 in 951ms
+ GET /api/dashboard 404 in 56ms
+ GET / 200 in 15ms
+ GET /api/dashboard 404 in 33ms
+ GET / 200 in 75ms
+ GET /api/dashboard 404 in 82ms
+ GET /api/dashboard 404 in 56ms
+ GET / 200 in 34ms
+ POST / 303 in 93ms
+ GET / 200 in 13ms
+ GET /api/dashboard 404 in 28ms
+ GET /api/dashboard 404 in 58ms
+ GET /api/dashboard 404 in 37ms
+ GET /api/dashboard 404 in 32ms
+ GET /api/dashboard 404 in 36ms
+ GET /api/dashboard 404 in 35ms
+ GET /api/dashboard 404 in 31ms

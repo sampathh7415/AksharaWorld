@@ -60,3 +60,6 @@ next-env.d.ts
 /docker-compose.yml
 /Dockerfile
 /nginx.conf
+
+# clerk configuration (can include secrets)
+/.clerk/
