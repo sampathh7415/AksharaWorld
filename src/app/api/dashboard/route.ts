@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { NextResponse } from 'next/server';
 
 const SAM_BRAIN_URL = process.env.NEXT_PUBLIC_SAM_BRAIN_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';

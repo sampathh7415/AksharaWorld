@@ -1,5 +1,6 @@
+export const runtime = 'edge';
 import { NextResponse } from 'next/server'
-import crypto from 'crypto'
+import CryptoJS from 'crypto-js'
 import { sendTelegramAlert } from '../../../lib/telegram'
 
 export async function POST(req: Request) {
@@ -19,10 +20,7 @@ export async function POST(req: Request) {
     }
 
     // Verify Signature
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(JSON.stringify(body))
-      .digest('hex')
+    const expectedSignature = CryptoJS.HmacSHA256(JSON.stringify(body), secret).toString(CryptoJS.enc.Hex)
 
     if (signature !== expectedSignature) {
       console.warn('⚠️ Razorpay Webhook Signature Mismatch')

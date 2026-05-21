@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from '@clerk/nextjs';
 import './globals.css';
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   title: 'Akshara World – Command Center',
   description: '24/7 Autonomous Digital Business Dashboard | AI CEO: Sam',
