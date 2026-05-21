@@ -11,11 +11,11 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci --legacy-peer-deps
-      - run: npm run build --workspace=dashboard
-      - run: npm run build --workspace=akshara-world-dashboard
+      - run: cd . && npm run build
+      - run: cd akshara-world-dashboard && npm run build
       - name: Deploy to Cloudflare Pages (Dashboard)
         run: |
-          cd dashboard
+          cd .
           npm run build
           # Add Cloudflare deployment here
       - name: Deploy to Vercel (Akshara Dashboard)

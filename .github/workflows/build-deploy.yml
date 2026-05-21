@@ -25,7 +25,7 @@ jobs:
       
       - name: Build main dashboard
         run: |
-          cd dashboard
+          cd .
           npm ci --legacy-peer-deps
           npm run build
       
@@ -37,13 +37,13 @@ jobs:
       
       - name: Run linting
         run: |
-          cd dashboard && npm run lint || true
+          cd . && npm run lint || true
           cd ../akshara-world-dashboard && npm run lint || true
       
       - name: Deploy to Cloudflare Pages (Dashboard)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          cd dashboard
+          cd .
           npm install -g wrangler
           wrangler pages deploy out/
         env:
