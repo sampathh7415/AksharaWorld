@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Akshara World — Payment Receipt</title>
+</head>
+<body style="font-family: system-ui, sans-serif; line-height: 1.5; color: #111;">
+  <h2>Thank you for your purchase</h2>
+  <p>Hi {{CUSTOMER_NAME}},</p>
+  <p>We received your payment for <strong>Akshara Launch Pilot</strong>.</p>
+  <table style="border-collapse: collapse; margin: 16px 0;">
+    <tr><td style="padding: 4px 12px 4px 0;"><strong>Amount</strong></td><td>₹{{AMOUNT_INR}}</td></tr>
+    <tr><td style="padding: 4px 12px 4px 0;"><strong>Payment ID</strong></td><td>{{RAZORPAY_PAYMENT_ID}}</td></tr>
+    <tr><td style="padding: 4px 12px 4px 0;"><strong>Date</strong></td><td>{{PAYMENT_DATE}}</td></tr>
+    <tr><td style="padding: 4px 12px 4px 0;"><strong>Plan</strong></td><td>{{OFFER_VARIANT}}</td></tr>
+  </table>
+  <p><strong>Next steps</strong></p>
+  <ol>
+    <li>We will provision Command Center access within 48 hours.</li>
+    <li>You will receive a Google Chat invite for onboarding support.</li>
+    <li>Reply to this email if you need a demo time.</li>
+  </ol>
+  <p>Refund policy: full refund within 7 days if access was not provisioned. See <a href="{{TERMS_URL}}">Terms of Service</a>.</p>
+  <p>— Akshara World</p>
+</body>
+</html>
