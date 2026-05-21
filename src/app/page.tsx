@@ -5,6 +5,7 @@ import { resilientFetch } from '../lib/resilience';
 
 const NAV = [
   { id: 'kpi', icon: '📊', label: 'Business KPIs' },
+  { id: '30dayops', icon: '📋', label: '30-Day Ops' },
   { id: 'departments', icon: '🏢', label: 'Departments' },
   { id: 'approvals', icon: '✅', label: 'Approvals Queue' },
   { id: 'sam', icon: '💬', label: 'Chat with Sam' },
@@ -16,6 +17,27 @@ const NAV = [
   { id: 'upgrades', icon: '🚀', label: 'Upgrade Proposals' },
   { id: 'filereviews', icon: '📁', label: 'File Reviews' },
   { id: 'failures', icon: '⚠️', label: '3-Try Failures' },
+];
+
+const DECISION_RULES = [
+  { signal: 'Traffic ↑, conversion flat', action: 'Change CTA/headline on top Blogger post within 24h', owner: 'Growth_Engine' },
+  { signal: 'Payment webhook failure', action: 'Stop outbound; run smoke-test-payment-flow.mjs', owner: 'Tech_Core + Guardian_Ops' },
+  { signal: 'Sheets API errors', action: 'Check Google API quota; verify secrets; see Runbook #2', owner: 'Tech_Core' },
+  { signal: '48h no pipeline movement', action: 'Change offer band or ICP segment; log experiment_id', owner: 'Revenue_Vault' },
+  { signal: '5 early-bird sold', action: 'Switch all CTAs to ₹1,500 standard', owner: 'Revenue_Vault' },
+  { signal: 'Demo → paid < 20%', action: 'Revise demo script; tighten ICP on WhatsApp', owner: 'Growth_Engine' },
+  { signal: 'Telegram alert > 4h unread', action: 'Open incident in SystemLog; follow runbook', owner: 'Guardian_Ops' },
+];
+
+const OPS_DOCS = [
+  { label: '📋 Sales Playbook', href: '/docs/sales/sales-playbook.md' },
+  { label: '📞 Demo Script', href: '/docs/sales/demo-script.md' },
+  { label: '💬 Outbound Playbook', href: '/docs/sales/outbound-playbook.md' },
+  { label: '🛡️ Runbook #1 — Payment Failure', href: '/docs/runbooks/01-razorpay-webhook-payment-failure.md' },
+  { label: '🛡️ Runbook #2 — Sheets API Down', href: '/docs/runbooks/02-google-sheets-api-down.md' },
+  { label: '🛡️ Runbook #3 — Cloudflare Rollback', href: '/docs/runbooks/03-cloudflare-deploy-rollback.md' },
+  { label: '📅 Daily Ritual', href: '/docs/cadence/DAILY_RITUAL.md' },
+  { label: '📆 Weekly Scorecard Ritual', href: '/docs/cadence/WEEKLY_SCORECARD_RITUAL.md' },
 ];
 
 const DEPTS = [
@@ -241,6 +263,102 @@ export default function Dashboard() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── 30-DAY OPS ── */}
+          {active === '30dayops' && (
+            <div>
+              {/* Hero Offer Status */}
+              <div className="glass-card" style={{ marginBottom: 20 }}>
+                <div className="card-header"><span className="card-title">🎯 Hero Offer — Launch Pilot Status</span><span className="pill blue">Active</span></div>
+                <div className="card-body">
+                  <div className="row-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 16 }}>
+                    {[
+                      { label: 'Early-Bird Price', value: '₹999', sub: 'First 5 seats', color: 'var(--yellow)' },
+                      { label: 'Standard Price', value: '₹1,500', sub: 'From Week 4 / after 5 seats', color: 'var(--blue)' },
+                      { label: 'Premium Price', value: '₹4,999', sub: '+1 live strategy session', color: 'var(--purple)' },
+                    ].map(k => (
+                      <div key={k.label} className="kpi-card">
+                        <div className="kpi-label">{k.label}</div>
+                        <div className="kpi-value" style={{ color: k.color }}>{k.value}</div>
+                        <div className="kpi-sub">{k.sub}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ background: 'var(--panel2)', borderRadius: 10, padding: 14, fontSize: '0.84rem', color: 'var(--muted)' }}>
+                    <strong style={{ color: 'var(--text)' }}>Checkout CTA:</strong> "Get the Akshara Launch Pilot — ₹1,500 (₹999 for first 5 seats). Sam runs 8 departments on ₹0 infra. [Pay with Razorpay]"
+                    <div style={{ marginTop: 8 }}>
+                      <a href="/public/products/launch-pilot" style={{ color: 'var(--blue)', fontWeight: 600, textDecoration: 'none' }}>→ View Launch Pilot Page</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Daily Ritual Checklist */}
+              <div className="glass-card" style={{ marginBottom: 20 }}>
+                <div className="card-header"><span className="card-title">☀️ Daily Ritual (~25 min, Mon–Sat)</span><span className="pill green">Target: ≥20/30 days</span></div>
+                <div className="card-body">
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                    <div>
+                      <div style={{ fontWeight: 700, marginBottom: 10, color: 'var(--yellow)' }}>☀️ Morning (~15 min)</div>
+                      {['Open /internal → Insight Lab (GA4, revenue, merchant feed, dept logs)', 'Approve queue — max 2 approvals today (ops-config)', 'Check Telegram + GA4 alerts from overnight', 'Set today outbound target: 10 touches'].map(item => (
+                        <div key={item} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'flex-start' }}>
+                          <span style={{ color: 'var(--muted)', marginTop: 1 }}>□</span>
+                          <span style={{ fontSize: '0.82rem', color: 'var(--muted2)' }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, marginBottom: 10, color: 'var(--purple)' }}>🌙 Evening (~10 min)</div>
+                      {['Update SalesPipeline — all touches, stages, next_action', 'Confirm Telegram — no unacknowledged alerts >4h', 'If alert open → follow runbook + log SystemLog', 'Log touches count: ___ / 10'].map(item => (
+                        <div key={item} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'flex-start' }}>
+                          <span style={{ color: 'var(--muted)', marginTop: 1 }}>□</span>
+                          <span style={{ fontSize: '0.82rem', color: 'var(--muted2)' }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Real-Time Decision Rules */}
+              <div className="glass-card" style={{ marginBottom: 20 }}>
+                <div className="card-header"><span className="card-title">⚡ Real-Time Decision Rules</span><span className="pill yellow">No new infra needed</span></div>
+                <div className="card-body" style={{ padding: 0 }}>
+                  <table className="data-table">
+                    <thead><tr><th>Signal</th><th>Action</th><th>Owner</th></tr></thead>
+                    <tbody>
+                      {DECISION_RULES.map((r, i) => (
+                        <tr key={i}>
+                          <td style={{ color: 'var(--yellow)', fontSize: '0.82rem', fontWeight: 600 }}>{r.signal}</td>
+                          <td style={{ color: 'var(--text)', fontSize: '0.82rem' }}>{r.action}</td>
+                          <td><span className="pill blue" style={{ fontSize: '0.7rem' }}>{r.owner}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Ops Docs Quick Links */}
+              <div className="glass-card">
+                <div className="card-header"><span className="card-title">📂 Ops Playbooks &amp; Runbooks</span><span className="pill green">Live in GitHub</span></div>
+                <div className="card-body">
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10 }}>
+                    {OPS_DOCS.map(d => (
+                      <a key={d.label} href={d.href} target="_blank" rel="noopener noreferrer"
+                        style={{ display: 'block', padding: '10px 14px', background: 'var(--panel2)', borderRadius: 10, fontSize: '0.83rem', color: 'var(--text)', textDecoration: 'none', border: '1px solid var(--border2)', transition: 'background 0.15s' }}
+                      >
+                        {d.label}
+                      </a>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 14, fontSize: '0.78rem', color: 'var(--muted)' }}>
+                    Sam ops-config: <strong>maxDailyApprovals=2</strong> · Priority: Growth_Engine, Revenue_Vault, Guardian_Ops · Deferred: Innovation_Scout
+                  </div>
                 </div>
               </div>
             </div>

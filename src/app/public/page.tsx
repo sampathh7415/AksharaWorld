@@ -20,11 +20,11 @@ export default function LandingPage() {
           Akshara World is the world's first 24/7 autonomous digital business platform. Powered by AI CEO Sam and the Antigravity physics engine.
         </p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          <a href="/services" className="px-8 py-4 rounded-full bg-white text-black font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-            Explore Services
+          <a href="/public/products/launch-pilot" className="px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_40px_rgba(6,182,212,0.4)]">
+            🚀 Get Launch Pilot — ₹999
           </a>
-          <a href="/blog" className="px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md">
-            Read the Blog
+          <a href="/services" className="px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md">
+            Explore Services
           </a>
         </div>
       </section>
@@ -78,20 +78,29 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="max-w-5xl mx-auto px-6 py-32 text-center">
         <div className="p-12 rounded-[3rem] bg-gradient-to-br from-cyan-500/20 to-purple-600/20 border border-white/10 backdrop-blur-3xl">
-          <h2 className="text-4xl font-bold mb-6">Join the Revolution</h2>
-          <p className="text-gray-400 mb-10 max-w-xl mx-auto">
-            Get early access to our autonomous services and real-time insights delivered to your inbox.
+          <div className="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-cyan-400 bg-cyan-400/10 rounded-full uppercase">
+            Akshara Launch Pilot — 30-Day Real Business
+          </div>
+          <h2 className="text-4xl font-bold mb-4">Start your business today</h2>
+          <p className="text-gray-400 mb-4 max-w-xl mx-auto">
+            Sam AI CEO runs 8 departments on ₹0 infrastructure. Get Command Center access, SalesPipeline, and your first revenue — in 30 days.
           </p>
-          <form className="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
-            <input 
-              type="email" 
-              placeholder="Enter your email" 
-              className="flex-1 px-6 py-4 rounded-full bg-black/40 border border-white/10 focus:border-cyan-500 outline-none transition-all"
-            />
-            <button className="px-8 py-4 rounded-full bg-white text-black font-bold hover:bg-cyan-400 transition-colors">
-              Subscribe
-            </button>
-          </form>
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+            <span className="px-4 py-1.5 rounded-full bg-yellow-500/20 text-yellow-400 text-sm font-bold">₹999 early-bird (first 5 seats)</span>
+            <span className="px-4 py-1.5 rounded-full bg-white/10 text-white text-sm">₹1,500 standard</span>
+            <span className="px-4 py-1.5 rounded-full bg-white/10 text-white text-sm">₹4,999 premium</span>
+          </div>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+            <a href="/public/products/launch-pilot"
+               className="px-8 py-4 rounded-full bg-white text-black font-bold hover:bg-cyan-400 transition-colors shadow-xl">
+              🚀 View Full Offer
+            </a>
+            <a href="https://rzp.io/rzp/9O1zMeI" target="_blank" rel="noopener noreferrer"
+               className="px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold hover:opacity-90 transition-opacity">
+              Pay with Razorpay →
+            </a>
+          </div>
+          <p className="mt-6 text-gray-600 text-xs">7-day refund if access not provisioned · Secure payment via Razorpay</p>
         </div>
       </section>
     </div>

@@ -81,6 +81,7 @@ export default function PublicLayout({
               <a href="/about" className="hover:text-white transition-colors">About</a>
               <a href="/services" className="hover:text-white transition-colors">Services</a>
               <a href="/blog" className="hover:text-white transition-colors">Blog</a>
+              <a href="/public/products/launch-pilot" className="hover:text-cyan-400 transition-colors font-semibold text-cyan-400/80">🚀 Launch Pilot</a>
               <a href="https://dashboard.aksharaworld.in" className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white">Command Center</a>
             </div>
           </div>
@@ -104,10 +105,17 @@ export default function PublicLayout({
                 </div>
               </div>
               <div className="space-y-4 text-xs">
+                <div className="font-bold text-white uppercase tracking-widest">Products</div>
+                <div className="flex flex-col gap-2">
+                  <a href="/public/products/launch-pilot" className="hover:text-cyan-400">🚀 Akshara Launch Pilot</a>
+                  <a href="/public/products/ai-blueprint" className="hover:text-cyan-400">📘 AI Blueprint v1.0</a>
+                </div>
+              </div>
+              <div className="space-y-4 text-xs">
                 <div className="font-bold text-white uppercase tracking-widest">Legal</div>
                 <div className="flex flex-col gap-2">
-                  <a href="/privacy" className="hover:text-cyan-400">Privacy Policy</a>
-                  <a href="/terms" className="hover:text-cyan-400">Terms of Service</a>
+                  <a href="/public/privacy" className="hover:text-cyan-400">Privacy Policy</a>
+                  <a href="/public/terms" className="hover:text-cyan-400">Terms of Service</a>
                 </div>
               </div>
             </div>
