@@ -12,27 +12,27 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
       
       - name: Build main dashboard
         run: |
           cd dashboard
-          npm ci
+          npm install --legacy-peer-deps
           npm run build
       
       - name: Build akshara dashboard
         run: |
           cd akshara-world-dashboard
-          npm ci
+          npm install --legacy-peer-deps
           npm run build
       
       - name: Run linting
