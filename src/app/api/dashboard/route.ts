@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 
 const SAM_BRAIN_URL = process.env.NEXT_PUBLIC_SAM_BRAIN_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';
 
+interface RazorpayPayment {
+  status: string;
+  amount: number;
+  created_at: number;
+}
+
 export async function GET() {
   const result: any = { timestamp: new Date().toISOString() };
 
@@ -36,7 +42,7 @@ export async function GET() {
     let todayRevenue = 0;
     let monthRevenue = 0;
 
-    (rzpData.items || []).forEach((p: any) => {
+    (rzpData.items || []).forEach((p: RazorpayPayment) => {
       if (p.status === 'captured') {
         const amount = p.amount / 100;
         totalRevenue += amount;
