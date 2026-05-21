@@ -46,9 +46,10 @@ export async function GET() {
       systemHealth: 'Optimal',
       timestamp: new Date().toISOString()
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
     console.error('Data API Error:', error)
-    await sendTelegramAlert(`🚨 <b>Guardian_Ops Alert</b>\nData API Failure: ${error.message}`)
+    await sendTelegramAlert(`🚨 <b>Guardian_Ops Alert</b>\nData API Failure: ${errorMessage}`)
     return NextResponse.json({ error: 'Failed to aggregate live data' }, { status: 500 })
   }
 }

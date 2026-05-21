@@ -27,8 +27,9 @@ export async function sendTelegramAlert(message: string) {
     if (!data.ok) throw new Error(data.description);
 
     return { success: true };
-  } catch (error: any) {
-    console.error("❌ Telegram Send Error:", error.message);
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    console.error("❌ Telegram Send Error:", errorMessage);
+    return { success: false, error: errorMessage };
   }
 }
