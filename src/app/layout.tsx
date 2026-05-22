@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from '@clerk/nextjs';
 import { Inter, Outfit } from 'next/font/google';
 import Script from 'next/script';
+import { ConsentBanner } from '../components/ConsentBanner';
 import './globals.css';
 
 // ── Google Fonts (self-hosted by Next.js — zero layout shift) ──
@@ -35,6 +36,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         {/* Hide reCAPTCHA badge (score-based = no challenge shown) */}
         <style>{`.grecaptcha-badge { visibility: hidden !important; }`}</style>
+
+        {/* ✅ Google Consent Mode v2 — defaults BEFORE GA4 loads */}
+        <Script id="consent-mode-defaults" strategy="beforeInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            functionality_storage: 'granted',
+            wait_for_update: 500
+          });
+        `}</Script>
 
         {/* ✅ Google Analytics GA4 — G-QZ4L9XW64F */}
         <Script
@@ -96,6 +111,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Show>
           </header>
           {children}
+          {/* ✅ Cookie Consent Banner — Google Consent Mode v2 */}
+          <ConsentBanner />
         </ClerkProvider>
       </body>
     </html>
