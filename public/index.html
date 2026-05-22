@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PixelForge AI — Image & Video Creation</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo" id="storeName">Pixel<span>Forge</span> AI</div>
+    <div>
+      <span class="badge" id="paymentMode">Loading…</span>
+      <a href="/studio.html" class="btn secondary" style="margin-left:0.5rem;padding:0.4rem 0.8rem;font-size:0.85rem">My Studio</a>
+      <a href="/dashboard.html" class="btn" style="margin-left:0.5rem;padding:0.4rem 0.8rem;font-size:0.85rem">Revenue</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="status-pill"><span class="dot"></span> Open 24/7 — pay, get credits, create instantly</div>
+      <h1>AI image & video creation — on demand</h1>
+      <p>Buy credits, access your private studio, and generate from text prompts. Payments go to your Stripe account (bank payouts automatic).</p>
+    </section>
+
+    <div class="grid" id="products"></div>
+
+    <section class="panel" style="margin-top:2rem">
+      <h2>How payouts work</h2>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.7">
+        Customers pay via Stripe Checkout. Money lands in your Stripe balance, then transfers to your linked bank (usually 2–7 days).
+        Connect your bank once in the <a href="https://dashboard.stripe.com/account" target="_blank" rel="noopener">Stripe Dashboard</a> — not inside this app.
+      </p>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const fmt = (cents) => '$' + (cents / 100).toFixed(2);
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 6000);
+    }
+
+    async function loadProducts() {
+      const [prodRes, cfgRes] = await Promise.all([
+        fetch('/api/products'),
+        fetch('/api/config'),
+      ]);
+      const { products, stripeLive } = await prodRes.json();
+      const cfg = await cfgRes.json();
+      if (cfg.storeName) {
+        document.title = cfg.storeName + ' — AI Studio';
+        const parts = cfg.storeName.split(' ');
+        document.getElementById('storeName').innerHTML =
+          parts.length > 1
+            ? parts[0] + ' <span>' + parts.slice(1).join(' ') + '</span>'
+            : cfg.storeName;
+      }
+      document.getElementById('paymentMode').textContent = stripeLive
+        ? 'Secure checkout — Stripe'
+        : 'Test mode — add Stripe keys for real payments';
+
+      const grid = document.getElementById('products');
+      grid.innerHTML = products.map((p) => `
+        <article class="card" data-id="${p.id}">
+          ${p.badge ? `<span class="badge" style="align-self:flex-start">${p.badge}</span>` : ''}
+          <h3>${p.name}</h3>
+          <div class="price">${fmt(p.priceCents)}</div>
+          <p>${p.description}</p>
+          <ul style="color:var(--muted);font-size:0.85rem;margin:0;padding-left:1.1rem">
+            ${p.type === 'image' ? `<li>${p.credits} image credits</li>` : ''}
+            ${p.type === 'video' ? `<li>${p.credits} video credits</li>${p.imageBonus ? `<li>+${p.imageBonus} bonus images</li>` : ''}` : ''}
+            ${p.type === 'bundle' ? `<li>${p.credits} images + ${p.videoCredits} videos / month</li>` : ''}
+          </ul>
+          <input type="email" placeholder="your@email.com" class="email" required />
+          <button type="button" class="buy">Buy & open AI Studio</button>
+        </article>
+      `).join('');
+
+      grid.querySelectorAll('.buy').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const card = btn.closest('.card');
+          const productId = card.dataset.id;
+          const email = card.querySelector('.email').value.trim();
+          if (!email.includes('@')) return toast('Enter a valid email');
+
+          btn.disabled = true;
+          btn.textContent = 'Processing…';
+
+          try {
+            const r = await fetch('/api/checkout', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ productId, email }),
+            });
+            const data = await r.json();
+            if (!r.ok) throw new Error(data.error || 'Checkout failed');
+
+            if (data.url) {
+              window.location.href = data.url;
+            } else {
+              localStorage.setItem('studioToken', data.order.accessToken);
+              toast('Credits activated!');
+              window.location.href = data.studioUrl;
+            }
+          } catch (e) {
+            toast(e.message);
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'Buy & open AI Studio';
+          }
+        });
+      });
+    }
+
+    if (new URLSearchParams(location.search).get('cancelled')) {
+      toast('Checkout cancelled — we saved your cart for recovery.');
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>

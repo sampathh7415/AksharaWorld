@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Studio — Create</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .studio-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 800px) { .studio-layout { grid-template-columns: 1fr; } }
+    textarea { width: 100%; min-height: 100px; padding: 0.75rem; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; font: inherit; }
+    .preview { min-height: 280px; background: var(--bg); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .preview img, .preview video { max-width: 100%; max-height: 400px; }
+    .credits-bar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .credits-bar .stat { flex: 1; min-width: 140px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">AI <span>Studio</span></div>
+    <a href="/">← Store</a>
+  </header>
+
+  <main>
+    <div id="gate" class="panel">
+      <h2>Enter your studio access token</h2>
+      <p style="color:var(--muted);margin:0.75rem 0">Sent after purchase (or saved in this browser).</p>
+      <input type="text" id="tokenInput" placeholder="Paste token from email / checkout" style="margin-bottom:0.75rem" />
+      <button type="button" id="openStudio">Open Studio</button>
+    </div>
+
+    <div id="workspace" style="display:none">
+      <div class="credits-bar">
+        <div class="stat">
+          <div class="label">Image credits</div>
+          <div class="value live" id="imgCredits">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Video credits</div>
+          <div class="value" id="vidCredits">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">AI engine</div>
+          <div class="value" id="aiMode" style="font-size:1rem">—</div>
+        </div>
+      </div>
+
+      <div class="studio-layout">
+        <div class="panel">
+          <h2>AI Image</h2>
+          <textarea id="imgPrompt" placeholder="A futuristic city at sunset, cinematic lighting…"></textarea>
+          <button type="button" id="genImage" style="margin-top:0.75rem">Generate image (1 credit)</button>
+        </div>
+        <div class="panel">
+          <h2>Preview</h2>
+          <div class="preview" id="imgPreview"><span style="color:var(--muted)">Image appears here</span></div>
+        </div>
+      </div>
+
+      <div class="studio-layout" style="margin-top:1.25rem">
+        <div class="panel">
+          <h2>AI Video</h2>
+          <textarea id="vidPrompt" placeholder="Ocean waves crashing on rocks, slow motion, 4K…"></textarea>
+          <button type="button" id="genVideo" style="margin-top:0.75rem">Generate video (1 credit)</button>
+        </div>
+        <div class="panel">
+          <h2>Preview</h2>
+          <div class="preview" id="vidPreview"><span style="color:var(--muted)">Video appears here</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let token = new URLSearchParams(location.search).get('token') || localStorage.getItem('studioToken') || '';
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 5000);
+    }
+
+    async function loadStudio(t) {
+      const r = await fetch('/api/studio?token=' + encodeURIComponent(t));
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || 'Invalid token');
+      token = t;
+      localStorage.setItem('studioToken', t);
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('workspace').style.display = 'block';
+      document.getElementById('imgCredits').textContent = data.imageCredits;
+      document.getElementById('vidCredits').textContent = data.videoCredits;
+      document.getElementById('aiMode').textContent = data.aiMode === 'replicate' ? 'Replicate AI' : 'Demo';
+    }
+
+    document.getElementById('openStudio').onclick = () => {
+      const t = document.getElementById('tokenInput').value.trim() || token;
+      loadStudio(t).catch((e) => toast(e.message));
+    };
+
+    document.getElementById('genImage').onclick = async () => {
+      const prompt = document.getElementById('imgPrompt').value.trim();
+      if (!prompt) return toast('Enter a prompt');
+      const btn = document.getElementById('genImage');
+      btn.disabled = true;
+      btn.textContent = 'Generating…';
+      try {
+        const r = await fetch('/api/studio/generate/image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, prompt }),
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'Failed');
+        document.getElementById('imgPreview').innerHTML = `<img src="${data.url}" alt="Generated" />`;
+        document.getElementById('imgCredits').textContent = data.credits.imageCredits;
+        document.getElementById('vidCredits').textContent = data.credits.videoCredits;
+        if (data.mode === 'demo') toast('Demo image — add REPLICATE_API_TOKEN for photoreal AI');
+      } catch (e) {
+        toast(e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Generate image (1 credit)';
+      }
+    };
+
+    document.getElementById('genVideo').onclick = async () => {
+      const prompt = document.getElementById('vidPrompt').value.trim();
+      if (!prompt) return toast('Enter a prompt');
+      const btn = document.getElementById('genVideo');
+      btn.disabled = true;
+      btn.textContent = 'Generating…';
+      try {
+        const r = await fetch('/api/studio/generate/video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, prompt }),
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'Failed');
+        const prev = document.getElementById('vidPreview');
+        if (data.url) {
+          prev.innerHTML = `<video src="${data.url}" controls autoplay loop></video>`;
+        } else {
+          prev.innerHTML = `<p style="color:var(--muted);padding:1rem">${data.message}</p>`;
+        }
+        if (data.credits) {
+          document.getElementById('imgCredits').textContent = data.credits.imageCredits;
+          document.getElementById('vidCredits').textContent = data.credits.videoCredits;
+        }
+      } catch (e) {
+        toast(e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Generate video (1 credit)';
+      }
+    };
+
+    if (token) {
+      document.getElementById('tokenInput').value = token;
+      loadStudio(token).catch(() => {});
+    }
+  </script>
+</body>
+</html>

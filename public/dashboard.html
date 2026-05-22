@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Revenue — Autopilot Store</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">Revenue <span>Command</span> Center</div>
+    <a href="/">← Storefront</a>
+  </header>
+
+  <main>
+    <p style="color:var(--muted);margin-bottom:1.5rem">
+      Real-time earnings via Server-Sent Events. Updates on every sale and automation event.
+    </p>
+
+    <div class="dash-grid">
+      <div class="stat">
+        <div class="label">Total revenue</div>
+        <div class="value live" id="totalRev">$0.00</div>
+      </div>
+      <div class="stat">
+        <div class="label">Today</div>
+        <div class="value" id="todayRev">$0.00</div>
+      </div>
+      <div class="stat">
+        <div class="label">Orders (all time)</div>
+        <div class="value" id="orderCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Last 24h</div>
+        <div class="value" id="last24">$0.00</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Hourly velocity (last 12 buckets)</h2>
+      <div class="chart-bar" id="chart"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Recent orders</h2>
+      <table>
+        <thead>
+          <tr><th>Time</th><th>Product</th><th>Email</th><th>Amount</th><th>Source</th></tr>
+        </thead>
+        <tbody id="orders"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2>Automation log (24/7 engine)</h2>
+      <ul class="log-list" id="automation"></ul>
+    </div>
+  </main>
+
+  <script>
+    const fmt = (cents) => '$' + (cents / 100).toFixed(2);
+    const fmtTime = (iso) => new Date(iso).toLocaleString();
+
+    function renderMetrics(m) {
+      document.getElementById('totalRev').textContent = fmt(m.totalRevenueCents);
+      document.getElementById('todayRev').textContent = fmt(m.todayRevenueCents);
+      document.getElementById('orderCount').textContent = m.orderCount;
+      document.getElementById('last24').textContent = fmt(m.last24hRevenueCents);
+
+      const orders = m.recentOrders || [];
+      const buckets = Array(12).fill(0);
+      const now = Date.now();
+      for (const o of orders) {
+        const ageH = (now - new Date(o.createdAt)) / 3600000;
+        if (ageH < 12) buckets[11 - Math.floor(ageH)] += o.amountCents;
+      }
+      const max = Math.max(...buckets, 1);
+      document.getElementById('chart').innerHTML = buckets
+        .map((v) => `<span style="height:${Math.max(8, (v / max) * 100)}%" title="${fmt(v)}"></span>`)
+        .join('');
+
+      document.getElementById('orders').innerHTML = orders.length
+        ? orders.map((o) => `
+          <tr>
+            <td>${fmtTime(o.createdAt)}</td>
+            <td>${o.productName}</td>
+            <td>${o.email}</td>
+            <td>${fmt(o.amountCents)}</td>
+            <td>${o.source}</td>
+          </tr>`).join('')
+        : '<tr><td colspan="5" style="color:var(--muted)">No orders yet — make a test sale on the storefront</td></tr>';
+
+      document.getElementById('automation').innerHTML = (m.automationLog || [])
+        .map((a) => `<li><strong>${a.type}</strong> — ${a.message || a.at}</li>`)
+        .join('') || '<li>Waiting for automation events…</li>';
+    }
+
+    fetch('/api/metrics').then((r) => r.json()).then(renderMetrics);
+
+    const es = new EventSource('/api/revenue/stream');
+    es.addEventListener('metrics', (e) => renderMetrics(JSON.parse(e.data)));
+    es.addEventListener('order', () => {
+      fetch('/api/metrics').then((r) => r.json()).then(renderMetrics);
+    });
+    es.onerror = () => {
+      setTimeout(() => location.reload(), 3000);
+    };
+  </script>
+</body>
+</html>

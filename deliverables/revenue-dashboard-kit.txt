@@ -1,0 +1,10 @@
+REVENUE DASHBOARD KIT
+=====================
+
+Includes:
+- KPI definitions (MRR, AOV, conversion rate)
+- SSE event schema for live totals
+- Sample Looker/Sheets formulas
+- Alert thresholds (spike, drop, webhook failures)
+
+Deploy the included /dashboard route alongside your storefront.

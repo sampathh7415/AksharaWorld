@@ -1,0 +1,11 @@
+24/7 OPS RUNBOOK BUNDLE
+=======================
+
+Runbook A: Payment webhook failure → replay from Stripe dashboard
+Runbook B: Site down → health check + rollback deploy
+Runbook C: Fraud spike → pause checkout + review events
+
+Automation schedule (included):
+- Every 15 min: health ping
+- Every hour: abandoned checkout recovery
+- Daily 08:00: revenue digest to operator email log

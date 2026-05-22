@@ -1,0 +1,13 @@
+AUTOPILOT BUSINESS — AUTOMATION PLAYBOOK
+=========================================
+
+Thank you for your purchase. This digital product is delivered instantly.
+
+Chapter 1: Offer & funnel (one hero product, clear CTA)
+Chapter 2: Payment webhooks (never trust the client — verify server-side)
+Chapter 3: Auto-delivery (download link + email within 60 seconds)
+Chapter 4: Real-time revenue dashboard (SSE or WebSocket)
+Chapter 5: Cron automations (abandoned cart, digest, upsell)
+Chapter 6: 24/7 monitoring (health checks + Telegram/Slack alerts)
+
+Your license: personal + commercial use for one business entity.

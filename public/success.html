@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment successful</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main style="text-align:center;padding:4rem 2rem">
+    <h1>Payment received</h1>
+    <p id="status" style="color:var(--muted);margin:1rem 0 2rem">Activating your AI Studio credits…</p>
+    <a href="/studio.html" id="studioLink" class="btn" style="display:none">Open AI Studio →</a>
+    <a href="/" class="btn secondary" style="margin-left:0.5rem">Buy more credits</a>
+  </main>
+  <script>
+    const sessionId = new URLSearchParams(location.search).get('session_id');
+    async function poll() {
+      if (!sessionId) {
+        document.getElementById('status').textContent = 'Check your email for studio access, or open My Studio with your token.';
+        return;
+      }
+      for (let i = 0; i < 15; i++) {
+        const r = await fetch('/api/order/lookup?session_id=' + encodeURIComponent(sessionId));
+        if (r.ok) {
+          const data = await r.json();
+          if (data.order?.accessToken) {
+            localStorage.setItem('studioToken', data.order.accessToken);
+            const link = document.getElementById('studioLink');
+            link.href = data.studioUrl;
+            link.style.display = 'inline-block';
+            document.getElementById('status').textContent = 'Credits active! Create AI images and videos now.';
+            return;
+          }
+        }
+        await new Promise((r) => setTimeout(r, 2000));
+      }
+      document.getElementById('status').textContent =
+        'Payment received. If studio is not ready yet, wait 30s and refresh — webhook may still be processing.';
+    }
+    poll();
+  </script>
+</body>
+</html>
