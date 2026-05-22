@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Google Fonts loaded via next/font/google in layout.tsx (self-hosted, zero layout shift) */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,7 +21,9 @@
   --muted2: #475569;
 }
 
-html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+html, body { height: 100%; font-family: var(--font-inter, 'Inter', sans-serif); background: var(--bg); color: var(--text); overflow: hidden; }
+
+h1, h2, h3, .brand-logo, .kpi-value { font-family: var(--font-outfit, 'Outfit', sans-serif); }
 
 /* ── LAYOUT ─────────────────────────────── */
 .shell { display: flex; height: 100vh; width: 100vw; }

@@ -1,6 +1,22 @@
 import type { Metadata } from 'next';
 import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from '@clerk/nextjs';
+import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
+
+// ── Google Fonts (self-hosted by Next.js — zero layout shift) ──
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+});
 
 export const metadata: Metadata = {
   title: 'Akshara World – Command Center',
@@ -9,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <body>
         <ClerkProvider>
           <header style={{
