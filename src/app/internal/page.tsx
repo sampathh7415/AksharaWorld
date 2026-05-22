@@ -33,6 +33,7 @@ import { RevenueVault } from '../../components/Dashboard/RevenueVault';
 import { TrafficMonitor } from '../../components/Dashboard/TrafficMonitor';
 import { GoogleMerchant } from '../../components/Dashboard/GoogleMerchant';
 import { AIInstructions } from '../../components/Dashboard/AIInstructions';
+import { InsightCharts } from '../../components/Dashboard/InsightCharts';
 import { resilientFetch } from '../../lib/resilience';
 
 interface Department {
@@ -971,6 +972,9 @@ export default function UnifiedDashboard() {
             {/* TAB 5: TELEMETRY & LOOKER ANALYTICS */}
             {activeTab === 'analytics' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                {/* ✅ Google Charts — Integrated */}
+                <InsightCharts />
+
                 <TrafficMonitor />
 
                 {/* Search Console & PageSpeed Insights */}
