@@ -99,6 +99,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             send_page_view: true,
           });
         `}</Script>
+
+        {/* ✅ Google AdSense — ca-pub-9728864343029052 (Auto Ads) */}
+        <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || 'ca-pub-9728864343029052'}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <ClerkProvider>
           <header style={{
             position: 'fixed',

@@ -45,6 +45,8 @@ jobs:
           NEXT_PUBLIC_RECAPTCHA_SITE_KEY: 6Lfv9vYsAAAAAH_t85p2PGbGHD1JsPbA2YyZ2Y85
           # ── Google Search Console ──
           GOOGLE_SITE_VERIFICATION: OncBqpSQj_mCxvK-6s6w0bKFJCHTlCF8SXFdl_AhOks
+          # ── Google AdSense ──
+          NEXT_PUBLIC_ADSENSE_PUBLISHER_ID: ca-pub-9728864343029052
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
