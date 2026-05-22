@@ -3,6 +3,7 @@ export const runtime = 'edge';
 
 import React, { useState } from 'react';
 import { getRecaptchaToken } from '../../../lib/recaptcha';
+import { gaContactFormSubmit } from '../../../lib/analytics';
 
 type FormState = 'idle' | 'sending' | 'success' | 'error' | 'blocked';
 
@@ -35,6 +36,7 @@ export default function ContactPage() {
         setStatus('blocked');
       } else if (data.success) {
         setStatus('success');
+        gaContactFormSubmit(form.subject); // 📊 GA4: track lead
         setForm({ name: '', email: '', subject: '', message: '' });
       } else {
         setStatus('error');

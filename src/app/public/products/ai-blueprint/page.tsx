@@ -3,6 +3,7 @@ export const runtime = 'edge';
 
 import React, { useState } from 'react';
 import { getRecaptchaToken } from '../../../../lib/recaptcha';
+import { gaPurchaseInitiate } from '../../../../lib/analytics';
 
 export default function ProductPage() {
   const [checking, setChecking] = useState(false);
@@ -29,7 +30,8 @@ export default function ProductPage() {
         return;
       }
 
-      // ✅ Human verified — redirect to Razorpay
+      // ✅ Human verified — track & redirect to Razorpay
+      gaPurchaseInitiate('AI Productivity Blueprint v1.0', 499); // 📊 GA4
       window.open('https://rzp.io/rzp/9O1zMeI', '_blank');
     } catch {
       // On error, allow through (don't block legitimate users)

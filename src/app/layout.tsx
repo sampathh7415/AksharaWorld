@@ -35,6 +35,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         {/* Hide reCAPTCHA badge (score-based = no challenge shown) */}
         <style>{`.grecaptcha-badge { visibility: hidden !important; }`}</style>
+
+        {/* ✅ Google Analytics GA4 — G-QZ4L9XW64F */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-QZ4L9XW64F'}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-QZ4L9XW64F'}', {
+            page_path: window.location.pathname,
+            send_page_view: true,
+          });
+        `}</Script>
         <ClerkProvider>
           <header style={{
             position: 'fixed',
