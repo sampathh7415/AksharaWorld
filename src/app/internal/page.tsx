@@ -35,7 +35,9 @@ import { GoogleMerchant } from '../../components/Dashboard/GoogleMerchant';
 import { AIInstructions } from '../../components/Dashboard/AIInstructions';
 import { InsightCharts } from '../../components/Dashboard/InsightCharts';
 import { InnovationScoutPanel } from '../../components/Dashboard/InnovationScoutPanel';
+import { SearchConsolePanel } from '../../components/Dashboard/SearchConsolePanel';
 import { resilientFetch } from '../../lib/resilience';
+
 
 interface Department {
   name: string;
@@ -1001,59 +1003,8 @@ export default function UnifiedDashboard() {
 
                 <TrafficMonitor />
 
-                {/* Search Console & PageSpeed Insights */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4">
-                    <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase">
-                      <Globe className="text-yellow-400 w-4 h-4" /> Google Search Console organic rankings
-                    </h3>
-                    <p className="text-xs text-gray-500">Top-performing queries driving active organic traffic to Akshara World.</p>
-                    <div className="space-y-2 pt-2">
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/5 flex justify-between items-center text-xs">
-                        <span className="font-bold text-slate-300">"zero capex business models"</span>
-                        <div className="text-right">
-                          <div className="font-black text-white">#1</div>
-                          <div className="text-[9px] text-gray-500 uppercase">Avg Rank</div>
-                        </div>
-                      </div>
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/5 flex justify-between items-center text-xs">
-                        <span className="font-bold text-slate-300">"serverless ai agents sheets db"</span>
-                        <div className="text-right">
-                          <div className="font-black text-white">#2</div>
-                          <div className="text-[9px] text-gray-500 uppercase">Avg Rank</div>
-                        </div>
-                      </div>
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/5 flex justify-between items-center text-xs">
-                        <span className="font-bold text-slate-300">"cloudflare pages edge runtime tutorial"</span>
-                        <div className="text-right">
-                          <div className="font-black text-white">#5</div>
-                          <div className="text-[9px] text-gray-500 uppercase">Avg Rank</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4">
-                    <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase">
-                      <Zap className="text-cyan-400 w-4 h-4" /> Google PageSpeed core web vitals
-                    </h3>
-                    <p className="text-xs text-gray-500">Real-time performance metrics monitored across international Workers nodes.</p>
-                    <div className="grid grid-cols-3 gap-3 pt-2">
-                      <div className="p-4 rounded-xl bg-black/40 border border-white/5 text-center">
-                        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1">Performance</div>
-                        <div className="text-xl font-black text-emerald-400">99 / 100</div>
-                      </div>
-                      <div className="p-4 rounded-xl bg-black/40 border border-white/5 text-center">
-                        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1">Accessibility</div>
-                        <div className="text-xl font-black text-emerald-400">100 / 100</div>
-                      </div>
-                      <div className="p-4 rounded-xl bg-black/40 border border-white/5 text-center">
-                        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1">SEO Index</div>
-                        <div className="text-xl font-black text-emerald-400">100 / 100</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* ✅ Google Search Console — Live Data Panel */}
+                <SearchConsolePanel />
 
                 {/* Looker Studio Report Integration Iframe */}
                 <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4">

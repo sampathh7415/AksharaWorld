@@ -21,9 +21,43 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'Akshara World – Command Center',
-  description: '24/7 Autonomous Digital Business Dashboard | AI CEO: Sam',
+  // ── Core SEO ──
+  title:       'Akshara World – AI-Powered Autonomous Business | Zero Cost Digital Empire',
+  description: 'Run a 24/7 autonomous digital business with zero recurring costs. AI CEO Sam manages operations, revenue, and growth using Google Sheets, Cloudflare Workers, and Gemini AI.',
+  keywords:    ['autonomous business', 'zero cost startup', 'AI CEO', 'Sam CEO', 'Cloudflare Workers', 'Google Sheets database', 'Gemini AI', 'aksharaworld'],
+  authors:     [{ name: 'Sampathkumar', url: 'https://aksharaworld.in' }],
+  creator:     'Akshara World',
+  publisher:   'Akshara World',
+  robots:      { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large' } },
+
+  // ── Google Search Console Verification ──
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || '',  // Set GOOGLE_SITE_VERIFICATION in .env.local
+  },
+
+  // ── Open Graph (WhatsApp, LinkedIn, Facebook) ──
+  openGraph: {
+    type:        'website',
+    locale:      'en_IN',
+    url:         'https://aksharaworld.in',
+    siteName:    'Akshara World',
+    title:       'Akshara World – AI Autonomous Business | Zero Cost Digital Empire',
+    description: 'Run a 24/7 autonomous business with AI CEO Sam. Zero recurring costs. Live in India.',
+    images:      [{ url: 'https://aksharaworld.in/og-image.jpg', width: 1200, height: 630, alt: 'Akshara World – AI CEO Dashboard' }],
+  },
+
+  // ── Twitter / X Card ──
+  twitter: {
+    card:        'summary_large_image',
+    title:       'Akshara World – Autonomous Business at Zero Cost',
+    description: 'AI CEO Sam runs the entire business. Powered by Gemini, Cloudflare, Google Sheets.',
+    images:      ['https://aksharaworld.in/og-image.jpg'],
+  },
+
+  // ── Canonical ──
+  alternates: { canonical: 'https://aksharaworld.in' },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
