@@ -37,6 +37,8 @@ import { InsightCharts } from '../../components/Dashboard/InsightCharts';
 import { InnovationScoutPanel } from '../../components/Dashboard/InnovationScoutPanel';
 import { SearchConsolePanel } from '../../components/Dashboard/SearchConsolePanel';
 import { MerchantCenterPanel } from '../../components/Dashboard/MerchantCenterPanel';
+import { BloggerPanel } from '../../components/Dashboard/BloggerPanel';
+import { YouTubePanel } from '../../components/Dashboard/YouTubePanel';
 import { resilientFetch } from '../../lib/resilience';
 
 
@@ -913,86 +915,11 @@ export default function UnifiedDashboard() {
                 {/* ✅ Google Merchant Center Live Panel — ID: 5782853246 */}
                 <MerchantCenterPanel />
 
-                {/* Blogger Scheduler & Pomelli Generator */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4">
-                    <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase">
-                      <BookOpen className="text-orange-400 w-4 h-4" /> Google Blogger Scheduler
-                    </h3>
-                    <p className="text-xs text-gray-500">Publish or schedule SEO-friendly drafts synced from Google Docs folders.</p>
-                    <div className="space-y-3 pt-2">
-                      <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2">
-                        <div className="flex justify-between items-start">
-                          <span className="text-xs font-bold text-slate-200">Reclaiming Autonomy with ₹0 Capex AI Systems</span>
-                          <span className="text-[8px] font-black text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20 uppercase tracking-tighter">SCHEDULED</span>
-                        </div>
-                        <p className="text-[11px] text-gray-500">Scheduled for publish at: 2026-05-22 09:00 AM IST</p>
-                        <div className="flex justify-end gap-2 pt-2">
-                          <button className="px-3 py-1.5 rounded-lg bg-orange-500 text-black text-[10px] font-black uppercase hover:scale-105 transition-transform">Publish Now</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                {/* ✅ Blogger Auto-Publisher — Blog ID: 4758144517261750879 */}
+                <BloggerPanel />
 
-                  <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4">
-                    <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase">
-                      <Sparkles className="text-cyan-400 w-4 h-4" /> Google Pomelli ad copy generator
-                    </h3>
-                    <p className="text-xs text-gray-500">Draft high-converting promotional copies for Google AdSense and organic campaigns.</p>
-                    <div className="space-y-3 pt-2">
-                      <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2">
-                        <div className="text-[9px] font-black text-cyan-400 uppercase tracking-widest">Active E-Book Campaign Ad Copy</div>
-                        <p className="text-xs text-gray-300 italic leading-relaxed">
-                          "Scale your digital empire to ₹10L/mo with absolutely zero recurring tool costs. Read the masterclass written by Sam (AI CEO)."
-                        </p>
-                        <div className="text-[9px] text-gray-500 uppercase font-mono tracking-widest pt-2">Keywords: zero capex saas, sam ceo, cloudflare workers</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Google Sites and Gmail Outbound Logs */}
-                <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase">
-                    <Globe className="text-blue-400 w-4 h-4" /> Google Sites micro-pages & Gmail Outbound list
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2">
-                      <div className="text-[10px] font-black text-blue-400 uppercase tracking-wider">Active Google Sites Campaign Pages</div>
-                      <div className="space-y-1.5 text-xs text-gray-400">
-                        <div className="flex justify-between items-center">
-                          <span>🌐 aksharaworld.in/launchpad</span>
-                          <span className="text-emerald-400 font-bold uppercase text-[9px]">LIVE</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span>🌐 aksharaworld.in/saas-scaffolding</span>
-                          <span className="text-emerald-400 font-bold uppercase text-[9px]">LIVE</span>
-                        </div>
-                        <a
-                          href="https://sites.google.com/new"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block mt-2 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest text-center hover:bg-blue-500/20 transition-colors"
-                        >
-                          ✅ Create New Google Sites Page ↗
-                        </a>
-                      </div>
-                    </div>
-                    <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2">
-                      <div className="text-[10px] font-black text-blue-400 uppercase tracking-wider">Gmail Newsletters Outbound queue</div>
-                      <div className="space-y-1.5 text-xs text-gray-400">
-                        <div className="flex justify-between items-center">
-                          <span>✉️ May Strategy Newsletter Blast (2,450 sent)</span>
-                          <span className="text-emerald-400 font-bold uppercase text-[9px]">DELIVERED</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span>✉️ Scaffolding Product Announcement (Pending)</span>
-                          <span className="text-yellow-400 font-bold uppercase text-[9px]">QUEUED</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* ✅ YouTube Channel — @AksharaAI */}
+                <YouTubePanel />
               </div>
             )}
 
