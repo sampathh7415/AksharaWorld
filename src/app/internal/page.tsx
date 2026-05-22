@@ -36,6 +36,7 @@ import { AIInstructions } from '../../components/Dashboard/AIInstructions';
 import { InsightCharts } from '../../components/Dashboard/InsightCharts';
 import { InnovationScoutPanel } from '../../components/Dashboard/InnovationScoutPanel';
 import { SearchConsolePanel } from '../../components/Dashboard/SearchConsolePanel';
+import { MerchantCenterPanel } from '../../components/Dashboard/MerchantCenterPanel';
 import { resilientFetch } from '../../lib/resilience';
 
 
@@ -908,6 +909,9 @@ export default function UnifiedDashboard() {
             {activeTab === 'marketing' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <GoogleMerchant />
+
+                {/* ✅ Google Merchant Center Live Panel — ID: 5782853246 */}
+                <MerchantCenterPanel />
 
                 {/* Blogger Scheduler & Pomelli Generator */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
