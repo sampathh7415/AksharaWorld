@@ -42,6 +42,25 @@ export async function POST(req: NextRequest) {
       // Telegram notification optional — don't fail the request
     }
 
+    // ✅ Save lead to Google Sheets via Apps Script
+    const webhookUrl = process.env.APPS_SCRIPT_WEBHOOK_URL;
+    if (webhookUrl) {
+      fetch(webhookUrl, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          type:    'leads',
+          name,
+          email,
+          subject: subject || '',
+          message,
+          score:   assessment.score,
+          source:  'contact-form',
+        }),
+        signal: AbortSignal.timeout(5000),
+      }).catch(() => {}); // Non-blocking
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Message received. We will reply within 24 hours.',

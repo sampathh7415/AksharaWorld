@@ -47,6 +47,15 @@ jobs:
           GOOGLE_SITE_VERIFICATION: OncBqpSQj_mCxvK-6s6w0bKFJCHTlCF8SXFdl_AhOks
           # ── Google AdSense ──
           NEXT_PUBLIC_ADSENSE_PUBLISHER_ID: ca-pub-9728864343029052
+          # ── Google Merchant Center ──
+          NEXT_PUBLIC_MERCHANT_ID: 5782853246
+          # ── Blogger ──
+          NEXT_PUBLIC_BLOGGER_ID: 4758144517261750879
+          # ── YouTube ──
+          NEXT_PUBLIC_YOUTUBE_HANDLE: "@AksharaAI"
+          # ── Gmail Newsletter / Apps Script DB ──
+          NEXT_PUBLIC_NEWSLETTER_EMAIL: sampathh7415@gmail.com
+          APPS_SCRIPT_WEBHOOK_URL: https://script.google.com/macros/s/AKfycbyzOJYVojovXzg6YI_LKviRG-xqOtmWgLuv9siAo9CYeqxH8no_bSwFbTorvnGJnirY/exec
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
