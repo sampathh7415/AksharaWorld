@@ -11,6 +11,8 @@
   "dependencies": {
     "@clerk/nextjs": "^7.3.3",
     "dotenv": "^17.4.2",
+    "firebase": "^11.0.2",
+    "firebase-admin": "^12.7.0",
     "lucide-react": "^1.16.0",
     "next": "^15.2.8",
     "react": "^19.2.6",
