@@ -39,6 +39,10 @@ import { SearchConsolePanel } from '../../components/Dashboard/SearchConsolePane
 import { MerchantCenterPanel } from '../../components/Dashboard/MerchantCenterPanel';
 import { BloggerPanel } from '../../components/Dashboard/BloggerPanel';
 import { YouTubePanel } from '../../components/Dashboard/YouTubePanel';
+import { TranslatePanel } from '../../components/Dashboard/TranslatePanel';
+import { PageSpeedPanel } from '../../components/Dashboard/PageSpeedPanel';
+import { LookerStudioPanel } from '../../components/Dashboard/LookerStudioPanel';
+import { SafeBrowsingPanel } from '../../components/Dashboard/SafeBrowsingPanel';
 import { resilientFetch } from '../../lib/resilience';
 
 
@@ -937,22 +941,17 @@ export default function UnifiedDashboard() {
                 {/* ✅ Google Search Console — Live Data Panel */}
                 <SearchConsolePanel />
 
-                {/* Looker Studio Report Integration Iframe */}
-                <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2 uppercase">
-                    <BarChart3 className="text-purple-400 w-4 h-4" /> Looker Studio interactive corporate frame
-                  </h3>
-                  <div className="h-64 rounded-3xl bg-black/50 border border-white/5 flex flex-col items-center justify-center text-center p-6 space-y-3">
-                    <BarChart3 className="w-12 h-12 text-purple-400/30 animate-pulse" />
-                    <div>
-                      <div className="text-sm font-black text-white">Looker BI Workspace Secured</div>
-                      <p className="text-xs text-gray-500 mt-1 max-w-md">Connected to sheetsDb transactional tables ledger to aggregate month-on-month revenues, AOV trends, and Google Ads expenditure ratios.</p>
-                    </div>
-                    <button className="px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors flex items-center gap-1.5">
-                      Open in Looker <ExternalLink className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
+                {/* ✅ Looker Studio — Embedded Reports */}
+                <LookerStudioPanel />
+
+                {/* ✅ Google PageSpeed Insights — Core Web Vitals */}
+                <PageSpeedPanel />
+
+                {/* ✅ Google Safe Browsing — URL Security Check */}
+                <SafeBrowsingPanel />
+
+                {/* ✅ Google Translate — 19 Languages incl. all Indian languages */}
+                <TranslatePanel />
               </div>
             )}
 
