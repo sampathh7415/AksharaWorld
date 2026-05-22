@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from '@clerk/nextjs';
 import { Inter, Outfit } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 
 // ── Google Fonts (self-hosted by Next.js — zero layout shift) ──
@@ -27,6 +28,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <body>
+        {/* ✅ Google reCAPTCHA Enterprise — Score-based v3, invisible to users */}
+        <Script
+          src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6Lfv9vYsAAAAAH_t85p2PGbGHD1JsPbA2YyZ2Y85'}`}
+          strategy="afterInteractive"
+        />
+        {/* Hide reCAPTCHA badge (score-based = no challenge shown) */}
+        <style>{`.grecaptcha-badge { visibility: hidden !important; }`}</style>
         <ClerkProvider>
           <header style={{
             position: 'fixed',
