@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 
   // ── Google Search Console Verification ──
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION || '',  // Set GOOGLE_SITE_VERIFICATION in .env.local
+    google: process.env.GOOGLE_SITE_VERIFICATION || 'OncBqpSQj_mCxvK-6s6w0bKFJCHTlCF8SXFdl_AhOks',
   },
 
   // ── Open Graph (WhatsApp, LinkedIn, Facebook) ──
