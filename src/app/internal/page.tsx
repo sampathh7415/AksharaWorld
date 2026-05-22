@@ -44,6 +44,7 @@ import { PageSpeedPanel } from '../../components/Dashboard/PageSpeedPanel';
 import { LookerStudioPanel } from '../../components/Dashboard/LookerStudioPanel';
 import { SafeBrowsingPanel } from '../../components/Dashboard/SafeBrowsingPanel';
 import { FirebasePanel } from '../../components/Dashboard/FirebasePanel';
+import { GoogleChatPanel } from '../../components/Dashboard/GoogleChatPanel';
 import { resilientFetch } from '../../lib/resilience';
 
 
@@ -925,6 +926,9 @@ export default function UnifiedDashboard() {
 
                 {/* ✅ YouTube Channel — @AksharaAI */}
                 <YouTubePanel />
+
+                {/* ✅ Google Chat — Webhook notifications */}
+                <GoogleChatPanel />
               </div>
             )}
 
