@@ -34,6 +34,7 @@ import { TrafficMonitor } from '../../components/Dashboard/TrafficMonitor';
 import { GoogleMerchant } from '../../components/Dashboard/GoogleMerchant';
 import { AIInstructions } from '../../components/Dashboard/AIInstructions';
 import { InsightCharts } from '../../components/Dashboard/InsightCharts';
+import { InnovationScoutPanel } from '../../components/Dashboard/InnovationScoutPanel';
 import { resilientFetch } from '../../lib/resilience';
 
 interface Department {
@@ -874,15 +875,27 @@ export default function UnifiedDashboard() {
                           <div className="text-xs font-bold text-slate-300">Command_Center_Architecture.svg</div>
                           <div className="text-[9px] text-gray-500 mt-1 uppercase">Format: SVG Vector • Mapped to GSC</div>
                         </div>
-                        <button className="text-[10px] text-cyan-400 font-bold hover:underline">View Vector</button>
+                        <a href="https://drawings.google.com" target="_blank" rel="noopener noreferrer" className="text-[10px] text-cyan-400 font-bold hover:underline flex items-center gap-1">
+                          Open Drawings ↗
+                        </a>
                       </div>
                       <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 flex justify-between items-center">
                         <div>
                           <div className="text-xs font-bold text-slate-300">Octopus_Tentacles_Synapse_Mapping.svg</div>
                           <div className="text-[9px] text-gray-500 mt-1 uppercase">Format: SVG Vector • Mapped to README</div>
                         </div>
-                        <button className="text-[10px] text-cyan-400 font-bold hover:underline">View Vector</button>
+                        <a href="https://drawings.google.com" target="_blank" rel="noopener noreferrer" className="text-[10px] text-cyan-400 font-bold hover:underline flex items-center gap-1">
+                          Open Drawings ↗
+                        </a>
                       </div>
+                      <a
+                        href="https://drawings.google.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full mt-2 py-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black uppercase tracking-widest text-center hover:bg-cyan-500/20 transition-colors"
+                      >
+                        ✅ Open Google Drawings — Create New Asset
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -949,6 +962,14 @@ export default function UnifiedDashboard() {
                           <span>🌐 aksharaworld.in/saas-scaffolding</span>
                           <span className="text-emerald-400 font-bold uppercase text-[9px]">LIVE</span>
                         </div>
+                        <a
+                          href="https://sites.google.com/new"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block mt-2 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest text-center hover:bg-blue-500/20 transition-colors"
+                        >
+                          ✅ Create New Google Sites Page ↗
+                        </a>
                       </div>
                     </div>
                     <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2">
@@ -974,6 +995,9 @@ export default function UnifiedDashboard() {
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 {/* ✅ Google Charts — Integrated */}
                 <InsightCharts />
+
+                {/* ✅ Innovation Scout — Google News, Trends, Patents, Scholar */}
+                <InnovationScoutPanel />
 
                 <TrafficMonitor />
 
