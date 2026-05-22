@@ -43,6 +43,7 @@ import { TranslatePanel } from '../../components/Dashboard/TranslatePanel';
 import { PageSpeedPanel } from '../../components/Dashboard/PageSpeedPanel';
 import { LookerStudioPanel } from '../../components/Dashboard/LookerStudioPanel';
 import { SafeBrowsingPanel } from '../../components/Dashboard/SafeBrowsingPanel';
+import { FirebasePanel } from '../../components/Dashboard/FirebasePanel';
 import { resilientFetch } from '../../lib/resilience';
 
 
@@ -952,6 +953,9 @@ export default function UnifiedDashboard() {
 
                 {/* ✅ Google Translate — 19 Languages incl. all Indian languages */}
                 <TranslatePanel />
+
+                {/* ✅ Google Firebase — aksharaworld-481e8 */}
+                <FirebasePanel />
               </div>
             )}
 

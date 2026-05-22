@@ -56,6 +56,14 @@ jobs:
           # ── Gmail Newsletter / Apps Script DB ──
           NEXT_PUBLIC_NEWSLETTER_EMAIL: sampathh7415@gmail.com
           APPS_SCRIPT_WEBHOOK_URL: https://script.google.com/macros/s/AKfycbyzOJYVojovXzg6YI_LKviRG-xqOtmWgLuv9siAo9CYeqxH8no_bSwFbTorvnGJnirY/exec
+          # ── Google Firebase ──
+          NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyBuKLez-yzYgYbzC8hLDCvFuwIurbj_YnM
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: aksharaworld-481e8.firebaseapp.com
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: aksharaworld-481e8
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: aksharaworld-481e8.firebasestorage.app
+          NEXT_PUBLIC_FIREBASE_MESSAGING_ID: "633321287038"
+          NEXT_PUBLIC_FIREBASE_APP_ID: "1:633321287038:web:3a5299251ffb6edd62972f"
+          NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: G-VJ7GHMKHFM
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
