@@ -254,6 +254,44 @@ To sync the dashboard code and maintain edge workers stability, follow these gui
 
 ---
 
+## 🤖 7. Local AI Agent Infrastructure (OpenHuman Integration)
+
+We have successfully integrated the **OpenHuman** local AI agent framework directly into the Akshara World enterprise ecosystem. This allows us to process and index private customer activity streams completely offline and at ₹0 cost, preserving strict data sovereignty.
+
+### ⚙️ Integration Architecture
+
+*   **Background Ingestion Daemon (`/services/openhuman-agent/agent-daemon.ts`):** A standard TypeScript daemon running on a 20-minute cycle. It captures inbound mock Gmail queries, Stripe checkout events, and Slack system notifications.
+*   **Solid-State Storage Adapter:** Maps event entities into a secure local SQLite database (`.code-review-graph/openhuman.db`). It features a self-healing fallback mechanism that automatically redirects writes to a resilient JSON store (`openhuman-memory.json`) if host database drivers are locked.
+*   **Next.js Synchronization Webhook (`/api/v1/openhuman/sync-hook`):** Receive webhook sync telemetry in our edge router, routing activity metrics to Google Sheets databases (`SheetsDb`) and immediate error logs directly to our Telegram alert system if a sync cycle fails.
+
+### 🔧 Configuration Parameters
+
+Ensure the following variables are configured in `.env.local` (refer to `.env.example` for details):
+-   `OPENHUMAN_API_URL`: Webhook sync listener (`/api/v1/openhuman/sync-hook`)
+-   `OPENHUMAN_DATABASE_PATH`: Path to the local database file.
+-   `OPENHUMAN_SYNC_INTERVAL_MIN`: Time interval between cycles (default: 20 minutes).
+
+### 🛠️ CLI Operations & Debugging
+
+*   **Starting the Ingestion Daemon:**
+    ```bash
+    npx ts-node services/openhuman-agent/agent-daemon.ts
+    ```
+*   **Spinning up Docker Container Context:**
+    To containerize the daemon along with the local SQLite store:
+    ```bash
+    docker build -t openhuman-agent ./services/openhuman-agent
+    docker run -d --name openhuman-sync -v $(pwd)/.code-review-graph:/app/.code-review-graph openhuman-agent
+    ```
+*   **Running a Dry-Run Sync Verification:**
+    Invoke a manual, single-cycle ingestion check directly from PowerShell:
+    ```powershell
+    powershell -Command "node -e 'require(\"ts-node\").register(); const { OpenHumanAgentDaemon } = require(\"./services/openhuman-agent/agent-daemon.ts\"); new OpenHumanAgentDaemon().executeCycle();'"
+    ```
+
+---
+
 **Status**: ✅ Production Ready (V2.0 Core Deployed)  
 **AI CEO**: Sam  
 **Active Repository Mapping**: Connected  
+

@@ -64,3 +64,9 @@ next-env.d.ts
 # local code review graph
 .code-review-graph/
 
+# Local databases & logs
+*.sqlite
+*.db
+openhuman-memory.json
+
+
