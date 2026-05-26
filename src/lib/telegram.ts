@@ -1,7 +1,4 @@
-/**
- * 🛰️ Akshara World - Telegram Messenger (Guardian_Ops)
- * Sends real-time alerts to the owner (@Sampathh7)
- */
+import { resilientFetch } from './resilience';
 
 export async function sendTelegramAlert(message: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -13,18 +10,22 @@ export async function sendTelegramAlert(message: string) {
   }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: "HTML",
-      }),
-    });
+    const data = await resilientFetch<any>(
+      `https://api.telegram.org/bot${token}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "HTML",
+        }),
+        timeout: 5000,
+        retries: 3,
+      }
+    );
 
-    const data = await response.json();
-    if (!data.ok) throw new Error(data.description);
+    if (!data.ok) throw new Error(data.description || 'Unknown error');
 
     return { success: true };
   } catch (error: any) {

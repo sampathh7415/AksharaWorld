@@ -115,12 +115,12 @@ Every department has a clear roadmap, specialized Google tools, and defined inpu
 
 ### 5. 💻 Tech_Core (Engineering & Infrastructure)
 *   **Mission**: Scaffold frontend files, handle API gateways, database hosting, and write test suites.
-*   **Google Apps**: Google App Engine & Firebase (dynamic DB hosting), Google for Developers APIs, Flutter (mobile app), and Google Jules (asynchronous AI coding agent), and Google Stitch (generative UI canvas).
+*   **Google & Core Apps**: Google App Engine & Firebase (dynamic DB hosting), Google for Developers APIs, Flutter (mobile app), Google Jules (asynchronous AI coding agent), Google Stitch (generative UI canvas), and **code-review-graph** (local AST-based codebase maps optimizing AI token windows).
 *   **Inputs**: Development instructions, bugs list, and feature requests.
 *   **Outputs**: Deployed Cloudflare Pages edge build, Firebase data records, and Flutter builds.
 *   **Clear Roadmap**:
     1.  **UI Prototyping**: Describe interface layouts on the Google Stitch infinite canvas and export layouts into code.
-    2.  **Asynchronous Coding**: Delegate bug-fixing, linting, and automated unit testing to the Google Jules agent.
+    2.  **Asynchronous Coding & Graph Optimization**: Delegate bug-fixing, linting, and automated unit testing to the Google Jules agent. Optimize Jules's token efficiency by up to 8.2x utilizing `code-review-graph` blast-radius analysis to only supply relevant codebase segments.
     3.  **Dynamic Infrastructure**: Host micro-databases on Google Firebase and set up custom API connectors via Google Developers.
     4.  **Edge Compiling**: Sync built files using SSD Staging and deploy globally on Cloudflare Pages Workers.
 
@@ -197,7 +197,8 @@ To ensure the entire business can be managed, reviewed, and audited directly fro
 ├── 📁 06_Tech_Core\
 │   ├── 📁 01_Stitch_Designs\            <- Google Stitch UI canvases, JSON mockups, and layout exports
 │   ├── 📁 02_Firebase_AppEngine\        <- Dynamic database configurations & server configurations
-│   └── 📁 03_Jules_TestSuites\          <- Automatic scripts, lint logs, and code reports
+│   ├── 📁 03_Jules_TestSuites\          <- Automatic scripts, lint logs, and code reports
+│   └── 📁 04_Code_Review_Graph\         <- .code-review-graph/ local SQLite database mapping the repository structure (ignored by Git)
 │
 ├── 📁 07_Guardian_Ops\
 │   ├── 📁 01_Security_2FA\              <- Auth credentials, reCAPTCHA keys, Safe Browsing logs

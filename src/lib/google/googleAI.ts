@@ -28,20 +28,22 @@ const GEMINI_URL     = 'https://generativelanguage.googleapis.com/v1beta/models/
 async function callGemini(systemPrompt: string, userPrompt: string): Promise<string> {
   if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
 
-  const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [
-        { role: 'user', parts: [{ text: `${systemPrompt}\n\nTask: ${userPrompt}` }] }
-      ],
-      generationConfig: { temperature: 0.8, maxOutputTokens: 1024 },
-    }),
-    signal: AbortSignal.timeout(30000),
-  });
+  const data = await resilientFetch<any>(
+    `${GEMINI_URL}?key=${GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          { role: 'user', parts: [{ text: `${systemPrompt}\n\nTask: ${userPrompt}` }] }
+        ],
+        generationConfig: { temperature: 0.8, maxOutputTokens: 1024 },
+      }),
+      timeout: 30000,
+      retries: 3,
+    }
+  );
 
-  if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
-  const data = await res.json();
   return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
 }
 

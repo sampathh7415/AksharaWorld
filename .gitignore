@@ -60,3 +60,7 @@ next-env.d.ts
 /docker-compose.yml
 /Dockerfile
 /nginx.conf
+
+# local code review graph
+.code-review-graph/
+
