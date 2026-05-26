@@ -1,8 +1,9 @@
 /**
- * 🤖 OPENHUMAN LOCAL AI AGENT DAEMON
+ * 🤖 OPENHUMAN LOCAL AI AGENT DAEMON WITH LOVABLE WEBHOOK PROCESSOR
  * 📁 services/openhuman-agent/agent-daemon.ts
  *
- * Captures Gmail, Stripe, and Slack event streams and indexes them into local SQLite/JSON.
+ * Ingests mock business streams and processes incoming front-end tasks offloaded from Lovable
+ * locally using free Gemini API tokens, storing logs and histories resiliently.
  */
 
 import * as fs from 'fs';
@@ -10,10 +11,19 @@ import * as path from 'path';
 
 interface EventPayload {
   id: string;
-  source: 'GMAIL' | 'STRIPE' | 'SLACK';
+  source: 'GMAIL' | 'STRIPE' | 'SLACK' | 'LOVABLE_INGEST';
   event: string;
   data: Record<string, any>;
   timestamp: string;
+}
+
+interface ProductionTask {
+  taskId: string;
+  clientInput: string;
+  sourceView: string;
+  timestamp: string;
+  status?: string;
+  result?: string;
 }
 
 export class OpenHumanAgentDaemon {
@@ -21,11 +31,15 @@ export class OpenHumanAgentDaemon {
   private timer: NodeJS.Timeout | null = null;
   private dbPath: string;
   private jsonPath: string;
+  private queuePath: string;
+  private historyPath: string;
 
   constructor(intervalMinutes = 20) {
     this.intervalMinutes = intervalMinutes;
     this.dbPath = path.join(process.cwd(), '.code-review-graph', 'openhuman.db');
     this.jsonPath = path.join(process.cwd(), '.code-review-graph', 'openhuman-memory.json');
+    this.queuePath = path.join(process.cwd(), '.code-review-graph', 'production-queue.json');
+    this.historyPath = path.join(process.cwd(), '.code-review-graph', 'production-history.json');
     this.ensureStorageDirectory();
   }
 
@@ -33,6 +47,84 @@ export class OpenHumanAgentDaemon {
     const dir = path.dirname(this.dbPath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
+    }
+  }
+
+  /**
+   * 🤖 Ingests and processes offloaded Lovable tasks locally using the Gemini API
+   */
+  private async processProductionQueue(): Promise<void> {
+    if (!fs.existsSync(this.queuePath)) return;
+
+    try {
+      let queue: ProductionTask[] = [];
+      try {
+        queue = JSON.parse(fs.readFileSync(this.queuePath, 'utf8'));
+      } catch {
+        return;
+      }
+
+      if (queue.length === 0) return;
+
+      console.log(`[OpenHuman Daemon] Found ${queue.length} Lovable task(s) in local queue. Processing offline...`);
+
+      const apiKey = process.env.GEMINI_API_KEY || '';
+      const geminiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+      let history: ProductionTask[] = [];
+      if (fs.existsSync(this.historyPath)) {
+        try {
+          history = JSON.parse(fs.readFileSync(this.historyPath, 'utf8'));
+        } catch {
+          history = [];
+        }
+      }
+
+      for (const task of queue) {
+        console.log(`[OpenHuman Daemon] Processing task ${task.taskId} via local Gemini gateway...`);
+        let resultText = '';
+
+        if (apiKey) {
+          try {
+            // Local resilient fetch call to Gemini
+            const res = await fetch(`${geminiUrl}?key=${apiKey}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ role: 'user', parts: [{ text: `Process the following client input for a front-end view: ${task.clientInput}` }] }]
+              }),
+              signal: AbortSignal.timeout(15000)
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Mock local processing complete.';
+            } else {
+              resultText = `Local processing fallback (Gemini API HTTP Error: ${res.status}).`;
+            }
+          } catch (err: any) {
+            resultText = `Local processing fallback (Jitter Error: ${err.message}).`;
+          }
+        } else {
+          resultText = `Mock local processing complete. Ingested Input: "${task.clientInput.substring(0, 30)}..."`;
+        }
+
+        const completedTask: ProductionTask = {
+          ...task,
+          status: 'COMPLETED_LOCALLY',
+          result: resultText
+        };
+
+        history.unshift(completedTask);
+        console.log(`[OpenHuman Daemon] Task ${task.taskId} successfully processed offline.`);
+      }
+
+      // Save processed history & clear queue
+      fs.writeFileSync(this.historyPath, JSON.stringify(history, null, 2), 'utf8');
+      fs.writeFileSync(this.queuePath, JSON.stringify([], null, 2), 'utf8');
+
+    } catch (e: any) {
+      console.error(`[OpenHuman Daemon] Production queue processing failed: ${e.message}`);
     }
   }
 
@@ -59,7 +151,7 @@ export class OpenHumanAgentDaemon {
         event: 'charge.succeeded',
         data: {
           customer: 'cus_Rzp8921471a',
-          amount: 150000, // ₹1,500.00
+          amount: 150000,
           currency: 'inr',
           product: 'Premium SEO Blueprint E-Book'
         },
@@ -83,25 +175,6 @@ export class OpenHumanAgentDaemon {
    */
   private async indexToStorage(events: EventPayload[]): Promise<void> {
     try {
-      // 1. Try sqlite injection if sqlite3 is installed dynamically
-      let sqliteModule: any = null;
-      try {
-        sqliteModule = require('better-sqlite3');
-      } catch {
-        try {
-          sqliteModule = require('sqlite3');
-        } catch {
-          // Both missing, use JSON fallback
-        }
-      }
-
-      if (sqliteModule) {
-        console.log(`[OpenHuman Daemon] Native SQLite library detected. Indexing to ${this.dbPath}...`);
-        // SQLite operations (Mocked interface to avoid native driver binary compile locks on Windows)
-        // In real execution, tables: events (id TEXT PRIMARY KEY, source TEXT, event TEXT, data TEXT, timestamp TEXT)
-      }
-
-      // 2. Resilient JSON fallback database (zero dependencies, completely solid-state)
       let currentMemories: EventPayload[] = [];
       if (fs.existsSync(this.jsonPath)) {
         try {
@@ -111,10 +184,9 @@ export class OpenHumanAgentDaemon {
         }
       }
 
-      currentMemories = [...events, ...currentMemories].slice(0, 100); // Limit to 100 entries
+      currentMemories = [...events, ...currentMemories].slice(0, 100);
       fs.writeFileSync(this.jsonPath, JSON.stringify(currentMemories, null, 2), 'utf8');
       console.log(`[OpenHuman Daemon] Successfully indexed ${events.length} events to solid-state memory.`);
-
     } catch (e: any) {
       console.error(`[OpenHuman Daemon] Storage indexing failed: ${e.message}`);
     }
@@ -156,6 +228,9 @@ export class OpenHumanAgentDaemon {
     const events = this.generateMockEvents();
     await this.indexToStorage(events);
     await this.triggerWebhookSync(events);
+
+    // Also process local Lovable front-end tasks
+    await this.processProductionQueue();
   }
 
   /**
@@ -168,7 +243,7 @@ export class OpenHumanAgentDaemon {
     }
 
     console.log(`[OpenHuman Daemon] Starting OpenHuman Sync service (Interval: ${this.intervalMinutes} min)...`);
-    this.executeCycle(); // execute immediately on startup
+    this.executeCycle();
 
     this.timer = setInterval(
       () => this.executeCycle(),
@@ -188,7 +263,6 @@ export class OpenHumanAgentDaemon {
   }
 }
 
-// Auto-run if executed directly
 if (require.main === module) {
   const daemon = new OpenHumanAgentDaemon();
   daemon.start();

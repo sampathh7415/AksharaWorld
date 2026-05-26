@@ -68,5 +68,9 @@ next-env.d.ts
 *.sqlite
 *.db
 openhuman-memory.json
+production-queue.json
+production-history.json
+*.mock
+
 
 

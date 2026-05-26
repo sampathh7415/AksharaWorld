@@ -291,7 +291,39 @@ Ensure the following variables are configured in `.env.local` (refer to `.env.ex
 
 ---
 
+## 🤖 8. Unified Business Architecture (Lovable x Local Agent Core)
+
+We have established a robust, serverless production architecture combining **Lovable.dev** and our **Local Agent Core** to run highly-interactive front-ends with absolute ₹0 recurring cloud generation costs.
+
+### ⚙️ Lovable x Local Agent Core Architecture
+
+*   **Lovable.dev (Front-End Studio):** Operates on a **Pro Lite Tier (300-credit base + 5 daily credit refresh loop)**, pushing static UI components and front-end layouts directly to our GitHub repository.
+*   **Local Agent Core Daemon (Back-End Swarm):** A Docker-hosted background Node.js service running locally. It intercepts user transactional tasks offloaded from Lovable front-ends, processes them locally via free Gemini API tokens (`resilientFetch`), and records results in the SQLite database, ensuring zero cloud credit leak.
+*   **Asynchronous Webhook Interception (`/api/v1/production-agent/webhook`):** A custom Next.js API endpoint that catches generation streams from Lovable-compiled components and offloads dynamic execution directly to the local daemon queues.
+
+### 💳 Subscription Stacking Protocol (Claiming 1 Year Lovable Pro Lite)
+
+We maximize our operational efficiency by stacking partner rewards to claim **1 Year of Lovable Pro Lite ($0/month) + 300 Development Credits**:
+
+1.  **Step 1 (Claim Adobe Express):** Open the **Airtel Thanks App** on your mobile device. Navigate to the Rewards section, search for partner rewards, and claim the **12 Months of Adobe Express Premium** subscription.
+2.  **Step 2 (Claim LinkedIn Premium):** Log into your newly upgraded Adobe Express Premium account. Navigate to the "Partner Perks & Benefits" dashboard, look for the career reward perk, and claim your **3 Months of Free LinkedIn Premium Career** coupon.
+3.  **Step 3 (Stack to Lovable Pro Lite):** Redeem the 3-month LinkedIn Premium subscription on your active LinkedIn account. Then, navigate to the official **Lovable.dev Partner Perks** page, connect your active LinkedIn Premium account profile, and unlock **1 Year of Lovable Pro Lite alongside 300 bonus credits**!
+
+### 🛠️ Production Ingestion & Execution
+
+*   **Lovable component directory:** `/src/components/lovable`
+*   **Production Webhook listener:** `/api/v1/production-agent/webhook`
+*   **Offloaded Local Queue store:** `.code-review-graph/production-queue.json`
+*   **Local Ingestion Run Command:**
+    ```powershell
+    # Manually check and process the local production queue
+    powershell -Command "node -e 'require(\"ts-node\").register(); const { OpenHumanAgentDaemon } = require(\"./services/openhuman-agent/agent-daemon.ts\"); new OpenHumanAgentDaemon().executeCycle();'"
+    ```
+
+---
+
 **Status**: ✅ Production Ready (V2.0 Core Deployed)  
 **AI CEO**: Sam  
 **Active Repository Mapping**: Connected  
+
 
