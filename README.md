@@ -320,34 +320,68 @@ We maximize our operational efficiency by stacking partner rewards to claim **1 
     powershell -Command "node -e 'require(\"ts-node\").register(); const { OpenHumanAgentDaemon } = require(\"./services/openhuman-agent/agent-daemon.ts\"); new OpenHumanAgentDaemon().executeCycle();'"
     ```
 
----
+## ☁️ 9. Enterprise Local Environment Sandbox (Floci x Playwright Suite)
 
-## ☁️ 9. Local AWS Cloud Emulation via Floci
+We maintain a fully operationalized, local-first enterprise sandbox by combining **Floci** (zero-cost local AWS cloud emulator alternative) and **Microsoft Playwright** (frontend E2E user-flow automated testing framework) to establish a continuous, self-healing agentic validation loop.
 
-We utilize **Floci** (the open-source local AWS cloud emulator alternative) to test AWS cloud integrations completely locally with ₹0 hosting and cloud subscription overhead.
+### ⚙️ Sandbox Emulation & Automation Architecture
 
-### ⚙️ Emulation Architecture
+1.  **Docker Orchestration Layer (Floci Cloud Emulation):**
+    *   Configured natively in [compose.yaml](file:///g:/My%20Drive/Antigravity/compose.yaml) pulling `floci/floci:latest`.
+    *   Exposes default AWS service port `4566` to intercept and process mock S3 and SQS requests locally.
+    *   Maintains a localized persistent volume mount at `./data/floci` to preserve application storage state across restarts (strictly ignored by `.gitignore`).
+2.  **End-to-End Test Engine (Playwright Test Suite):**
+    *   Maintains production-grade runner parameters inside [playwright.config.ts](file:///g:/My%20Drive/Antigravity/playwright.config.ts), targeting Chromium, Firefox, and WebKit layout engines.
+    *   Automatically spins up our Next.js frontend server locally (`npm run dev` on port `3000`) inside a background subprocess before running E2E suites.
+    *   Includes a robust user-flow test suite at [tests/user-flow.spec.ts](file:///g:/My%20Drive/Antigravity/tests/user-flow.spec.ts) that navigates the shell tabs, validates metrics containers, and interacts with the Sam CEO AI chat interface.
+3.  **Agentic Self-Healing Orchestrator:**
+    *   Bridges engines via a global master script at [scripts/run-healthcheck.sh](file:///g:/My%20Drive/Antigravity/scripts/run-healthcheck.sh).
+    *   It boots Floci containers, verifies browser binaries, executes automated tests, and pipes standard error logs directly back to our agent context to trigger self-healing codebase repair loops in case of regression failures.
+4.  **BetterBugs Telemetry Diagnostics Parser:**
+    *   Ingests browser record telemetry logs through [betterbugs-parser.js](file:///g:/My%20Drive/Antigravity/src/services/betterbugs-parser.js).
+    *   Extracts structured console stack traces, network response bodies, and action workflows to construct auto-healing prompts for self-healing loops.
 
-*   **Docker Container Orchestration:** Configured in `docker-compose.yml` pulling `floci/floci:latest`. Exposes port `4566` to emulate S3, SQS, and other cloud structures.
-*   **Persistent Storage Bind Mount:** Mapped to `./data/floci` to persist S3 bucket states across container cycles (strictly ignored by `.gitignore`).
-*   **Resilient TypeScript AWS Client (`/src/services/aws-client.ts`):** Exposes a robust, type-safe client wrapper for S3 operations. Automatically routes requests to the local Floci URL (`AWS_ENDPOINT_URL`) when running in local development mode, falling back gracefully to mock payloads on edge runtimes.
+### 🛠️ Execution & Automated Testing Guide
 
-### 🛠️ Execution & Verification Guide
+#### 1. Spinning Up the Emulation Container
+To launch the Floci local cloud server manually in the background, run:
+```bash
+docker compose -f compose.yaml up -d floci
+```
 
-1.  **Spinning Up the Local Cloud Emulator:**
-    Start the Docker container context in the background:
-    ```bash
-    docker compose up -d floci
-    ```
-2.  **Verifying Local S3 Buckets:**
-    Use standard AWS CLI commands (configured with endpoint URL) to list or create buckets on the local emulator:
-    ```bash
-    # Create S3 Bucket locally
-    aws --endpoint-url=http://localhost:4566 s3 mb s3://akshara-test-bucket
+#### 2. Running Automated E2E Testing Suites
+You can run the Playwright browser tests using our package helper:
+```bash
+# Run headless browser tests across all engines
+npm run test:e2e
 
-    # List local S3 Buckets
-    aws --endpoint-url=http://localhost:4566 s3 ls
-    ```
+# Run tests in interactive UI mode
+npx playwright test --ui
+```
+
+#### 3. Triggering the Global Sandbox Health Check (Self-Healing Loop)
+To execute the unified container-provisioning, dependency-checking, and test-running script:
+```bash
+# Execute sandbox master routine
+bash ./scripts/run-healthcheck.sh
+```
+
+#### 4. Diagnostic Session Ingestion via BetterBugs
+To parse a BetterBugs session log file directly and generate a self-healing diagnostic prompt, run:
+```bash
+# Ingest and parse a BetterBugs session log file
+bash ./scripts/run-healthcheck.sh --betterbugs tests/mock-betterbugs.json
+```
+
+#### 5. Verification of Local S3 Buckets
+Use standard AWS CLI commands (pointed at our local Floci URL) to interact with the local emulator:
+```bash
+# Create local S3 bucket
+aws --endpoint-url=http://localhost:4566 s3 mb s3://akshara-test-bucket
+
+# List local S3 buckets
+aws --endpoint-url=http://localhost:4566 s3 ls
+```
 
 ---
 

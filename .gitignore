@@ -75,6 +75,8 @@ production-history.json
 # Floci persistent storage data
 /data/floci/
 
-
-
-
+# Playwright Test Outputs
+/playwright-report/
+/test-results/
+/test-results-snapshots/
+*.trace

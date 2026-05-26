@@ -1,0 +1,45 @@
+{
+  "system": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "os": "Windows 10",
+    "browser": "Chrome",
+    "screenResolution": "1920x1080"
+  },
+  "console": [
+    {
+      "type": "log",
+      "text": "Initialising command center console dashboard...",
+      "timestamp": 1779767900000
+    },
+    {
+      "type": "error",
+      "text": "Uncaught TypeError: Cannot read properties of undefined (reading 'success')",
+      "timestamp": 1779767905000,
+      "stack": "TypeError: Cannot read properties of undefined (reading 'success')\n    at Dashboard.fetchDashboard (file:///src/app/page.tsx:120:15)\n    at useEffect (file:///src/app/page.tsx:94:5)"
+    }
+  ],
+  "network": [
+    {
+      "url": "http://localhost:3000/api/dashboard",
+      "method": "GET",
+      "status": 500,
+      "timestamp": 1779767904000,
+      "requestHeaders": {
+        "Accept": "application/json"
+      },
+      "responseBody": "{\"error\":\"Internal Server Error\",\"reason\":\"Database pool connection failure on port 4566\"}"
+    }
+  ],
+  "actions": [
+    {
+      "type": "click",
+      "selector": ".nav-item.active",
+      "timestamp": 1779767901000
+    },
+    {
+      "type": "click",
+      "selector": ".chat-send",
+      "timestamp": 1779767903000
+    }
+  ]
+}
