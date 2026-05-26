@@ -66,4 +66,31 @@ test.describe('Akshara World Dashboard Sandbox E2E User Flow Suite', () => {
     await expect(userMsgBubble).toBeVisible();
     await expect(userMsgBubble).toContainText(testMessage);
   });
+
+  test('should navigate to Multi-Cloud UI and verify Lovable and Helium AI tabs', async ({ page }) => {
+    // 1. Navigate to the Multi-Cloud UI view
+    const cloudNav = page.getByText('Multi-Cloud UI');
+    await expect(cloudNav).toBeVisible();
+    await cloudNav.click();
+
+    // Verify view is active
+    await expect(page.locator('.topbar-title')).toContainText('Multi-Cloud UI');
+
+    // 2. Verify branding nodes and partner credentials credits display
+    await expect(page.getByText('Unified Cloud UI Ingestion Engine')).toBeVisible();
+    await expect(page.getByText('Helium Credits: $500 Partner Program')).toBeVisible();
+
+    // 3. Filter views for Helium AI components specifically
+    const heliumFilterBtn = page.getByRole('button', { name: 'Helium AI', exact: true });
+    await expect(heliumFilterBtn).toBeVisible();
+    await heliumFilterBtn.click();
+
+    // 4. Verify filtered items and click Helium Swarm Architect panel
+    const heliumArchitectPanel = page.getByText('Helium AI Swarm Architect Panel');
+    await expect(heliumArchitectPanel).toBeVisible();
+    await heliumArchitectPanel.click();
+
+    // 5. Verify viewport simulations render the appropriate components
+    await expect(page.getByText('AI Agent Swarm Architect Panel')).toBeVisible();
+  });
 });

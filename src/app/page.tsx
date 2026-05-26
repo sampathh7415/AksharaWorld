@@ -2,6 +2,7 @@
 export const runtime = 'edge';
 import { useState, useEffect, useRef } from 'react';
 import { resilientFetch } from '../lib/resilience';
+import { CloudUiContainer } from '../components/cloud-ui/CloudUiContainer';
 
 const NAV = [
   { id: 'kpi', icon: '📊', label: 'Business KPIs' },
@@ -9,6 +10,7 @@ const NAV = [
   { id: 'departments', icon: '🏢', label: 'Departments' },
   { id: 'approvals', icon: '✅', label: 'Approvals Queue' },
   { id: 'sam', icon: '💬', label: 'Chat with Sam' },
+  { id: 'cloudui', icon: '☁️', label: 'Multi-Cloud UI' },
   { id: 'brain', icon: '🧠', label: 'AI Brain DNA' },
   { id: 'resources', icon: '⚙️', label: 'Resource Inventory' },
   { id: 'alerts', icon: '🚨', label: 'Alerts' },
@@ -439,6 +441,11 @@ export default function Dashboard() {
                 <button className="chat-send" onClick={sendMessage}>➤</button>
               </div>
             </div>
+          )}
+
+          {/* ── MULTI-CLOUD UI ── */}
+          {active === 'cloudui' && (
+            <CloudUiContainer />
           )}
 
           {/* ── BRAIN DNA ── */}

@@ -291,66 +291,55 @@ Ensure the following variables are configured in `.env.local` (refer to `.env.ex
 
 ---
 
-## 🤖 8. Unified Business Architecture (Lovable x Local Agent Core)
+## 🤖 8. Unified Business Engine (Cloud UI & Autonomous Local Sandbox)
 
-We have established a robust, serverless production architecture combining **Lovable.dev** and our **Local Agent Core** to run highly-interactive front-ends with absolute ₹0 recurring cloud generation costs.
+We have operationalized a highly resilient, local-first enterprise business infrastructure that coordinates cloud-generated front-ends (**Lovable.dev** and **Helium AI**) with our local background swarms (**OpenHuman**, **Floci AWS Emulator**, **Playwright**, and **BetterBugs**) to run continuous operations at exact ₹0 recurring infrastructure overhead.
 
-### ⚙️ Lovable x Local Agent Core Architecture
+### ⚙️ Multi-Cloud UI Ingestion Architecture
 
-*   **Lovable.dev (Front-End Studio):** Operates on a **Pro Lite Tier (300-credit base + 5 daily credit refresh loop)**, pushing static UI components and front-end layouts directly to our GitHub repository.
-*   **Local Agent Core Daemon (Back-End Swarm):** A Docker-hosted background Node.js service running locally. It intercepts user transactional tasks offloaded from Lovable front-ends, processes them locally via free Gemini API tokens (`resilientFetch`), and records results in the SQLite database, ensuring zero cloud credit leak.
-*   **Asynchronous Webhook Interception (`/api/v1/production-agent/webhook`):** A custom Next.js API endpoint that catches generation streams from Lovable-compiled components and offloads dynamic execution directly to the local daemon queues.
+*   **Lovable.dev Ingestion:** Pushes premium Next.js landing pages, secure checkouts, and transactional frameworks directly to our repository, running on the **Pro Lite Tier (300-credit base + 5 daily credit refresh loop)**.
+*   **Helium AI Integration:** Pushes advanced AI Agent Swarm Panels, Lead Ingestion Feeds, and Strategy templates directly to our repository, running on **$500 Partner Program credits**.
+*   **Unified Ingestion Container ([CloudUiContainer.tsx](file:///g:/My%20Drive/Antigravity/src/components/cloud-ui/CloudUiContainer.tsx)):** A premium, tabbed dashboard viewport component designed to render, manage, and hot-reload components exported from both Lovable and Helium AI code generation pipelines.
+*   **Asynchronous Webhook Router ([route.ts](file:///g:/My%20Drive/Antigravity/src/app/api/v1/production-agent/webhook/route.ts)):** An optimized Next.js API route that catches user generation triggers, parses the `sourcePlatform` (`lovable` | `helium-ai`), logs telemetry, and offloads heavy background calculation tasks directly to the local daemon queue. It is fully Next.js edge-runtime build safe (uses dynamic require for filesystem imports).
 
-### 💳 Subscription Stacking Protocol (Claiming 1 Year Lovable Pro Lite)
+### 💳 Subscription Stacking & Credits Access Protocol
 
-We maximize our operational efficiency by stacking partner rewards to claim **1 Year of Lovable Pro Lite ($0/month) + 300 Development Credits**:
+We maximize our operational efficiency by stacking partner rewards to claim both **1 Year of Lovable Pro Lite ($0/month)** and **$500 in Helium AI credits**:
 
-1.  **Step 1 (Claim Adobe Express):** Open the **Airtel Thanks App** on your mobile device. Navigate to the Rewards section, search for partner rewards, and claim the **12 Months of Adobe Express Premium** subscription.
-2.  **Step 2 (Claim LinkedIn Premium):** Log into your newly upgraded Adobe Express Premium account. Navigate to the "Partner Perks & Benefits" dashboard, look for the career reward perk, and claim your **3 Months of Free LinkedIn Premium Career** coupon.
-3.  **Step 3 (Stack to Lovable Pro Lite):** Redeem the 3-month LinkedIn Premium subscription on your active LinkedIn account. Then, navigate to the official **Lovable.dev Partner Perks** page, connect your active LinkedIn Premium account profile, and unlock **1 Year of Lovable Pro Lite alongside 300 bonus credits**!
+1.  **Claiming Lovable Pro Lite (3 Steps):**
+    *   *Step 1:* Open the **Airtel Thanks App** on your mobile device, navigate to partner rewards, and claim the **12 Months of Adobe Express Premium** subscription.
+    *   *Step 2:* Log into Adobe Express, open the "Partner Perks & Benefits" panel, and claim the **3 Months of Free LinkedIn Premium Career** coupon.
+    *   *Step 3:* Redeem LinkedIn Premium on your account, navigate to the **Lovable.dev Partner Perks** page, connect your active profile, and unlock **1 Year of Lovable Pro Lite ($0/mo) + 300 credits**!
+2.  **Claiming Helium AI Credits:**
+    *   Create a Helium developer profile, navigate to the "Partner Rewards" dashboard, link your verified GitHub workspace repository, and redeem the **$500 developer credit voucher** to run heavy cloud reasoning operations.
 
-### 🛠️ Production Ingestion & Execution
-
-*   **Lovable component directory:** `/src/components/lovable`
-*   **Production Webhook listener:** `/api/v1/production-agent/webhook`
-*   **Offloaded Local Queue store:** `.code-review-graph/production-queue.json`
-*   **Local Ingestion Run Command:**
-    ```powershell
-    # Manually check and process the local production queue
-    powershell -Command "node -e 'require(\"ts-node\").register(); const { OpenHumanAgentDaemon } = require(\"./services/openhuman-agent/agent-daemon.ts\"); new OpenHumanAgentDaemon().executeCycle();'"
-    ```
-
-## ☁️ 9. Enterprise Local Environment Sandbox (Floci x Playwright Suite)
-
-We maintain a fully operationalized, local-first enterprise sandbox by combining **Floci** (zero-cost local AWS cloud emulator alternative) and **Microsoft Playwright** (frontend E2E user-flow automated testing framework) to establish a continuous, self-healing agentic validation loop.
-
-### ⚙️ Sandbox Emulation & Automation Architecture
+### ⚙️ Sandbox Emulation & BetterBugs Self-Healing
 
 1.  **Docker Orchestration Layer (Floci Cloud Emulation):**
     *   Configured natively in [compose.yaml](file:///g:/My%20Drive/Antigravity/compose.yaml) pulling `floci/floci:latest`.
-    *   Exposes default AWS service port `4566` to intercept and process mock S3 and SQS requests locally.
-    *   Maintains a localized persistent volume mount at `./data/floci` to preserve application storage state across restarts (strictly ignored by `.gitignore`).
-2.  **End-to-End Test Engine (Playwright Test Suite):**
-    *   Maintains production-grade runner parameters inside [playwright.config.ts](file:///g:/My%20Drive/Antigravity/playwright.config.ts), targeting Chromium, Firefox, and WebKit layout engines.
-    *   Automatically spins up our Next.js frontend server locally (`npm run dev` on port `3000`) inside a background subprocess before running E2E suites.
-    *   Includes a robust user-flow test suite at [tests/user-flow.spec.ts](file:///g:/My%20Drive/Antigravity/tests/user-flow.spec.ts) that navigates the shell tabs, validates metrics containers, and interacts with the Sam CEO AI chat interface.
-3.  **Agentic Self-Healing Orchestrator:**
-    *   Bridges engines via a global master script at [scripts/run-healthcheck.sh](file:///g:/My%20Drive/Antigravity/scripts/run-healthcheck.sh).
-    *   It boots Floci containers, verifies browser binaries, executes automated tests, and pipes standard error logs directly back to our agent context to trigger self-healing codebase repair loops in case of regression failures.
-4.  **BetterBugs Telemetry Diagnostics Parser:**
+    *   Exposes AWS port `4566` to emulate S3, SQS, and other cloud services locally.
+    *   Binds persistent storage mount to `./data/floci` to maintain states across restarts (strictly ignored by `.gitignore`).
+2.  **Nginx Reverse Proxy:**
+    *   Routes dashboard and component traffic safely between local development layers without resource collision via [nginx.conf](file:///g:/My%20Drive/Antigravity/nginx.conf).
+3.  **End-to-End Test Engine (Playwright Test Suite):**
+    *   Maintains production-grade E2E runner options in [playwright.config.ts](file:///g:/My%20Drive/Antigravity/playwright.config.ts), targeting Chromium, Firefox, and WebKit.
+    *   E2E test suite at [tests/user-flow.spec.ts](file:///g:/My%20Drive/Antigravity/tests/user-flow.spec.ts) headless-verifies tab views, metrics widgets, chat inputs, and the new Multi-Cloud UI viewport.
+4.  **BetterBugs Telemetry Link Resolver:**
     *   Ingests browser record telemetry logs through [betterbugs-parser.js](file:///g:/My%20Drive/Antigravity/src/services/betterbugs-parser.js).
-    *   Extracts structured console stack traces, network response bodies, and action workflows to construct auto-healing prompts for self-healing loops.
+    *   Exposes `parseSessionLink(url)` which parses BetterBugs session links (e.g. `betterbugs.io/session/BB-998877`), matches local telemetry caches, or generates mock telemetry to construct auto-healing prompts for self-healing loops.
+5.  **Unified Healthcheck Orchestrator ([run-healthcheck.sh](file:///g:/My%20Drive/Antigravity/scripts/run-healthcheck.sh)):**
+    *   Bridges engines via a global master script to start containers, verify browser dependencies, run Playwright E2E tests, and execute BetterBugs telemetry diagnostic auto-parsers in case of test failures.
 
 ### 🛠️ Execution & Automated Testing Guide
 
-#### 1. Spinning Up the Emulation Container
-To launch the Floci local cloud server manually in the background, run:
+#### 1. Spinning Up the Sandbox Container Stack
+To launch Floci local cloud services and Nginx proxies in the background:
 ```bash
-docker compose -f compose.yaml up -d floci
+docker compose -f compose.yaml up -d floci nginx
 ```
 
-#### 2. Running Automated E2E Testing Suites
-You can run the Playwright browser tests using our package helper:
+#### 2. Running Automated Playwright Test Suites
+To run E2E browser checks:
 ```bash
 # Run headless browser tests across all engines
 npm run test:e2e
@@ -359,22 +348,21 @@ npm run test:e2e
 npx playwright test --ui
 ```
 
-#### 3. Triggering the Global Sandbox Health Check (Self-Healing Loop)
+#### 3. Triggering the Global Health Check & Self-Healing Loop
 To execute the unified container-provisioning, dependency-checking, and test-running script:
 ```bash
-# Execute sandbox master routine
 bash ./scripts/run-healthcheck.sh
 ```
 
 #### 4. Diagnostic Session Ingestion via BetterBugs
-To parse a BetterBugs session log file directly and generate a self-healing diagnostic prompt, run:
+To parse a BetterBugs session link directly and print a self-healing diagnostic prompt:
 ```bash
-# Ingest and parse a BetterBugs session log file
-bash ./scripts/run-healthcheck.sh --betterbugs tests/mock-betterbugs.json
+# Ingest and parse a BetterBugs session link URL
+bash ./scripts/run-healthcheck.sh --betterbugs https://app.betterbugs.io/session/BB-887766
 ```
 
-#### 5. Verification of Local S3 Buckets
-Use standard AWS CLI commands (pointed at our local Floci URL) to interact with the local emulator:
+#### 5. Verification of Local S3 Emulation Buckets
+Use standard AWS CLI commands (configured with endpoint URL) to list or create buckets on the local emulator:
 ```bash
 # Create local S3 bucket
 aws --endpoint-url=http://localhost:4566 s3 mb s3://akshara-test-bucket

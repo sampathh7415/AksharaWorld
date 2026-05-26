@@ -22,6 +22,12 @@ async function testParser() {
   console.log('--- SELF-HEALING PROMPT GENERATION ---');
   console.log(prompt);
   console.log('--------------------------------------\n');
+
+  console.log('--- TESTING BETTERBUGS LINK RESOLUTION ---');
+  const resolvedReport = await betterBugsParser.parseSessionLink('https://app.betterbugs.io/session/BB-887766');
+  console.log(resolvedReport);
+  console.log('------------------------------------------\n');
+  
   console.log('✅ Telemetry parser testing completed successfully!');
 }
 
