@@ -322,8 +322,35 @@ We maximize our operational efficiency by stacking partner rewards to claim **1 
 
 ---
 
+## ☁️ 9. Local AWS Cloud Emulation via Floci
+
+We utilize **Floci** (the open-source local AWS cloud emulator alternative) to test AWS cloud integrations completely locally with ₹0 hosting and cloud subscription overhead.
+
+### ⚙️ Emulation Architecture
+
+*   **Docker Container Orchestration:** Configured in `docker-compose.yml` pulling `floci/floci:latest`. Exposes port `4566` to emulate S3, SQS, and other cloud structures.
+*   **Persistent Storage Bind Mount:** Mapped to `./data/floci` to persist S3 bucket states across container cycles (strictly ignored by `.gitignore`).
+*   **Resilient TypeScript AWS Client (`/src/services/aws-client.ts`):** Exposes a robust, type-safe client wrapper for S3 operations. Automatically routes requests to the local Floci URL (`AWS_ENDPOINT_URL`) when running in local development mode, falling back gracefully to mock payloads on edge runtimes.
+
+### 🛠️ Execution & Verification Guide
+
+1.  **Spinning Up the Local Cloud Emulator:**
+    Start the Docker container context in the background:
+    ```bash
+    docker compose up -d floci
+    ```
+2.  **Verifying Local S3 Buckets:**
+    Use standard AWS CLI commands (configured with endpoint URL) to list or create buckets on the local emulator:
+    ```bash
+    # Create S3 Bucket locally
+    aws --endpoint-url=http://localhost:4566 s3 mb s3://akshara-test-bucket
+
+    # List local S3 Buckets
+    aws --endpoint-url=http://localhost:4566 s3 ls
+    ```
+
+---
+
 **Status**: ✅ Production Ready (V2.0 Core Deployed)  
 **AI CEO**: Sam  
-**Active Repository Mapping**: Connected  
-
-
+**Active Repository Mapping**: Connected

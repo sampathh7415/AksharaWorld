@@ -44,3 +44,13 @@ services:
       - dashboard
       - akshara-dashboard
     restart: unless-stopped
+
+  # Local AWS Emulation alternative via Floci
+  floci:
+    image: floci/floci:latest
+    container_name: akshara-floci-cloud
+    ports:
+      - "4566:4566"
+    volumes:
+      - ./data/floci:/app/data
+    restart: unless-stopped

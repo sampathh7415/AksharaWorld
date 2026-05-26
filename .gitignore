@@ -72,5 +72,9 @@ production-queue.json
 production-history.json
 *.mock
 
+# Floci persistent storage data
+/data/floci/
+
+
 
 
