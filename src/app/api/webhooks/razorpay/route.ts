@@ -15,6 +15,7 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || ''
 const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || 'akshara_secret_2026'
 const GOOGLE_SHEETS_API_KEY = process.env.GOOGLE_SHEETS_API_KEY || ''
 const GOOGLE_SHEETS_SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID || ''
+const APPS_SCRIPT_WEBHOOK_URL = process.env.APPS_SCRIPT_WEBHOOK_URL || process.env.GOOGLE_SHEETS_WEBHOOK_URL || ''
 
 async function sendTelegram(text: string) {
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) return
@@ -26,13 +27,36 @@ async function sendTelegram(text: string) {
 }
 
 async function logToSheets(row: string[]) {
-  if (!GOOGLE_SHEETS_API_KEY || !GOOGLE_SHEETS_SPREADSHEET_ID) return
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_SPREADSHEET_ID}/values/Transactions!A:F:append?valueInputOption=USER_ENTERED&key=${GOOGLE_SHEETS_API_KEY}`
-  await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ values: [row] }),
-  })
+  // Try Apps Script Webhook first (zero-cost, no API key required)
+  if (APPS_SCRIPT_WEBHOOK_URL) {
+    try {
+      const payload = {
+        type: 'revenue',
+        paymentId: row[2], // row[2] = paymentId
+        amount: parseFloat(row[4].replace(/[^\d.]/g, '')), // row[4] = amount
+        status: row[5] || 'captured', // row[5] = status
+        notes: `Customer: ${row[3] || 'N/A'} (Logged via Webhook)` // row[3] = email
+      }
+      await fetch(APPS_SCRIPT_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      return
+    } catch (e) {
+      console.error('[Webhook Sheets Log] Failed via Apps Script Webhook:', e)
+    }
+  }
+
+  // Fallback to Google Sheets API Key if present
+  if (GOOGLE_SHEETS_API_KEY && GOOGLE_SHEETS_SPREADSHEET_ID) {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_SPREADSHEET_ID}/values/Transactions!A:F:append?valueInputOption=USER_ENTERED&key=${GOOGLE_SHEETS_API_KEY}`
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values: [row] }),
+    })
+  }
 }
 
 export async function POST(req: Request) {
