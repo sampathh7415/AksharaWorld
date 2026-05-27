@@ -80,3 +80,6 @@ production-history.json
 /test-results/
 /test-results-snapshots/
 *.trace
+
+# Local Netlify folder
+.netlify
