@@ -1,0 +1,131 @@
+name: SAM Daily Automation
+
+on:
+  schedule:
+    # 6 AM IST = 00:30 UTC
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Run mode (full / metrics-only / notify-only)'
+        required: false
+        default: 'full'
+
+jobs:
+  daily-automation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      # ── Telegram: Start notification ──────────────────────────────────────
+      - name: Notify Telegram — Automation Start
+        run: |
+          DATE=$(date '+%Y-%m-%d %H:%M IST')
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"chat_id\": \"${{ secrets.TELEGRAM_CHAT_ID }}\",
+              \"text\": \"🤖 SAM Daily Automation started\\n📅 Date: $DATE\\n🌐 Repo: sampathh7415/AksharaWorld\\n⚡ Mode: ${{ github.event.inputs.mode || 'scheduled' }}\",
+              \"parse_mode\": \"HTML\"
+            }"
+
+      # ── Build check ────────────────────────────────────────────────────────
+      - name: Run build check
+        run: npm run build
+        continue-on-error: true
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID }}
+          RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET }}
+
+      # ── Payment / Razorpay Health Check ───────────────────────────────────
+      - name: Razorpay API Health Check
+        id: razorpay_check
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -u "${{ secrets.RAZORPAY_KEY_ID }}:${{ secrets.RAZORPAY_KEY_SECRET }}" \
+            "https://api.razorpay.com/v1/payments?count=1")
+          echo "razorpay_status=$STATUS" >> $GITHUB_OUTPUT
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ Razorpay API: OK ($STATUS)"
+          else
+            echo "⚠️ Razorpay API: $STATUS"
+          fi
+        continue-on-error: true
+
+      # ── Google Sheets: Log daily run ───────────────────────────────────────
+      - name: Log to Google Sheets
+        if: ${{ secrets.GOOGLE_SHEETS_API_KEY != '' && secrets.GOOGLE_SHEETS_SPREADSHEET_ID != '' }}
+        run: |
+          DATE=$(date '+%Y-%m-%d')
+          TIME=$(date '+%H:%M:%S')
+          curl -s -X POST \
+            "https://sheets.googleapis.com/v4/spreadsheets/${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}/values/Automation!A:E:append?valueInputOption=USER_ENTERED&key=${{ secrets.GOOGLE_SHEETS_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"values\": [[\"$DATE\", \"$TIME\", \"GitHub Actions\", \"SAM Daily Run\", \"${{ job.status }}\"]]
+            }"
+        continue-on-error: true
+
+      # ── GA4 Daily Metrics Pull ─────────────────────────────────────────────
+      - name: Pull GA4 Metrics
+        if: ${{ secrets.GA4_PROPERTY_ID != '' && secrets.GA4_ACCESS_TOKEN != '' }}
+        run: |
+          curl -s -X POST \
+            "https://analyticsdata.googleapis.com/v1beta/properties/${{ secrets.GA4_PROPERTY_ID }}:runReport" \
+            -H "Authorization: Bearer ${{ secrets.GA4_ACCESS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "dateRanges": [{"startDate": "yesterday", "endDate": "yesterday"}],
+              "metrics": [{"name": "activeUsers"}, {"name": "sessions"}, {"name": "screenPageViews"}]
+            }' | tee /tmp/ga4_metrics.json
+          echo "GA4 metrics pulled"
+        continue-on-error: true
+
+      # ── Telegram: Completion Report ───────────────────────────────────────
+      - name: Notify Telegram — Daily Report
+        run: |
+          DATE=$(date '+%Y-%m-%d')
+          RAZORPAY="${{ steps.razorpay_check.outputs.razorpay_status }}"
+          [ "$RAZORPAY" = "200" ] && RZ_STATUS="✅ Online" || RZ_STATUS="⚠️ Check needed"
+          
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"chat_id\": \"${{ secrets.TELEGRAM_CHAT_ID }}\",
+              \"text\": \"📊 SAM Daily Report — $DATE\\n\\n💳 Razorpay: $RZ_STATUS\\n🌐 Site: https://aksharaworld.in\\n🛒 Product: https://aksharaworld.in/products/ai-blueprint\\n\\n✅ Automation run complete!\\n🤖 Next run: Tomorrow 6:00 AM IST\",
+              \"parse_mode\": \"HTML\"
+            }"
+
+      # ── Brevo: Email stats (optional) ─────────────────────────────────────
+      - name: Pull Brevo Email Statistics
+        if: ${{ secrets.BREVO_API_KEY != '' }}
+        run: |
+          curl -s -X GET "https://api.brevo.com/v3/emailCampaigns?status=sent&limit=5" \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Accept: application/json" | head -c 500
+        continue-on-error: true
+
+      # ── Final status ────────────────────────────────────────────────────────
+      - name: Print Summary
+        run: |
+          echo "════════════════════════════════════════"
+          echo "✅ SAM Daily Automation Complete"
+          echo "📅 $(date '+%Y-%m-%d %H:%M UTC')"
+          echo "🏢 Akshara World — sampathh7415/AksharaWorld"
+          echo "════════════════════════════════════════"
