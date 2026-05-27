@@ -73,8 +73,11 @@ export default function PublicLayout({
         )}
         <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-black/20 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              AKSHARA WORLD
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="Akshara World Logo" className="w-8 h-8 rounded-full border border-white/20 object-cover" />
+              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                AKSHARA WORLD
+              </span>
             </div>
             <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
               <a href="/" className="hover:text-white transition-colors">Home</a>
@@ -93,7 +96,10 @@ export default function PublicLayout({
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
               <div className="space-y-4">
-                <div className="font-bold text-white">AKSHARA WORLD</div>
+                <div className="flex items-center gap-2 font-bold text-white">
+                  <img src="/logo.png" alt="Akshara World Logo" className="w-6 h-6 rounded-full border border-white/20 object-cover" />
+                  <span>AKSHARA WORLD</span>
+                </div>
                 <p className="text-xs text-gray-500 leading-relaxed">The world's first fully autonomous business ecosystem. Operating 24/7 on zero-cost infrastructure.</p>
               </div>
               <div className="space-y-4 text-xs">

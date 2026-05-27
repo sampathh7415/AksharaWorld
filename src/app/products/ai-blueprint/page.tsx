@@ -24,8 +24,9 @@ export default function AIBlueprintPage() {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '24px 0', borderBottom: '1px solid rgba(255,255,255,0.1)'
       }}>
-        <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: '1.3rem' }}>
-          🌟 Akshara World
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: '1.3rem' }}>
+          <img src="/logo.png" alt="Akshara World Logo" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.2)', objectFit: 'cover' }} />
+          <span>Akshara World</span>
         </Link>
         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>AI Tools & Education</span>
       </nav>

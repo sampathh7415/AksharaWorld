@@ -169,9 +169,12 @@ export default function Dashboard() {
     <div className="shell">
       {/* ── SIDEBAR ── */}
       <aside className="sidebar">
-        <div className="sidebar-brand">
-          <div className="brand-logo">⚡ Akshara World</div>
-          <div className="brand-sub">Command Center</div>
+        <div className="sidebar-brand" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <img src="/logo.png" alt="Akshara World Logo" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid var(--border)', objectFit: 'cover' }} />
+          <div>
+            <div className="brand-logo" style={{ fontSize: '1.05rem', lineHeight: '1.2' }}>Akshara World</div>
+            <div className="brand-sub">Command Center</div>
+          </div>
         </div>
         <nav className="sidebar-nav">
           <div className="nav-section-label">Operations</div>

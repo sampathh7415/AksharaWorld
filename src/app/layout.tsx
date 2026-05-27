@@ -30,6 +30,13 @@ export const metadata: Metadata = {
   publisher:   'Akshara World',
   robots:      { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large' } },
 
+  // ── Icons ──
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
+
   // ── Google Search Console Verification ──
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION || 'OncBqpSQj_mCxvK-6s6w0bKFJCHTlCF8SXFdl_AhOks',
