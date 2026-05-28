@@ -15,17 +15,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
           cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
-        working-directory: ./
         run: npm ci --legacy-peer-deps
 
-      - name: Build dashboard
-        working-directory: ./
-        run: npm run build
+      - name: Build with @cloudflare/next-on-pages
+        run: npx @cloudflare/next-on-pages
         env:
           # ── Clerk Auth ──
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
@@ -64,13 +62,16 @@ jobs:
           NEXT_PUBLIC_FIREBASE_MESSAGING_ID: "633321287038"
           NEXT_PUBLIC_FIREBASE_APP_ID: "1:633321287038:web:3a5299251ffb6edd62972f"
           NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: G-VJ7GHMKHFM
+          # ── Razorpay ──
+          RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID }}
+          RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET }}
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .next/standalone --project-name=akshara-dashboard
+          command: pages deploy .vercel/output/static --project-name=akshara-dashboard
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
@@ -82,6 +83,7 @@ jobs:
       - name: Deployment summary
         run: |
           echo "✅ Dashboard deployed to Cloudflare Pages"
-          echo "📍 Custom domain: dash.aksharaworld.in"
+          echo "📍 Custom domain: aksharaworld.in (dashboard route)"
           echo "📊 GA4: G-QZ4L9XW64F active"
           echo "🛡️ reCAPTCHA Enterprise: 6Lfv9vYs... active"
+          echo "🔒 Clerk auth: protecting all non-public routes"
