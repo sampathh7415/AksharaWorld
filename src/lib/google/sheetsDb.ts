@@ -48,7 +48,7 @@ let localQueue: QueueJob[] = [
 ];
 
 export class SheetsDb {
-  private static webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL || '';
+  private static webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL || process.env.APPS_SCRIPT_WEBHOOK_URL || '';
 
   public static async getTransactions(): Promise<Transaction[]> {
     if (!this.webhookUrl) {
