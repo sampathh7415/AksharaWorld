@@ -9,6 +9,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/razorpay-webhook(.*)',
   '/api/newsletter(.*)',          // Newsletter subscribe form
   '/api/contact(.*)',             // Contact form submissions
+  '/api/book(.*)',                // Meet booking scheduler form
   '/api/feed(.*)',                // RSS feeds
   '/api/v1/production-agent(.*)',// External agent webhook
 ])
