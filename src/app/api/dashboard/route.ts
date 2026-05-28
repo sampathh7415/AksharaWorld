@@ -1,7 +1,7 @@
 export const runtime = 'edge';
 import { NextResponse } from 'next/server';
 
-const SAM_BRAIN_URL = process.env.NEXT_PUBLIC_SAM_BRAIN_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';
+const SAM_BRAIN_URL = process.env.SAM_BRAIN_URL || process.env.NEXT_PUBLIC_SAM_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';
 
 export async function GET() {
   const result: any = { timestamp: new Date().toISOString() };
@@ -22,7 +22,8 @@ export async function GET() {
   try {
     const keyId = process.env.RAZORPAY_KEY_ID;
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+    // btoa() is the Edge-Runtime / Web API equivalent of Buffer.from().toString('base64')
+    const auth = btoa(`${keyId}:${keySecret}`);
     
     const rzpRes = await fetch('https://api.razorpay.com/v1/payments?count=100', {
       headers: { Authorization: `Basic ${auth}` }
