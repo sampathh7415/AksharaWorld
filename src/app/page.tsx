@@ -524,11 +524,13 @@ export default function Dashboard() {
               <div className="card-header"><span className="card-title">🚨 System Alerts</span></div>
               <div className="card-body">
                 {[
-                  { type: 'warn', title: 'Public URL Pending', desc: 'Dashboard runs on localhost:3000. Deploy to Cloudflare Pages for 24/7 public access.' },
-                  { type: 'warn', title: 'Razorpay Not Connected', desc: 'Revenue collection is blocked until Razorpay API keys are added.' },
-                  { type: 'warn', title: 'Telegram BOT_TOKEN Missing', desc: 'Mobile approval notifications are inactive until token is set in Cloudflare secrets.' },
-                  { type: 'info', title: 'Clerk Auth Live', desc: 'Owner-only access enforced with 2FA. All routes protected.' },
-                  { type: 'info', title: 'GitHub Synced', desc: '5 commits pushed to sampathh7415/AksharaWorld — all business code backed up.' },
+                  { type: 'warn', title: 'Razorpay API Keys — Connect Live Keys', desc: 'Test mode active. Add RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET to Cloudflare/Netlify environment for live revenue tracking.' },
+                  { type: 'warn', title: 'Telegram BOT_TOKEN Missing', desc: 'Mobile approval notifications inactive until BOT_TOKEN is set in environment secrets.' },
+                  { type: 'warn', title: 'WhatsApp Number Not Configured', desc: 'Public page WhatsApp link uses placeholder number. Update NEXT_PUBLIC_WHATSAPP_NUMBER in env vars.' },
+                  { type: 'info', title: '✅ Dashboard Protection — LIVE', desc: 'Clerk auth now protects / (dashboard). Only signed-in owner can access. Public routes /public/* and /products/* are open.' },
+                  { type: 'info', title: '✅ Cloudflare CI/CD — Active', desc: 'GitHub push triggers automatic build + deploy via deploy-cloudflare.yml workflow.' },
+                  { type: 'info', title: '✅ Edge Runtime Fixes Applied', desc: 'Buffer.from() replaced with btoa() in dashboard API — Edge Runtime compatible now.' },
+                  { type: 'info', title: '✅ GitHub Synced', desc: `Latest commit: fix(critical): protect dashboard, fix Edge Runtime Buffer, add social icons. Repo: sampathh7415/AksharaWorld` },
                 ].map((a, i) => (
                   <div key={i} className={`alert-item ${a.type}`}>
                     <span className="alert-icon">{a.type === 'warn' ? '⚠️' : 'ℹ️'}</span>
@@ -541,6 +543,7 @@ export default function Dashboard() {
               </div>
             </div>
           )}
+
 
           {/* ── CAPSULE ── */}
           {active === 'capsule' && (
@@ -560,15 +563,20 @@ export default function Dashboard() {
               <div className="card-header"><span className="card-title">📜 Change Log</span></div>
               <div className="card-body" style={{ padding: 0 }}>
                 <table className="data-table">
-                  <thead><tr><th>Timestamp</th><th>Component</th><th>Change</th><th>By</th></tr></thead>
+                  <thead><tr><th>Date</th><th>Component</th><th>Change</th><th>By</th></tr></thead>
                   <tbody>
                     {[
+                      ['2026-05-28', 'Security', 'Clerk auth now protects / (dashboard) — all routes secured', 'Antigravity'],
+                      ['2026-05-28', 'Dashboard API', 'Fixed Buffer.from() → btoa() for Edge Runtime compatibility', 'Antigravity'],
+                      ['2026-05-28', 'Public Nav', 'Added social icons (Instagram, Facebook, YouTube, WhatsApp)', 'Antigravity'],
+                      ['2026-05-27', 'Webhook', 'Robust Google Sheets fallback via Apps Script webhook', 'Antigravity'],
+                      ['2026-05-27', 'Cloud UI', 'Lovable Developer Bridge department integrated', 'Antigravity'],
+                      ['2026-05-27', 'Brand', 'New circular logo deployed everywhere + GitHub repo', 'Antigravity'],
+                      ['2026-05-27', 'Deploy', 'netlify.toml added for aksharaworld.in deployment', 'Antigravity'],
                       ['2026-05-12', 'Dashboard', 'Unified dashboard — merged 3 versions into 1', 'Antigravity'],
                       ['2026-05-12', 'GitHub', 'Full workspace synced to sampathh7415/AksharaWorld', 'Sam'],
                       ['2026-05-11', 'AI DNA', 'jcode Semantic Memory + 500-AI-Agents Skill Library integrated', 'Antigravity'],
                       ['2026-05-11', 'Auth', 'Clerk 2FA live — owner-only access enforced', 'Sam'],
-                      ['2026-05-11', 'Brain', 'Sam CEO Brain v2.0 deployed to Cloudflare Workers', 'Sam'],
-                      ['2026-05-11', 'CRON', 'Innovation_Scout daily 6 AM IST scan active', 'Sam'],
                     ].map(([t, c, d, b], i) => (
                       <tr key={i}>
                         <td style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{t}</td>
@@ -582,6 +590,7 @@ export default function Dashboard() {
               </div>
             </div>
           )}
+
 
           {/* ── UPGRADES ── */}
           {active === 'upgrades' && (
