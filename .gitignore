@@ -83,3 +83,20 @@ production-history.json
 
 # Local Netlify folder
 .netlify
+
+# Agent & Editor Tool Folders (local only, never commit)
+.claude/
+.cursor/
+.gemini/
+.kiro/
+.qoder/
+.vscode/
+.opencode.json
+.windsurfrules
+.mcp.json
+CLAUDE.md
+QODER.md
+
+# Old / corrupted node_modules backups
+/node_modules_old/
+/node_modules_corrupted_*/

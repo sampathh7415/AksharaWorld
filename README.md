@@ -1,8 +1,25 @@
 # 🐙 Akshara World: Vision, Octopus Strategy & Autonomous System Map
 
+<p align="center">
+  <img src="public/logo.png" width="80" height="80" style="border-radius:50%" alt="Akshara World Logo" />
+</p>
+
 Welcome to the absolute single source of truth explaining the **Octopus Business Strategy**, the 8 specialized AI departments (tentacles) revolving around our AI CEO **Sam**, individual departmental roadmaps, zero-cost Google products clusters, and the complete Google Drive folder directory map.
 
 By opening this repository, the **entire, complete digital business empire of Akshara World is fully visible and auditable in front of you**.
+
+---
+
+## 🌐 Live URLs
+
+| URL | Purpose | Access |
+|-----|---------|--------|
+| [aksharaworld.in/public](https://aksharaworld.in/public) | Public Landing Page — logo, about, products | 🌍 Public |
+| [aksharaworld.in](https://aksharaworld.in) | Business Command Center Dashboard | 🔒 Owner Only (Clerk Auth) |
+| [akshara-pulse.lovable.app](https://akshara-pulse.lovable.app/) | Full Product Catalog with pricing | 🌍 Public |
+| [aksharaworld.in/products/ai-blueprint](https://aksharaworld.in/products/ai-blueprint) | AI Productivity Blueprint product page | 🌍 Public |
+
+> **Deployment**: Cloudflare Pages (CI/CD via GitHub Actions on every push to `main`)
 
 ---
 
@@ -373,6 +390,9 @@ aws --endpoint-url=http://localhost:4566 s3 ls
 
 ---
 
-**Status**: ✅ Production Ready (V2.0 Core Deployed)  
-**AI CEO**: Sam  
-**Active Repository Mapping**: Connected
+**Status**: ✅ Production Ready (V2.0 Core Deployed)
+**Last Updated**: 2026-05-28
+**Latest Commit**: `41bb7b9` — fix(ci): Cloudflare Pages deployment, Node 20, Razorpay secrets
+**AI CEO**: Sam
+**Active Repository**: [sampathh7415/AksharaWorld](https://github.com/sampathh7415/AksharaWorld)
+**Domain**: [aksharaworld.in](https://aksharaworld.in)
