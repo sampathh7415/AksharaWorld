@@ -526,7 +526,7 @@ export default function Dashboard() {
                 {[
                   { type: 'warn', title: 'Razorpay API Keys — Connect Live Keys', desc: 'Test mode active. Add RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET to Cloudflare/Netlify environment for live revenue tracking.' },
                   { type: 'warn', title: 'Telegram BOT_TOKEN Missing', desc: 'Mobile approval notifications inactive until BOT_TOKEN is set in environment secrets.' },
-                  { type: 'warn', title: 'WhatsApp Number Not Configured', desc: 'Public page WhatsApp link uses placeholder number. Update NEXT_PUBLIC_WHATSAPP_NUMBER in env vars.' },
+                  { type: 'info', title: '✅ WhatsApp Configured', desc: 'Public page WhatsApp link is successfully configured to +919740322413.' },
                   { type: 'info', title: '✅ Dashboard Protection — LIVE', desc: 'Clerk auth now protects / (dashboard). Only signed-in owner can access. Public routes /public/* and /products/* are open.' },
                   { type: 'info', title: '✅ Cloudflare CI/CD — Active', desc: 'GitHub push triggers automatic build + deploy via deploy-cloudflare.yml workflow.' },
                   { type: 'info', title: '✅ Edge Runtime Fixes Applied', desc: 'Buffer.from() replaced with btoa() in dashboard API — Edge Runtime compatible now.' },
