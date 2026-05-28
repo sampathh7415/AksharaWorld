@@ -388,11 +388,22 @@ aws --endpoint-url=http://localhost:4566 s3 mb s3://akshara-test-bucket
 aws --endpoint-url=http://localhost:4566 s3 ls
 ```
 
+### 🛒 Unified Google Merchant Center Integration
+We have successfully wired Google Merchant Center to your live digital product catalog.
+1. **Dynamic RSS XML Feed (`/api/google/merchant-feed`)**: Compiles and serves your products in standard XML RSS format, fully compatible with Google Merchant Center for auto-syncing shopping listings.
+2. **Real-time Panel Metrics API (`/api/merchant`)**: Backs the dashboard panel dynamically, rendering approval status, impressions, and clicks for all 5 real-time digital products currently deployed in your business:
+   - *Akshara Launch Pilot* (₹999) — `/public/products/launch-pilot`
+   - *AI Productivity Blueprint v1.0* (₹499) — `/public/products/ai-blueprint`
+   - *Akshara World Premium SEO Blueprint E-Book* (₹1,500) — `/products/seo-blueprint`
+   - *Niche Automation Scaffolding Bundle* (₹3,500) — `/products/niche-scaffolding`
+   - *Automated AI Blogger Script (Cloudflare Workers Edition)* (₹4,999) — `/products/ai-blogger-worker`
+
 ---
 
-**Status**: ✅ Production Ready (V2.0 Core Deployed)
+**Status**: ✅ Production Ready (V2.1 Deployed - Error-Free Pipelines)
 **Last Updated**: 2026-05-28
-**Latest Commit**: `41bb7b9` — fix(ci): Cloudflare Pages deployment, Node 20, Razorpay secrets
+**Latest Commit**: `853d526` — feat(google): align sheetsDb with App Script, add HTML receipt template, connect Merchant Center and clean up GitHub Actions
 **AI CEO**: Sam
 **Active Repository**: [sampathh7415/AksharaWorld](https://github.com/sampathh7415/AksharaWorld)
 **Domain**: [aksharaworld.in](https://aksharaworld.in)
+

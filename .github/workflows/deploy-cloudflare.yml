@@ -51,6 +51,8 @@ jobs:
           NEXT_PUBLIC_BLOGGER_ID: 4758144517261750879
           # ── YouTube ──
           NEXT_PUBLIC_YOUTUBE_HANDLE: "@AksharaAI"
+          # ── WhatsApp Contact ──
+          NEXT_PUBLIC_WHATSAPP_NUMBER: "919740322413"
           # ── Gmail Newsletter / Apps Script DB ──
           NEXT_PUBLIC_NEWSLETTER_EMAIL: sampathh7415@gmail.com
           APPS_SCRIPT_WEBHOOK_URL: https://script.google.com/macros/s/AKfycbyzOJYVojovXzg6YI_LKviRG-xqOtmWgLuv9siAo9CYeqxH8no_bSwFbTorvnGJnirY/exec
