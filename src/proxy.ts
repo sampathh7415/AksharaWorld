@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-// ✅ PUBLIC routes — no auth needed
+// ✅ PUBLIC routes — no auth needed (accessible without sign-in)
 const isPublicRoute = createRouteMatcher([
   '/public(.*)',                  // Public landing page at /public
   '/products(.*)',                // Product pages (visible to customers)
@@ -15,11 +15,16 @@ const isPublicRoute = createRouteMatcher([
 ])
 
 // 🔒 Everything else (including /) requires Clerk sign-in
-export default clerkMiddleware(async (auth, req) => {
+// ✅ Next.js 16: proxy.ts replaces deprecated middleware.ts
+//    Exports as `proxy` function (was `middleware`). Runs on Node.js runtime.
+export const proxy = clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     await auth.protect()
   }
 })
+
+// Keep default export for backwards compatibility during transition
+export default proxy
 
 export const config = {
   matcher: [
