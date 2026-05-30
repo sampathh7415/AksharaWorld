@@ -1,4 +1,4 @@
-name: Deploy Dashboard to Cloudflare Pages
+name: Deploy to Cloudflare Pages
 
 on:
   push:
@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,41 +24,54 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build with @cloudflare/next-on-pages
-        run: npx @cloudflare/next-on-pages
+      # ── Check if Cloudflare secrets are configured ─────────────────────────
+      - name: Check Cloudflare secrets
+        id: cf_check
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] || [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "cf_ready=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Cloudflare secrets not set — skipping Cloudflare deploy"
+          else
+            echo "cf_ready=true" >> $GITHUB_OUTPUT
+            echo "✅ Cloudflare secrets found — will deploy"
+          fi
+
+      # ── Standard Next.js build (validates code compiles correctly) ─────────
+      - name: Build Next.js (webpack mode — stable for CI)
+        run: npm run build
         env:
-          # ── Clerk Auth ──
+          # ── Clerk Auth ──────────────────────────────────────────────────────
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
           NEXT_PUBLIC_CLERK_SIGN_IN_URL: /sign-in
           NEXT_PUBLIC_CLERK_SIGN_UP_URL: /sign-up
           NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
           NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
-          # ── Sam Brain ──
+          # ── Sam Brain ───────────────────────────────────────────────────────
           NEXT_PUBLIC_SAM_URL: ${{ secrets.NEXT_PUBLIC_SAM_URL }}
           SAM_BRAIN_URL: ${{ secrets.NEXT_PUBLIC_SAM_URL }}
-          # ── Gemini AI ──
+          # ── Gemini AI ───────────────────────────────────────────────────────
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          # ── Google Analytics GA4 ──
+          # ── Google Analytics GA4 ────────────────────────────────────────────
           NEXT_PUBLIC_GA_MEASUREMENT_ID: G-QZ4L9XW64F
-          # ── Google reCAPTCHA Enterprise ──
+          # ── Google reCAPTCHA Enterprise ─────────────────────────────────────
           NEXT_PUBLIC_RECAPTCHA_SITE_KEY: 6Lfv9vYsAAAAAH_t85p2PGbGHD1JsPbA2YyZ2Y85
-          # ── Google Search Console ──
+          # ── Google Search Console ───────────────────────────────────────────
           GOOGLE_SITE_VERIFICATION: OncBqpSQj_mCxvK-6s6w0bKFJCHTlCF8SXFdl_AhOks
-          # ── Google AdSense ──
+          # ── Google AdSense ──────────────────────────────────────────────────
           NEXT_PUBLIC_ADSENSE_PUBLISHER_ID: ca-pub-9728864343029052
-          # ── Google Merchant Center ──
+          # ── Google Merchant Center ──────────────────────────────────────────
           NEXT_PUBLIC_MERCHANT_ID: 5782853246
-          # ── Blogger ──
+          # ── Blogger ─────────────────────────────────────────────────────────
           NEXT_PUBLIC_BLOGGER_ID: 4758144517261750879
-          # ── YouTube ──
+          # ── YouTube ─────────────────────────────────────────────────────────
           NEXT_PUBLIC_YOUTUBE_HANDLE: "@AksharaAI"
-          # ── WhatsApp Contact ──
+          # ── WhatsApp Contact ────────────────────────────────────────────────
           NEXT_PUBLIC_WHATSAPP_NUMBER: "919740322413"
-          # ── Gmail Newsletter / Apps Script DB ──
+          # ── Gmail Newsletter / Apps Script DB ───────────────────────────────
           NEXT_PUBLIC_NEWSLETTER_EMAIL: sampathh7415@gmail.com
           APPS_SCRIPT_WEBHOOK_URL: https://script.google.com/macros/s/AKfycbyzOJYVojovXzg6YI_LKviRG-xqOtmWgLuv9siAo9CYeqxH8no_bSwFbTorvnGJnirY/exec
-          # ── Google Firebase ──
+          # ── Google Firebase ─────────────────────────────────────────────────
           NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyBuKLez-yzYgYbzC8hLDCvFuwIurbj_YnM
           NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: aksharaworld-481e8.firebaseapp.com
           NEXT_PUBLIC_FIREBASE_PROJECT_ID: aksharaworld-481e8
@@ -64,28 +79,44 @@ jobs:
           NEXT_PUBLIC_FIREBASE_MESSAGING_ID: "633321287038"
           NEXT_PUBLIC_FIREBASE_APP_ID: "1:633321287038:web:3a5299251ffb6edd62972f"
           NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: G-VJ7GHMKHFM
-          # ── Razorpay ──
+          # ── Razorpay ────────────────────────────────────────────────────────
+          RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID }}
+          RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET }}
+
+      # ── Deploy to Cloudflare Pages (only if secrets are configured) ────────
+      - name: Build for Cloudflare Pages
+        if: steps.cf_check.outputs.cf_ready == 'true'
+        run: npx @cloudflare/next-on-pages
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          NEXT_PUBLIC_SAM_URL: ${{ secrets.NEXT_PUBLIC_SAM_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: G-QZ4L9XW64F
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY: 6Lfv9vYsAAAAAH_t85p2PGbGHD1JsPbA2YyZ2Y85
+          NEXT_PUBLIC_WHATSAPP_NUMBER: "919740322413"
           RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID }}
           RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET }}
 
       - name: Deploy to Cloudflare Pages
+        if: steps.cf_check.outputs.cf_ready == 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy .vercel/output/static --project-name=akshara-dashboard
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
-          NEXT_PUBLIC_SAM_URL: ${{ secrets.NEXT_PUBLIC_SAM_URL }}
-          NEXT_PUBLIC_GA_MEASUREMENT_ID: G-QZ4L9XW64F
-          NEXT_PUBLIC_RECAPTCHA_SITE_KEY: 6Lfv9vYsAAAAAH_t85p2PGbGHD1JsPbA2YyZ2Y85
 
+      # ── Summary ───────────────────────────────────────────────────────────
       - name: Deployment summary
         run: |
-          echo "✅ Dashboard deployed to Cloudflare Pages"
-          echo "📍 Custom domain: aksharaworld.in (dashboard route)"
-          echo "📊 GA4: G-QZ4L9XW64F active"
-          echo "🛡️ reCAPTCHA Enterprise: 6Lfv9vYs... active"
+          echo "=================================="
+          echo "✅ Build: SUCCESS"
+          if [ "${{ steps.cf_check.outputs.cf_ready }}" = "true" ]; then
+            echo "✅ Cloudflare Deploy: COMPLETE"
+            echo "🌐 URL: aksharaworld.in"
+          else
+            echo "⏭️ Cloudflare Deploy: SKIPPED (add CLOUDFLARE_API_TOKEN & CLOUDFLARE_ACCOUNT_ID secrets to enable)"
+          fi
+          echo "📊 GA4: G-QZ4L9XW64F"
           echo "🔒 Clerk auth: protecting all non-public routes"
+          echo "=================================="
