@@ -539,10 +539,146 @@ We have successfully wired Google Merchant Center to your live digital product c
 
 ---
 
-**Status**: ✅ Production Ready (V2.1 Deployed - Error-Free Pipelines)
-**Last Updated**: 2026-05-28
-**Latest Commit**: `853d526` — feat(google): align sheetsDb with App Script, add HTML receipt template, connect Merchant Center and clean up GitHub Actions
+## Business Services
+
+This section documents the structured software service prototypes, operational wing architectures, and the 20-year development roadmap designed for the Akshara World digital ecosystem.
+
+### ⚡ 1. Zero-Cost Micro-Task Service Prototypes (Immediate Launch)
+To generate initial customer acquisition pipelines with minimal upfront hosting overhead, the platform utilizes five standard service prototypes built entirely on free-tier cloud architectures and Google Workspace APIs:
+
+1. **Document & Slide Formatting Engine (`Revenue_Vault` Funnel)**
+   * *Service Prototype:* Automated conversion of plain client text files or raw outlines into formatted presentations using Google Slides and curated typography via Google Fonts.
+   * *Turnaround Target:* 2 Hours.
+   * *Next.js Telemetry Upsell:* Automatically registers completed project states and offers client-facing dashboards displaying content views.
+
+2. **Resume ATS Optimization Service (`Content_Forge` Funnel)**
+   * *Service Prototype:* Translation, restructuring, and formatting of resume outlines within Google Docs to optimize for ATS (Applicant Tracking Systems) compatibility.
+   * *Turnaround Target:* 3 Hours.
+   * *Next.js Telemetry Upsell:* Sends delivery files containing custom portfolio site templates hosted on Cloudflare Pages.
+
+3. **Brand Vector Asset Generation (`Media_Studio` Funnel)**
+   * *Service Prototype:* Creation of customized vector diagrams, architectural wireframes, and SVGs inside Google Drawings.
+   * *Turnaround Target:* 1 Hour.
+   * *Next.js Telemetry Upsell:* Delivers assets with responsive embed widgets designed to load instantly via edge CDNs.
+
+4. **Short-Form Content Clipping (`Media_Studio` Funnel)**
+   * *Service Prototype:* Editing and rendering raw video footage into Vertical vertical formats suitable for YouTube Shorts and TikTok playlists.
+   * *Turnaround Target:* 4 Hours.
+   * *Next.js Telemetry Upsell:* Connects finished render files directly to FeedBurner RSS directories to automate multi-channel syndication.
+
+5. **API & System Prompt Optimization (`Tech_Core` Funnel)**
+   * *Service Prototype:* Designing structured prompt frameworks, system instructions, and JSON schemas for LLM-driven developer operations.
+   * *Turnaround Target:* 2 Hours.
+   * *Next.js Telemetry Upsell:* Integrates prompts directly with serverless Firebase Firestore triggers and edge routers.
+
+---
+
+### 🐙 2. Technical Operations & Telemetry Loops (The 5 Wings)
+The software services of Akshara World are integrated into an operational hierarchy that coordinates data, telemetry, and transactions across five distinct wings:
+
+```
+[Storefront Transactions] ---> [Wing 1: Revenue_Vault] ---> [Wing 2: Telemetry Logger]
+                                                                     |
+                                                                     v
+[Blogger CMS Deployments] <--- [Wing 3: Content_Forge]  <--- [Wing 5: Resilience Fail-Safes]
+                                         ^
+                                         |
+                            [Wing 4: Cloud Infrastructure]
+```
+
+1. **💰 Wing 1: REVENUE & MONETIZATION (`Revenue_Vault`)**
+   * *Core Responsibility:* Captures and validates digital checkout transactions via Razorpay webhook streams.
+   * *Interoperability Trigger:* Upon validating a payment payload, it automatically invokes `SheetsDb.addTransaction` and triggers Wing 2 to log active customer indices.
+
+2. **📊 Wing 2: METRICS & TELEMETRY (`Insight_Lab`)**
+   * *Core Responsibility:* Monitors conversion rates, search indexing status, and edge latency.
+   * *Interoperability Trigger:* If search ranking drops are flagged by Search Console, it automatically triggers Wing 3 to queue relevant SEO keyword drafts.
+
+3. **✍️ Wing 3: CONTENT & BRANDING (`Content_Forge`)**
+   * *Core Responsibility:* Automates keyword discovery, content translation, and scheduled blogger posts.
+   * *Interoperability Trigger:* Pushes raw draft outputs directly to Blogger and schedules transactional email templates in Brevo delivery pipelines.
+
+4. **💻 Wing 4: STACK & INFRASTRUCTURE (`Tech_Core`)**
+   * *Core Responsibility:* Resolves serverless compilation configurations, manages Firebase Firestores, and updates repository knowledge graphs.
+   * *Interoperability Trigger:* Automatically triggers conditional wrangler deployments on Cloudflare and maps workspace file modifications to `code-review-graph`.
+
+5. **🛡️ Wing 5: RESILIENCE & COMPLIANCE (`Guardian_Ops`)**
+   * *Core Responsibility:* Manages Clerk identities, validates reCAPTCHA Enterprise scores, and triggers circuit-breaker fallbacks.
+   * *Interoperability Trigger:* Automatically mirror Sheets logs into Firebase and routes diagnostic alert payloads to Telegram bots upon API failures.
+
+---
+
+### 📈 3. The 20-Year Legacy Software & API Roadmap (50 Main Concepts)
+
+To ensure high availability, scalability, and long-term viability, the development roadmap is categorized into three major horizons:
+
+#### Phase 1: Bootstrapped Optimization (Years 1–5)
+*Focused on zero-cost hosting tiers, local developer tool optimization, and Workspace API bridges.*
+
+1. **Blogger Markdown Auto-Sync Hook:** Next.js trigger that automatically deploys markdown drafts directly to Blogger APIs.
+2. **Keyless Sheets Telemetry Redirector:** Routing runtime console logs directly via Apps Script Webhooks to bypass GCP v4 API key constraints.
+3. **AST Graph Token Reducer:** Implementing tree-sitter parsing in developer IDEs to reduce model token ingestion cost by 8.2x.
+4. **Local Repository Backup Daemon:** Scheduled CLI routines archiving workspace structures to your virtual `07_Guardian_Ops` Google Drive folder.
+5. **Dynamic WhatsApp Receipt Dispatcher:** Free-tier template triggers that route customer transaction notices directly to mobile screens.
+6. **Keyless sheetsDb Analytics Panel:** Internal dashboard component rendering Google Sheets lists as high-speed JSON arrays.
+7. **Free reCAPTCHA Gatekeeper:** Protecting user checkout pages and bookings paths against bot traffic using reCAPTCHA Enterprise.
+8. **Static Cloudflare CDN Asset Vault:** Staging and serving visual logos, SVGs, and diagram frames entirely on Cloudflare Pages static domains.
+9. **Zero-Cost Google Meet Scheduler:** Edge API router generating customized Meet video rooms without calendar licensing fees.
+10. **Blogger XML RSS Feed syndicator:** Generating dynamic product catalogs suitable for merchant directories.
+11. **Looker Studio Telemetry Grids:** Visualizing client traffic channels and index health directly inside Looker Studio.
+12. **Next.js Webpack Build Guard:** Build-safe rules preventing Turbopack memory limit issues during Cloudflare compilation.
+13. **Local AWS S3 Emulation Container:** Running persistent Floci cloud emulators on Docker containers to test S3 APIs offline at ₹0 cost.
+14. **Playwright E2E store Verification:** Headless browser validation suites verifying storefront checkout forms before production builds.
+15. **BetterBugs Diagnostic Ingestor:** Custom parser extracting telemetry logs from browser records to build self-healing prompt pipelines.
+16. **GSC Index Monitor:** Dynamic indexing checks utilising verified Search Console tokens.
+17. **Google Translate Page Localizer:** Script translating storefront views into major regional languages using free translation endpoints.
+
+#### Phase 2: Distributed Serverless Compute & Decoupling (Years 6–12)
+*Focused on edge data caching, asynchronous task scheduling, and isolated fallback routing.*
+
+18. **Cloudflare KV Session Store:** Offloading Clerk auth session lookups to high-speed KV key-value databases at the edge.
+19. **Serverless Ingestion Queue (SQS Emulator):** Standard SQS queue emulators running locally to mirror transaction records during sheets downtime.
+20. **Distributed SQLite Database Engine:** Upgrading local memory files to a persistent SQLite database synced to cloud buckets.
+21. **Automated PDF Memo Generator:** Cron tasks rendering transactional ledger reports into formatted PDF memos inside Google Drive.
+22. **Google Classroom Webhook Register:** Registering buyers to customer onboarding classrooms automatically via webhook calls.
+23. **Dynamic Merchant Center Sync:** Automated XML product syndicators updating the Google Merchant Center shopping feed automatically.
+24. **Multi-Model Consensus Framework:** Consensus loops comparing output fixes across Qwen, Gemini, and Claude before publishing updates.
+25. **Circuit-Breaker Retrying API Wrappers:** Native JS libraries that handle external payment API timeouts with standard fallback routes.
+26. **Secure Webhook Queue Decoupler:** Decoupling Razorpay webhooks using Cloudflare Queue routers to avoid timeout drops.
+27. **Looker Studio Client dashboards:** Custom reporting views mapped for premium corporate automation clients.
+28. **Flutter Storefront Mobile wrappers:** Compiling Next.js dashboards into cross-platform mobile apps for iOS and Android.
+29. **Android Studio Compilation Pipelines:** Automated local terminal scripts building updated APK files for client review.
+30. **Google Web Designer Asset Builders:** Responsive HTML ads designed using GWD, synced with Google Photos asset directories.
+31. **Google Fonts Dynamic CSS optimizers:** Auto-generating locally cached typography packages to improve Google PageSpeed scores.
+32. **reCAPTCHA Enterprise Multi-Score Assessors:** Adjusting user risk thresholds based on dynamic Edge geolocation parameters.
+33. **Safe Browsing Site Shields:** Dynamic verification hooks updating the dashboard's domain safety index hourly.
+34. **Cron-Loop Ingestion Daemons:** Background tasks executing client tasks on dedicated intervals.
+
+#### Phase 3: Cognitive Swarms & Full Ecosystem Autonomy (Years 13–20)
+*Focused on localized vector indexing, sovereign databases, and self-repairing software loops.*
+
+35. **Local Vector Database Stores:** Implementing vector databases locally inside `.code-review-graph/` to parse client documents offline.
+36. **Private SQLite Data Sovereignty:** Archiving customer activity registers completely in encrypted local DB nodes.
+37. **Headless Playwright Scraping Nodes:** Running scheduled headless browser engines to check competitor pricing schemas.
+38. **Automatic Codebase Refactoring loops:** Using local AST reviews to detect dead files and run automatic cleanups.
+39. **Self-Healing Webhook Endpoint Handlers:** Edge endpoints that auto-patch their own routing logic in case of incoming JSON schema changes.
+40. **Autonomous Bug-Patching Daemons:** Background loops scanning error tables and creating tested GitHub pull requests.
+41. **Titan Key Multi-Factor Security Hardening:** Forcing physical security verification for all manual code release overrides.
+42. **Looker Studio Advanced ML predictive models:** Mapped charts predicting quarterly revenue curves based on transaction history.
+43. **Sovereign Multi-Repo Watch Daemons:** Background services managing sync status across a registry of corporate repos.
+44. **Google Translate Auto-Localization Loops:** Real-time multi-language translation pipelines running in database triggers.
+45. **Custom Apps Script Webhook Security Layers:** Encrypting webhook payload bodies with AES encryption to prevent payload injection.
+46. **Google Activity Log Leakage Scanners:** Scanning developer footprints for potential security token exposure.
+47. **Google Illuminate Podcast Syndicators:** Auto-posting text-to-audio files directly to video streaming playlists.
+48. **Playwright Visual Regressive Testing Suites:** Comparing pixel screenshots of UI changes across browsers to prevent visual bugs.
+49. **Blogger Automatic Archiving Engines:** Offline backups archiving historical blog database tables to local SQLite files.
+50. **Keyless Google Drive Folder Monitors:** Scanning folder directories to ingest new incoming client assets.
+
+---
+
+**Status**: ✅ Production Ready (V2.2 Deployed - Error-Free Pipelines)
+**Last Updated**: 2026-05-30
+**Latest Commit**: `3cdec76` — feat(secrets): add security-hardened secrets script and pnpm lockfile
 **AI CEO**: Sam
 **Active Repository**: [sampathh7415/AksharaWorld](https://github.com/sampathh7415/AksharaWorld)
 **Domain**: [aksharaworld.in](https://aksharaworld.in)
-
