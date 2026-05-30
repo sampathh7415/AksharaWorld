@@ -15,20 +15,19 @@ const isPublicRoute = createRouteMatcher([
 ])
 
 // 🔒 Everything else (including /) requires Clerk sign-in
-// ✅ Next.js 16: proxy.ts replaces deprecated middleware.ts
-//    Exports as `proxy` function (was `middleware`). Runs on Node.js runtime.
-export const proxy = clerkMiddleware(async (auth, req) => {
+// NOTE: proxy.ts convention is Next.js 16+ only.
+//       This project uses Next.js 15 — must remain as middleware.ts
+export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     await auth.protect()
   }
 })
 
-// Keep default export for backwards compatibility during transition
-export default proxy
-
 export const config = {
   matcher: [
+    // Skip Next.js internals and all static files
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
     '/(api|trpc)(.*)',
   ],
 }
