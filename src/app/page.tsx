@@ -1,635 +1,186 @@
 'use client';
-export const runtime = 'edge';
-import { useState, useEffect, useRef } from 'react';
-import { resilientFetch } from '../lib/resilience';
-import { CloudUiContainer } from '../components/cloud-ui/CloudUiContainer';
 
-const NAV = [
-  { id: 'kpi', icon: '📊', label: 'Business KPIs' },
-  { id: '30dayops', icon: '📋', label: '30-Day Ops' },
-  { id: 'departments', icon: '🏢', label: 'Departments' },
-  { id: 'approvals', icon: '✅', label: 'Approvals Queue' },
-  { id: 'sam', icon: '💬', label: 'Chat with Sam' },
-  { id: 'cloudui', icon: '☁️', label: 'Multi-Cloud UI' },
-  { id: 'brain', icon: '🧠', label: 'AI Brain DNA' },
-  { id: 'resources', icon: '⚙️', label: 'Resource Inventory' },
-  { id: 'alerts', icon: '🚨', label: 'Alerts' },
-  { id: 'capsule', icon: '💊', label: 'Capsule Viewer' },
-  { id: 'changelog', icon: '📜', label: 'Change Log' },
-  { id: 'upgrades', icon: '🚀', label: 'Upgrade Proposals' },
-  { id: 'filereviews', icon: '📁', label: 'File Reviews' },
-  { id: 'failures', icon: '⚠️', label: '3-Try Failures' },
-];
+import React from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import ProductCard from '../components/ProductCard';
 
-const DECISION_RULES = [
-  { signal: 'Traffic ↑, conversion flat', action: 'Change CTA/headline on top Blogger post within 24h', owner: 'Growth_Engine' },
-  { signal: 'Payment webhook failure', action: 'Stop outbound; run smoke-test-payment-flow.mjs', owner: 'Tech_Core + Guardian_Ops' },
-  { signal: 'Sheets API errors', action: 'Check Google API quota; verify secrets; see Runbook #2', owner: 'Tech_Core' },
-  { signal: '48h no pipeline movement', action: 'Change offer band or ICP segment; log experiment_id', owner: 'Revenue_Vault' },
-  { signal: '5 early-bird sold', action: 'Switch all CTAs to ₹1,500 standard', owner: 'Revenue_Vault' },
-  { signal: 'Demo → paid < 20%', action: 'Revise demo script; tighten ICP on WhatsApp', owner: 'Growth_Engine' },
-  { signal: 'Telegram alert > 4h unread', action: 'Open incident in SystemLog; follow runbook', owner: 'Guardian_Ops' },
-];
-
-const OPS_DOCS = [
-  { label: '📋 Sales Playbook', href: '/docs/sales/sales-playbook.md' },
-  { label: '📞 Demo Script', href: '/docs/sales/demo-script.md' },
-  { label: '💬 Outbound Playbook', href: '/docs/sales/outbound-playbook.md' },
-  { label: '🛡️ Runbook #1 — Payment Failure', href: '/docs/runbooks/01-razorpay-webhook-payment-failure.md' },
-  { label: '🛡️ Runbook #2 — Sheets API Down', href: '/docs/runbooks/02-google-sheets-api-down.md' },
-  { label: '🛡️ Runbook #3 — Cloudflare Rollback', href: '/docs/runbooks/03-cloudflare-deploy-rollback.md' },
-  { label: '📅 Daily Ritual', href: '/docs/cadence/DAILY_RITUAL.md' },
-  { label: '📆 Weekly Scorecard Ritual', href: '/docs/cadence/WEEKLY_SCORECARD_RITUAL.md' },
-];
-
-const DEPTS = [
-  { name: 'Content_Forge', mission: 'Research & write SEO content', agents: 'Researcher, Writer, Editor, SEO', status: 'Active' },
-  { name: 'Media_Studio', mission: 'Images, video, audio, shorts', agents: 'Designer, Video, TTS, Thumbnail', status: 'Active' },
-  { name: 'Growth_Engine', mission: 'Distribution on IG, YT, FB', agents: 'Social, Email, Community', status: 'Active' },
-  { name: 'Revenue_Vault', mission: 'Monetization & finance', agents: 'Payments, Affiliate, Bookkeeper', status: 'Active' },
-  { name: 'Tech_Core', mission: 'Infra, code, deploys', agents: 'DevOps, Coder, DB-Admin, Security', status: 'Active' },
-  { name: 'Guardian_Ops', mission: 'Self-healing, compliance, backups', agents: 'Healer, Watchdog, Legal, Backup', status: 'Active' },
-  { name: 'Insight_Lab', mission: 'Analytics & forecasting', agents: 'Analyst, Forecaster, A/B Tester', status: 'Active' },
-  { name: 'Innovation_Scout', mission: 'Daily R&D — new tools & trends', agents: 'Trend Hunter, Tool Evaluator', status: 'Active', cron: true },
-];
-
-const PHASES = [
-  { num: '0', label: 'Phase 0 — Setup', desc: 'Drive, Blueprint, Sam deployed, Dashboard live', state: 'done' },
-  { num: '1', label: 'Phase 1 — MVP Departments', desc: 'Content_Forge, AdSense, Innovation_Scout, Telegram bot', state: 'active' },
-  { num: '2', label: 'Phase 2 — Publishing & Revenue', desc: 'YT Shorts, IG Reels, Razorpay Payment Links', state: 'pending' },
-  { num: '3', label: 'Phase 3 — Scale', desc: 'Multilingual content, subdomains, Lemon Squeezy', state: 'pending' },
-  { num: '4', label: 'Phase 4 — Hardening', desc: 'Full observability, chaos testing, multi-cloud failover', state: 'pending' },
-  { num: '5', label: 'Phase 5 — Autonomy', desc: 'Sam self-directs new niches, reinvests revenue', state: 'pending' },
-];
-
-const RESOURCES = [
-  ['Google Drive', 'Google', 'Storage', '< 1%', 'Free', 'green'],
-  ['Google Sheets', 'Google', 'Database', '< 1%', 'Free', 'green'],
-  ['Gemini API', 'Google', 'AI', '~5%', 'Free tier', 'green'],
-  ['Cloudflare Workers', 'Cloudflare', 'Compute', '< 1%', 'Free tier', 'green'],
-  ['Clerk Auth', 'Clerk', 'Security', 'Active', 'Free tier', 'green'],
-  ['GitHub', 'GitHub', 'Code', 'Connected', 'Free', 'green'],
-  ['Razorpay', 'Razorpay', 'Payments', 'Not connected', '0 MDR until live', 'yellow'],
-  ['Telegram Bot', 'Telegram', 'Notifications', 'Token pending', 'Free', 'yellow'],
-];
-
-function now() { return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); }
-
-export default function Dashboard() {
-  const [active, setActive] = useState('kpi');
-  const [time, setTime] = useState('');
-  const [messages, setMessages] = useState([
-    { role: 'sam', text: 'Greetings. I am Sam, AI CEO of Akshara World. Phase 0 is complete. Dashboard is live with Clerk auth, GitHub sync, and AI Brain DNA integrated. What is your directive?', time: now() },
-  ]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [approvals, setApprovals] = useState([
-    { id: 'APR-003', dept: 'Tech_Core', title: 'Deploy to Cloudflare Pages', desc: 'Authorize public URL deployment for dash.aksharaworld.in', status: 'pending' },
-    { id: 'APR-004', dept: 'Revenue_Vault', title: 'Connect Razorpay Account', desc: 'Authorize Razorpay API key integration for payment processing', status: 'pending' },
-    { id: 'APR-005', dept: 'Growth_Engine', title: 'Telegram Bot Activation', desc: 'Connect BOT_TOKEN to enable mobile approval notifications', status: 'pending' },
-  ]);
-  const [data, setData] = useState<any>(null);
-  const [capsule, setCapsule] = useState('');
-  const chatBottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    fetchDashboard();
-    const t = setInterval(() => setTime(new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })), 1000);
-
-    return () => clearInterval(t);
-  }, []);
-
-  useEffect(() => {
-    fetchDashboard();
-    chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  async function fetchDashboard() {
-    try {
-      const fallback = {
-        capsule: 'Akshara World - Autonomous Business Hub. SAM AI CEO version 2.0. [Self-Healing Memory Mode]',
-        samBrain: { status: 'offline', reason: 'Using resilient offline memory store.' },
-        metrics: {
-          revenue: { total: '0.00', today: '0.00', month: '0.00', currency: 'INR' },
-          transactions: 0,
-          aov: '0.00',
-          phase: 'Phase 1 — Operational MVP (Active)',
-          departments: 8,
-          uptime: '100.00%'
-        }
-      };
-      const d = await resilientFetch<any>('/api/dashboard', { timeout: 6000, retries: 2 }, fallback);
-      setData(d);
-      if (d.capsule) setCapsule(d.capsule);
-    } catch {}
-  }
-
-  async function handleApproval(id: string, action: 'approve' | 'reject') {
-    setApprovals(a => a.map(x => x.id === id ? { ...x, status: action === 'approve' ? 'approved' : 'rejected' } : x));
-    try {
-      await resilientFetch('/api/approve', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, action }),
-        timeout: 8000,
-        retries: 2
-      }, { success: true });
-    } catch {}
-  }
-
-  async function sendMessage() {
-    if (!input.trim() || loading) return;
-    const userMsg = { role: 'user', text: input.trim(), time: now() };
-    setMessages(m => [...m, userMsg]);
-    setInput('');
-    setLoading(true);
-    try {
-      const fallbackMsg = { reply: '[Self-Healing Backup Route] I encountered a synapse error, but I have successfully self-healed and enabled backup local response systems. How can I help you today?' };
-      const d = await resilientFetch<any>(
-        '/api/sam',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: userMsg.text }),
-          timeout: 10000,
-          retries: 2
-        },
-        fallbackMsg
-      );
-      setMessages(m => [...m, { role: 'sam', text: d.reply || '[No response]', time: now() }]);
-    } catch {
-      setMessages(m => [...m, { role: 'sam', text: '[Error] Failed to reach Sam Brain.', time: now() }]);
-    }
-    setLoading(false);
-  }
-
-  const pendingCount = approvals.filter(a => a.status === 'pending').length;
-
+export default function HomePage() {
   return (
-    <div className="shell">
-      {/* ── SIDEBAR ── */}
-      <aside className="sidebar">
-        <div className="sidebar-brand" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <img src="/logo.png" alt="Akshara World Logo" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid var(--border)', objectFit: 'cover' }} />
-          <div>
-            <div className="brand-logo" style={{ fontSize: '1.05rem', lineHeight: '1.2' }}>Akshara World</div>
-            <div className="brand-sub">Command Center</div>
+    <div className="min-h-screen bg-[#030712] text-slate-200 flex flex-col selection:bg-cyan-500/20 relative overflow-x-hidden">
+      
+      {/* Dynamic Background Glowing Blobs */}
+      <div className="absolute top-[10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-cyan-500/[0.03] blur-[150px] pointer-events-none" />
+      <div className="absolute top-[40%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-indigo-500/[0.03] blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-purple-500/[0.02] blur-[150px] pointer-events-none" />
+
+      {/* Header */}
+      <Header />
+
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 px-6 overflow-hidden">
+        <div className="mx-auto max-w-7xl flex flex-col items-center text-center relative z-10">
+          
+          {/* Animated Tech Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.02] border border-white/5 shadow-2xl mb-8 animate-fade-in">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              Sam CEO v2.2 Edge Engine Deployed
+            </span>
           </div>
-        </div>
-        <nav className="sidebar-nav">
-          <div className="nav-section-label">Operations</div>
-          {NAV.map(n => (
-            <div key={n.id} className={`nav-item${active === n.id ? ' active' : ''}`} onClick={() => setActive(n.id)}>
-              <span className="icon">{n.icon}</span>
-              <span style={{ flex: 1 }}>{n.label}</span>
-              {n.id === 'approvals' && pendingCount > 0 && (
-                <span style={{ background: 'var(--blue)', color: '#fff', fontSize: '0.65rem', fontWeight: 700, padding: '2px 7px', borderRadius: 20 }}>{pendingCount}</span>
-              )}
+
+          {/* Visionary Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.08] tracking-tight max-w-5xl" style={{ fontFamily: 'var(--font-outfit, sans-serif)' }}>
+            Deploy a 24/7 <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">Autonomous Empire</span> at Zero Recurring Cost
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-sm sm:text-base md:text-lg text-slate-500 max-w-3xl mt-8 leading-relaxed font-semibold">
+            Stop paying monthly SaaS bills. Leverage Google Sheets, Brevo transactional webhooks, and Cloudflare Edge micro-services to run a completely self-executing business managed by our custom AI CEO, Sam.
+          </p>
+
+          {/* Action CTAs */}
+          <div className="flex flex-col sm:flex-row items-center gap-4.5 mt-10 w-full sm:w-auto">
+            <a
+              href="#products"
+              className="w-full sm:w-auto px-8 py-4.5 bg-cyan-500 text-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-transform duration-300 shadow-[0_4px_30px_rgba(6,182,212,0.3)] text-center cursor-pointer"
+            >
+              Get the Blueprint (₹499)
+            </a>
+            <a
+              href="/dashboard"
+              className="w-full sm:w-auto px-8 py-4.5 border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all duration-300 text-center cursor-pointer"
+            >
+              Enter Command Center
+            </a>
+          </div>
+
+          {/* Live Telemetry Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 max-w-4xl w-full mt-24 border-y border-white/5 py-8 bg-black/10 backdrop-blur-md rounded-[2rem] px-8 border border-white/5">
+            <div>
+              <span className="text-2xl md:text-3xl font-black text-white block">100%</span>
+              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1 block">Edge Uptime</span>
             </div>
-          ))}
-        </nav>
-        <div className="sidebar-footer">
-          <div className="sam-status">
-            <div className="sam-avatar">S</div>
-            <div className="sam-info">
-              <div className="name">Sam — AI CEO</div>
-              <div className="status">● Online · Cloudflare</div>
+            <div>
+              <span className="text-2xl md:text-3xl font-black text-cyan-400 block">8 Active</span>
+              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1 block">Swarm Wings</span>
+            </div>
+            <div>
+              <span className="text-2xl md:text-3xl font-black text-white block">₹0.00</span>
+              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1 block">Infra SaaS Fees</span>
+            </div>
+            <div>
+              <span className="text-2xl md:text-3xl font-black text-indigo-400 block">140+</span>
+              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1 block">Deployments</span>
             </div>
           </div>
-        </div>
-      </aside>
 
-      {/* ── MAIN ── */}
-      <div className="main">
-        <div className="topbar">
-          <div className="topbar-title">{NAV.find(n => n.id === active)?.icon} {NAV.find(n => n.id === active)?.label}</div>
-          <div className="topbar-right">
-            <span className="badge green"><span className="pulse" />Sam Brain: Live</span>
-            <span className="badge blue">GitHub: Synced</span>
-            <span className="badge yellow">⏰ {time}</span>
+        </div>
+      </section>
+
+      {/* The Swarm Wings Section */}
+      <section className="py-20 bg-black/25 relative border-y border-white/5 px-6">
+        <div className="mx-auto max-w-7xl">
+          
+          <div className="text-center mb-16">
+            <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest block mb-3">
+              Operational Engines
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black text-white" style={{ fontFamily: 'var(--font-outfit, sans-serif)' }}>
+              The 8 Autonomous Swarm Departments
+            </h2>
+            <p className="text-xs text-slate-500 font-semibold max-w-xl mx-auto mt-4 leading-relaxed">
+              Sam CEO coordinates specialized software micro-agents operating concurrently within a unified edge telemetry mesh.
+            </p>
           </div>
-        </div>
 
-        <div className="content">
-
-          {/* ── KPI ── */}
-          {active === 'kpi' && (
-            <div>
-              <div className="kpi-grid">
-                {[
-                  { label: 'Revenue (MTD)', value: '₹0', sub: 'Goal: ₹1,10,000 / mo', color: 'var(--blue)' },
-                  { label: 'Uptime', value: '100%', sub: 'Sam Brain: Cloudflare Workers', color: 'var(--green)' },
-                  { label: 'AI Departments', value: '8', sub: 'All operational', color: 'var(--purple)' },
-                  { label: 'Pending Approvals', value: String(pendingCount), sub: 'Owner action required', color: 'var(--yellow)' },
-                  { label: 'Phase', value: '1', sub: 'MVP Departments — Revenue', color: 'var(--cyan)' },
-                  { label: 'GitHub Commits', value: '5', sub: 'sampathh7415/AksharaWorld', color: 'var(--orange)' },
-                ].map(k => (
-                  <div className="kpi-card" key={k.label}>
-                    <div className="kpi-label">{k.label}</div>
-                    <div className="kpi-value" style={{ color: k.color }}>{k.value}</div>
-                    <div className="kpi-sub">{k.sub}</div>
-                  </div>
-                ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { title: 'Content_Forge', desc: 'Conducts automated semantic search and writes premium, highly-converting SEO content.' },
+              { title: 'Tech_Core', desc: 'Manages database schema state adjustments on Sheets, builds edge-safe code, and tracks failures.' },
+              { title: 'Growth_Engine', desc: 'Drives targeted distribution loops across YouTube, Instagram, and Brevo mailing pools.' },
+              { title: 'Revenue_Vault', desc: 'Monetizes digital outputs, automates checkout, and keeps ledgers using Razorpay.' },
+              { title: 'Guardian_Ops', desc: 'Performs self-healing loops, checks regulatory compliance, and coordinates system backups.' },
+              { title: 'Insight_Lab', desc: 'Aggregates real-time GA4 metrics, traffic trends, and calculates conversion ratios.' },
+              { title: 'Innovation_Scout', desc: 'Conducts daily search sweeps for new open-source software libraries and AI paradigms.' },
+              { title: 'Media_Studio', desc: 'Generates premium images, renders videos, and produces programmatic thumbnail designs.' },
+            ].map((wing, i) => (
+              <div key={i} className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] transition-all duration-300">
+                <span className="text-[10px] font-black text-cyan-400 uppercase tracking-wider block mb-2">Wing 0{i + 1}</span>
+                <h3 className="text-base font-extrabold text-white mb-2" style={{ fontFamily: 'var(--font-outfit, sans-serif)' }}>{wing.title}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-semibold">{wing.desc}</p>
               </div>
-
-              {/* Phase Roadmap */}
-              <div className="glass-card" style={{ marginBottom: 20 }}>
-                <div className="card-header"><span className="card-title">🗺️ Business Roadmap</span><span className="pill blue">Phase 1 Active</span></div>
-                <div className="card-body">
-                  <div className="phase-list">
-                    {PHASES.map(p => (
-                      <div className="phase-item" key={p.num}>
-                        <div className={`phase-dot ${p.state}`}>{p.state === 'done' ? '✓' : p.num}</div>
-                        <div className="phase-info">
-                          <div className="phase-name">{p.label}</div>
-                          <div className="phase-desc">{p.desc}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Live Activity */}
-              <div className="glass-card">
-                <div className="card-header"><span className="card-title">⚡ Live Activity</span><span className="pill green">Real-time</span></div>
-                <div className="card-body">
-                  {[
-                    { who: 'Sam', color: 'var(--purple)', text: 'Phase 0 complete. GitHub synced. Clerk auth live. DNA integration deployed.', ago: 'Now' },
-                    { who: 'Innovation_Scout', color: 'var(--cyan)', text: 'CRON active — Daily 6 AM IST market scan scheduled.', ago: '1 hr ago' },
-                    { who: 'Tech_Core', color: 'var(--blue)', text: 'MemoryService.ts + SkillLibrary.ts committed to main branch.', ago: '2 hrs ago' },
-                    { who: 'Guardian_Ops', color: 'var(--green)', text: 'Backup created: Backup_2026-05-11 — capsule, resources, wrangler.', ago: '3 hrs ago' },
-                  ].map((a, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: '50%', background: a.color + '22', border: `1px solid ${a.color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 700, flexShrink: 0, color: a.color }}>{a.who[0]}</div>
-                      <div>
-                        <div style={{ fontSize: '0.85rem' }}><span style={{ color: a.color, fontWeight: 600 }}>{a.who}</span> {a.text}</div>
-                        <div style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: 2 }}>{a.ago}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── 30-DAY OPS ── */}
-          {active === '30dayops' && (
-            <div>
-              {/* Hero Offer Status */}
-              <div className="glass-card" style={{ marginBottom: 20 }}>
-                <div className="card-header"><span className="card-title">🎯 Hero Offer — Launch Pilot Status</span><span className="pill blue">Active</span></div>
-                <div className="card-body">
-                  <div className="row-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 16 }}>
-                    {[
-                      { label: 'Early-Bird Price', value: '₹999', sub: 'First 5 seats', color: 'var(--yellow)' },
-                      { label: 'Standard Price', value: '₹1,500', sub: 'From Week 4 / after 5 seats', color: 'var(--blue)' },
-                      { label: 'Premium Price', value: '₹4,999', sub: '+1 live strategy session', color: 'var(--purple)' },
-                    ].map(k => (
-                      <div key={k.label} className="kpi-card">
-                        <div className="kpi-label">{k.label}</div>
-                        <div className="kpi-value" style={{ color: k.color }}>{k.value}</div>
-                        <div className="kpi-sub">{k.sub}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ background: 'var(--panel2)', borderRadius: 10, padding: 14, fontSize: '0.84rem', color: 'var(--muted)' }}>
-                    <strong style={{ color: 'var(--text)' }}>Checkout CTA:</strong> "Get the Akshara Launch Pilot — ₹1,500 (₹999 for first 5 seats). Sam runs 8 departments on ₹0 infra. [Pay with Razorpay]"
-                    <div style={{ marginTop: 8 }}>
-                      <a href="/public/products/launch-pilot" style={{ color: 'var(--blue)', fontWeight: 600, textDecoration: 'none' }}>→ View Launch Pilot Page</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Daily Ritual Checklist */}
-              <div className="glass-card" style={{ marginBottom: 20 }}>
-                <div className="card-header"><span className="card-title">☀️ Daily Ritual (~25 min, Mon–Sat)</span><span className="pill green">Target: ≥20/30 days</span></div>
-                <div className="card-body">
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                    <div>
-                      <div style={{ fontWeight: 700, marginBottom: 10, color: 'var(--yellow)' }}>☀️ Morning (~15 min)</div>
-                      {['Open /internal → Insight Lab (GA4, revenue, merchant feed, dept logs)', 'Approve queue — max 2 approvals today (ops-config)', 'Check Telegram + GA4 alerts from overnight', 'Set today outbound target: 10 touches'].map(item => (
-                        <div key={item} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'flex-start' }}>
-                          <span style={{ color: 'var(--muted)', marginTop: 1 }}>□</span>
-                          <span style={{ fontSize: '0.82rem', color: 'var(--muted2)' }}>{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 700, marginBottom: 10, color: 'var(--purple)' }}>🌙 Evening (~10 min)</div>
-                      {['Update SalesPipeline — all touches, stages, next_action', 'Confirm Telegram — no unacknowledged alerts >4h', 'If alert open → follow runbook + log SystemLog', 'Log touches count: ___ / 10'].map(item => (
-                        <div key={item} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'flex-start' }}>
-                          <span style={{ color: 'var(--muted)', marginTop: 1 }}>□</span>
-                          <span style={{ fontSize: '0.82rem', color: 'var(--muted2)' }}>{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Real-Time Decision Rules */}
-              <div className="glass-card" style={{ marginBottom: 20 }}>
-                <div className="card-header"><span className="card-title">⚡ Real-Time Decision Rules</span><span className="pill yellow">No new infra needed</span></div>
-                <div className="card-body" style={{ padding: 0 }}>
-                  <table className="data-table">
-                    <thead><tr><th>Signal</th><th>Action</th><th>Owner</th></tr></thead>
-                    <tbody>
-                      {DECISION_RULES.map((r, i) => (
-                        <tr key={i}>
-                          <td style={{ color: 'var(--yellow)', fontSize: '0.82rem', fontWeight: 600 }}>{r.signal}</td>
-                          <td style={{ color: 'var(--text)', fontSize: '0.82rem' }}>{r.action}</td>
-                          <td><span className="pill blue" style={{ fontSize: '0.7rem' }}>{r.owner}</span></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Ops Docs Quick Links */}
-              <div className="glass-card">
-                <div className="card-header"><span className="card-title">📂 Ops Playbooks &amp; Runbooks</span><span className="pill green">Live in GitHub</span></div>
-                <div className="card-body">
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10 }}>
-                    {OPS_DOCS.map(d => (
-                      <a key={d.label} href={d.href} target="_blank" rel="noopener noreferrer"
-                        style={{ display: 'block', padding: '10px 14px', background: 'var(--panel2)', borderRadius: 10, fontSize: '0.83rem', color: 'var(--text)', textDecoration: 'none', border: '1px solid var(--border2)', transition: 'background 0.15s' }}
-                      >
-                        {d.label}
-                      </a>
-                    ))}
-                  </div>
-                  <div style={{ marginTop: 14, fontSize: '0.78rem', color: 'var(--muted)' }}>
-                    Sam ops-config: <strong>maxDailyApprovals=2</strong> · Priority: Growth_Engine, Revenue_Vault, Guardian_Ops · Deferred: Innovation_Scout
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── DEPARTMENTS ── */}
-          {active === 'departments' && (
-            <div>
-              <div className="dept-grid">
-                {DEPTS.map(d => (
-                  <div className="dept-card" key={d.name}>
-                    <div className="dept-card-header">
-                      <span className="dept-name">{d.name}</span>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        {d.cron && <span className="pill purple">CRON</span>}
-                        <span className="pill green">● Active</span>
-                      </div>
-                    </div>
-                    <div className="dept-detail">
-                      <div style={{ marginBottom: 4 }}>{d.mission}</div>
-                      <div style={{ color: 'var(--muted)', fontSize: '0.74rem' }}>Agents: {d.agents}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ── APPROVALS ── */}
-          {active === 'approvals' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">✅ Approvals Queue</span><span className="pill yellow">{pendingCount} Pending</span></div>
-              <div className="card-body">
-                {approvals.map(a => (
-                  <div className="approval-item" key={a.id}>
-                    <div className="approval-info">
-                      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
-                        <span className="pill blue">{a.dept}</span>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{a.id}</span>
-                      </div>
-                      <div className="approval-title">{a.title}</div>
-                      <div className="approval-desc">{a.desc}</div>
-                    </div>
-                    <div className="approval-actions">
-                      {a.status === 'pending' ? (
-                        <>
-                          <button className="btn approve" onClick={() => handleApproval(a.id, 'approve')}>✓ Approve</button>
-                          <button className="btn reject" onClick={() => handleApproval(a.id, 'reject')}>✗ Reject</button>
-                        </>
-                      ) : (
-                        <span className={`pill ${a.status === 'approved' ? 'green' : 'red'}`}>{a.status === 'approved' ? '✓ Approved' : '✗ Rejected'}</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ── SAM CHAT ── */}
-          {active === 'sam' && (
-            <div className="chat-wrap">
-              <div className="chat-messages">
-                {messages.map((m, i) => (
-                  <div key={i} className={`msg ${m.role}`}>
-                    <div className="msg-avatar">{m.role === 'sam' ? 'S' : 'O'}</div>
-                    <div>
-                      <div className="msg-bubble">{m.text}</div>
-                      <div className="msg-time">{m.time}</div>
-                    </div>
-                  </div>
-                ))}
-                {loading && <div className="msg sam"><div className="msg-avatar">S</div><div className="msg-bubble"><span className="spinner" /></div></div>}
-                <div ref={chatBottomRef} />
-              </div>
-              <div className="chat-input-row">
-                <input className="chat-input" placeholder="Message Sam..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()} />
-                <button className="chat-send" onClick={sendMessage}>➤</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── MULTI-CLOUD UI ── */}
-          {active === 'cloudui' && (
-            <CloudUiContainer />
-          )}
-
-          {/* ── BRAIN DNA ── */}
-          {active === 'brain' && (
-            <div>
-              <div className="row-grid" style={{ marginBottom: 20 }}>
-                <div className="glass-card">
-                  <div className="card-header"><span className="card-title">🧠 Semantic Memory Graph</span><span className="pill green">Stable</span></div>
-                  <div className="card-body">
-                    {[['Graph Health', '100% Stable', 'green'], ['Architecture', 'jcode DNA Pattern', 'blue'], ['Sideagent', 'Verification Active', 'purple'], ['Vector Store', 'Supabase pgvector (pending)', 'yellow']].map(([k, v, c]) => (
-                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border2)' }}>
-                        <span style={{ color: 'var(--muted)', fontSize: '0.84rem' }}>{k}</span>
-                        <span className={`pill ${c}`}>{v}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="glass-card">
-                  <div className="card-header"><span className="card-title">🛠️ Agent Skill Store</span><span className="pill blue">4 Active</span></div>
-                  <div className="card-body">
-                    {['Innovation Scout', 'Content Strategist', 'Revenue Auditor', 'Guardian Watchdog'].map(s => (
-                      <div key={s} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border2)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--blue)' }} />
-                          <span style={{ fontSize: '0.85rem' }}>{s}</span>
-                        </div>
-                        <span className="pill green">Deployed</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="glass-card">
-                <div className="card-header"><span className="card-title">🧬 Deep DNA Sources</span></div>
-                <div className="card-body">
-                  <div className="row-grid three">
-                    {[['jcode', 'Semantic Memory + TUI patterns', 'blue'], ['500-AI-Agents', 'Skill blueprints (500+ use cases)', 'purple'], ['CrewAI + FastMCP', 'Swarm orchestration bridge', 'cyan']].map(([src, desc, c]) => (
-                      <div key={src} style={{ background: 'var(--panel2)', border: '1px solid var(--border2)', borderRadius: 10, padding: 16 }}>
-                        <div style={{ fontWeight: 700, marginBottom: 6 }}>{src}</div>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>{desc}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── RESOURCES ── */}
-          {active === 'resources' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">⚙️ Resource Inventory</span><span className="pill blue">Zero Investment Stack</span></div>
-              <div className="card-body" style={{ padding: 0 }}>
-                <table className="data-table">
-                  <thead><tr><th>Resource</th><th>Provider</th><th>Type</th><th>Quota</th><th>Cost</th><th>Status</th></tr></thead>
-                  <tbody>
-                    {RESOURCES.map(([r, p, t, q, c, s]) => (
-                      <tr key={String(r)}>
-                        <td style={{ fontWeight: 600, color: 'var(--text)' }}>{r}</td>
-                        <td>{p}</td><td>{t}</td><td>{q}</td><td>{c}</td>
-                        <td><span className={`pill ${s}`}>{s === 'green' ? '● Active' : '○ Pending'}</span></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* ── ALERTS ── */}
-          {active === 'alerts' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">🚨 System Alerts</span></div>
-              <div className="card-body">
-                {[
-                  { type: 'warn', title: 'Razorpay API Keys — Connect Live Keys', desc: 'Test mode active. Add RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET to Cloudflare/Netlify environment for live revenue tracking.' },
-                  { type: 'warn', title: 'Telegram BOT_TOKEN Missing', desc: 'Mobile approval notifications inactive until BOT_TOKEN is set in environment secrets.' },
-                  { type: 'info', title: '✅ WhatsApp Configured', desc: 'Public page WhatsApp link is successfully configured to +919740322413.' },
-                  { type: 'info', title: '✅ Dashboard Protection — LIVE', desc: 'Clerk auth now protects / (dashboard). Only signed-in owner can access. Public routes /public/* and /products/* are open.' },
-                  { type: 'info', title: '✅ Cloudflare CI/CD — Active', desc: 'GitHub push triggers automatic build + deploy via deploy-cloudflare.yml workflow.' },
-                  { type: 'info', title: '✅ Edge Runtime Fixes Applied', desc: 'Buffer.from() replaced with btoa() in dashboard API — Edge Runtime compatible now.' },
-                  { type: 'info', title: '✅ GitHub Synced', desc: `Latest commit: fix(critical): protect dashboard, fix Edge Runtime Buffer, add social icons. Repo: sampathh7415/AksharaWorld` },
-                ].map((a, i) => (
-                  <div key={i} className={`alert-item ${a.type}`}>
-                    <span className="alert-icon">{a.type === 'warn' ? '⚠️' : 'ℹ️'}</span>
-                    <div className="alert-text">
-                      <div className="title">{a.title}</div>
-                      <div className="desc">{a.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-
-          {/* ── CAPSULE ── */}
-          {active === 'capsule' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">💊 Capsule — Single Source of Truth</span><span className="pill green">Live from Drive</span></div>
-              <div className="card-body">
-                <pre style={{ fontFamily: 'monospace', fontSize: '0.82rem', color: 'var(--muted2)', whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>
-                  {capsule || data?.capsule || 'Loading capsule from Google Drive...'}
-                </pre>
-              </div>
-            </div>
-          )}
-
-          {/* ── CHANGELOG ── */}
-          {active === 'changelog' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">📜 Change Log</span></div>
-              <div className="card-body" style={{ padding: 0 }}>
-                <table className="data-table">
-                  <thead><tr><th>Date</th><th>Component</th><th>Change</th><th>By</th></tr></thead>
-                  <tbody>
-                    {[
-                      ['2026-05-28', 'Security', 'Clerk auth now protects / (dashboard) — all routes secured', 'Antigravity'],
-                      ['2026-05-28', 'Dashboard API', 'Fixed Buffer.from() → btoa() for Edge Runtime compatibility', 'Antigravity'],
-                      ['2026-05-28', 'Public Nav', 'Added social icons (Instagram, Facebook, YouTube, WhatsApp)', 'Antigravity'],
-                      ['2026-05-27', 'Webhook', 'Robust Google Sheets fallback via Apps Script webhook', 'Antigravity'],
-                      ['2026-05-27', 'Cloud UI', 'Lovable Developer Bridge department integrated', 'Antigravity'],
-                      ['2026-05-27', 'Brand', 'New circular logo deployed everywhere + GitHub repo', 'Antigravity'],
-                      ['2026-05-27', 'Deploy', 'netlify.toml added for aksharaworld.in deployment', 'Antigravity'],
-                      ['2026-05-12', 'Dashboard', 'Unified dashboard — merged 3 versions into 1', 'Antigravity'],
-                      ['2026-05-12', 'GitHub', 'Full workspace synced to sampathh7415/AksharaWorld', 'Sam'],
-                      ['2026-05-11', 'AI DNA', 'jcode Semantic Memory + 500-AI-Agents Skill Library integrated', 'Antigravity'],
-                      ['2026-05-11', 'Auth', 'Clerk 2FA live — owner-only access enforced', 'Sam'],
-                    ].map(([t, c, d, b], i) => (
-                      <tr key={i}>
-                        <td style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{t}</td>
-                        <td><span className="pill blue">{c}</span></td>
-                        <td style={{ color: 'var(--text)' }}>{d}</td>
-                        <td style={{ color: 'var(--green)' }}>{b}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-
-          {/* ── UPGRADES ── */}
-          {active === 'upgrades' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">🚀 Upgrade Proposals</span><span className="pill blue">Innovation_Scout — Daily R&D</span></div>
-              <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
-                  No upgrade proposals yet. Innovation_Scout will submit daily proposals once Telegram notifications are active.
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── FILE REVIEWS ── */}
-          {active === 'filereviews' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">📁 File Review Reports</span></div>
-              <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
-                  No files reviewed yet. Share any file with Sam and it will produce an Advantage/Disadvantage report saved to 09_File_Reviews/ in Drive.
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── 3-TRY FAILURES ── */}
-          {active === 'failures' && (
-            <div className="glass-card">
-              <div className="card-header"><span className="card-title">⚠️ Three-Try Failure Reports</span><span className="pill green">0 Open Failures</span></div>
-              <div className="card-body">
-                <div style={{ color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center', padding: 40 }}>
-                  ✅ No failures on record. Every operation that fails 3 consecutive times will appear here with root-cause analysis.
-                </div>
-              </div>
-            </div>
-          )}
+            ))}
+          </div>
 
         </div>
-      </div>
+      </section>
+
+      {/* Product Catalog Showcase */}
+      <section id="products" className="py-24 md:py-28 px-6">
+        <div className="mx-auto max-w-7xl">
+          
+          <div className="text-center mb-20">
+            <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest block mb-3">
+              Premium Solutions
+            </span>
+            <h2 className="text-3xl md:text-5xl font-black text-white" style={{ fontFamily: 'var(--font-outfit, sans-serif)' }}>
+              Acquire the Akshara Engine
+            </h2>
+            <p className="text-xs text-slate-500 font-semibold max-w-lg mx-auto mt-4 leading-relaxed">
+              Get immediate, zero-friction access to verified source repositories, implementation guides, and direct Razorpay integrations.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            
+            {/* Blueprint Product */}
+            <ProductCard
+              title="AI Autonomous Business Blueprint"
+              description="The complete, production-grade guide to deploying a self-healing digital business with ₹0 infra cost. Includes full code templates."
+              price="₹499"
+              originalPrice="₹1,499"
+              isPopular={true}
+              badge="Best Value"
+              checkoutUrl="https://rzp.io/rzp/9O1zMeI"
+              detailUrl="/public/products/ai-blueprint"
+              features={[
+                'Zero-Cost Micro-Task entry models',
+                'Edge JWT cookie middleware templates',
+                'Razorpay & Brevo dynamic api routes',
+                '50-point 20-year horizon roadmap config',
+                'Comprehensive Google Sheets db connectors',
+                'Direct Razorpay quick link deployment'
+              ]}
+            />
+
+            {/* Launch Pilot Product */}
+            <ProductCard
+              title="Launch Pilot Strategy Pack"
+              description="Guided blueprint deployment assets with ready-made content schemas, outbound triggers, and pre-packaged niche assets."
+              price="₹999"
+              originalPrice="₹2,999"
+              isPopular={false}
+              checkoutUrl="https://rzp.io/rzp/9O1zMeI"
+              detailUrl="/public/products/launch-pilot"
+              features={[
+                '5 pre-configured high-margin niches',
+                'Outbound outreach WhatsApp templates',
+                'Premium SheetsDb administrative layouts',
+                'Direct WhatsApp operational feedback desk',
+                'Pre-configured GA4 measurement blueprints',
+                'Sam CEO interactive response prompt sets'
+              ]}
+            />
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
+
     </div>
   );
 }

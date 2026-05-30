@@ -2,8 +2,12 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
 // ✅ PUBLIC routes — no auth needed (accessible without sign-in)
 const isPublicRoute = createRouteMatcher([
-  '/public(.*)',                  // Public landing page at /public
+  '/',                            // Public landing page (Brand Hub) at /
+  '/dashboard(.*)',               // Private dashboard (Command Center) - guarded by custom Edge JWT password check
+  '/public(.*)',                  // Public pages
   '/products(.*)',                // Product pages (visible to customers)
+  '/api/auth(.*)',                // Auth endpoints (login, logout)
+  '/api/dashboard(.*)',           // Dashboard telemetry data (contains dynamic /api/dashboard/real-data)
   '/api/webhook(.*)',             // Razorpay & external webhooks
   '/api/webhooks(.*)',
   '/api/razorpay-webhook(.*)',
