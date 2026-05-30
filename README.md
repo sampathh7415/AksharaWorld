@@ -355,6 +355,26 @@ These are targeted deployment systems, local developer shells, and historical re
 | 76| **Google URL Shortener** | `Revenue_Vault` | ⚪ **Legacy Reference** | Legacy shortener references parsed and updated to modern dynamic slugs. |
 | 77| **Google Fit API** | `Insight_Lab` | ⚪ **Legacy Reference** | Discontinued API references gracefully caught and clean-ignored by system logs. |
 
+### 💻 Category 7: Supported AI Coding Platforms & MCP Clients
+These represent premium AI developer platforms and coding assistants fully integrated with our local standard `code-review-graph` MCP server schema.
+
+| # | AI Platform / Client Tool | Department Owner | Implementation Status | Real-Time Integration & Business Role |
+|---|---|---|---|---|
+| 78| **Antigravity** | `Tech_Core` | 🟢 **Active & Integrated** | Current engineering agent executing refactoring, graph building, and deployment runs. |
+| 79| **Codex** | `Tech_Core` | 🟢 **Live & Supported** | Standard coding context parser referencing the persistent knowledge graph. |
+| 80| **Claude Code** | `Tech_Core` | 🟢 **Live & Supported** | Premium terminal assistant querying impacted paths and test coverage. |
+| 81| **Cursor** | `Tech_Core` | 🟢 **Live & Supported** | Codebase editor mapping symbols and files through AST analysis. |
+| 82| **Windsurf** | `Tech_Core` | 🟢 **Live & Supported** | IDE agent querying callers, callees, and imports via sqlite schema. |
+| 83| **Zed** | `Tech_Core` | 🟢 **Live & Supported** | High-performance editor indexing repository directories locally. |
+| 84| **Continue** | `Tech_Core` | 🟢 **Live & Supported** | Sidepanel assistant querying semantic search functions. |
+| 85| **OpenCode** | `Tech_Core` | 🟢 **Live & Supported** | Open integration client mapping dependencies and blast radius. |
+| 86| **Qwen** | `Tech_Core` | 🟢 **Live & Supported** | Multi-lingual reasoning agent scanning active workspace code. |
+| 87| **Qoder** | `Tech_Core` | 🟢 **Live & Supported** | Code review optimization agent mapping community modules. |
+| 88| **Kiro** | `Tech_Core` | 🟢 **Live & Supported** | Asynchronous task manager parsing repository nodes. |
+| 89| **GitHub Copilot** | `Tech_Core` | 🟢 **Live & Supported** | Standard inline autocompleter mapping local coding definitions. |
+| 90| **GitHub Copilot CLI** | `Tech_Core` | 🟢 **Live & Supported** | Shell agent routing commands based on graph-aware schemas. |
+| 91| **Gemini CLI** | `Tech_Core` | 🟢 **Live & Supported** | Developer shell executor running local code diagnostics. |
+
 ---
 
 ## ⚡ 6. Execution & Staging Compiles

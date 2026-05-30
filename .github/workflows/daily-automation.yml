@@ -14,65 +14,68 @@ on:
 jobs:
   daily-automation:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-        continue-on-error: true
-
       # ── Telegram: Start notification ──────────────────────────────────────
       - name: Notify Telegram — Automation Start
         run: |
           DATE=$(date '+%Y-%m-%d %H:%M UTC')
+          if [ -z "${{ secrets.TELEGRAM_TOKEN }}" ] || [ -z "${{ secrets.TELEGRAM_CHAT_ID }}" ]; then
+            echo "Telegram secrets not set — skipping"
+            exit 0
+          fi
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "{\"chat_id\":\"${{ secrets.TELEGRAM_CHAT_ID }}\",\"text\":\"SAM Daily Automation started! Date: $DATE | Repo: sampathh7415/AksharaWorld\"}"
+            -d "{\"chat_id\":\"${{ secrets.TELEGRAM_CHAT_ID }}\",\"text\":\"🤖 SAM Daily Automation started!\nDate: $DATE\nRepo: sampathh7415/AksharaWorld\nSite: aksharaworld.in\"}"
         continue-on-error: true
 
-      # ── Razorpay Health Check ─────────────────────────────────────────────
+      # ── Razorpay API Health Check ─────────────────────────────────────────
       - name: Razorpay API Health Check
         id: razorpay_check
         run: |
+          if [ -z "${{ secrets.RAZORPAY_KEY_ID }}" ] || [ -z "${{ secrets.RAZORPAY_KEY_SECRET }}" ]; then
+            echo "razorpay_status=SECRETS_MISSING" >> $GITHUB_OUTPUT
+            echo "Razorpay secrets not configured — skipping"
+            exit 0
+          fi
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             -u "${{ secrets.RAZORPAY_KEY_ID }}:${{ secrets.RAZORPAY_KEY_SECRET }}" \
             "https://api.razorpay.com/v1/payments?count=1")
           echo "razorpay_status=$STATUS" >> $GITHUB_OUTPUT
-          if [ "$STATUS" = "200" ]; then
-            echo "Razorpay API: OK ($STATUS)"
-          else
-            echo "Razorpay API status: $STATUS"
-          fi
+          echo "Razorpay API status: $STATUS"
         continue-on-error: true
 
-      # ── Google Sheets: Log daily run (optional — skips if secret missing) ──
+      # ── Website Health Check ──────────────────────────────────────────────
+      - name: Website Health Check
+        id: site_check
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://aksharaworld.in/public" || echo "000")
+          echo "site_status=$STATUS" >> $GITHUB_OUTPUT
+          echo "aksharaworld.in/public HTTP status: $STATUS"
+          
+          PRODUCT=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://aksharaworld.in/public/products/ai-blueprint" || echo "000")
+          echo "product_status=$PRODUCT" >> $GITHUB_OUTPUT
+          echo "AI Blueprint product HTTP status: $PRODUCT"
+        continue-on-error: true
+
+      # ── Google Sheets: Log daily run via Apps Script Webhook ──────────────
       - name: Log to Google Sheets
         run: |
-          SHEET_ID="${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}"
-          API_KEY="${{ secrets.GOOGLE_SHEETS_API_KEY }}"
-          if [ -z "$SHEET_ID" ] || [ -z "$API_KEY" ]; then
-            echo "Google Sheets secrets not set — skipping"
+          WEBHOOK="${{ secrets.APPS_SCRIPT_WEBHOOK_URL }}"
+          if [ -z "$WEBHOOK" ]; then
+            echo "Apps Script Webhook URL not set — skipping Google Sheets log"
             exit 0
           fi
           DATE=$(date '+%Y-%m-%d')
           TIME=$(date '+%H:%M:%S')
-          curl -s -X POST \
-            "https://sheets.googleapis.com/v4/spreadsheets/$SHEET_ID/values/Automation!A:E:append?valueInputOption=USER_ENTERED&key=$API_KEY" \
+          curl -s -X POST "$WEBHOOK" \
             -H "Content-Type: application/json" \
-            -d "{\"values\":[[\"$DATE\",\"$TIME\",\"GitHub Actions\",\"SAM Daily Run\",\"success\"]]}"
-          echo "Logged to Google Sheets"
+            -d "{\"action\":\"addLog\",\"data\":{\"timestamp\":\"$DATE $TIME\",\"department\":\"Tech_Core\",\"message\":\"GitHub Actions: SAM Daily Run completed successfully\",\"status\":\"info\"}}"
+          echo "✅ Logged run to Google Sheets via Webhook"
         continue-on-error: true
 
-      # ── GA4 Metrics (optional — skips if secret missing) ─────────────────
+      # ── GA4 Metrics ───────────────────────────────────────────────────────
       - name: Pull GA4 Metrics
         run: |
           GA4_ID="${{ secrets.GA4_PROPERTY_ID }}"
@@ -89,7 +92,7 @@ jobs:
           echo "GA4 metrics pulled"
         continue-on-error: true
 
-      # ── Brevo Email Stats (optional — skips if secret missing) ────────────
+      # ── Brevo Email Stats ─────────────────────────────────────────────────
       - name: Pull Brevo Email Statistics
         run: |
           BREVO_KEY="${{ secrets.BREVO_API_KEY }}"
@@ -97,32 +100,41 @@ jobs:
             echo "Brevo API key not set — skipping"
             exit 0
           fi
-          curl -s -X GET "https://api.brevo.com/v3/emailCampaigns?status=sent&limit=5" \
+          RESULT=$(curl -s -X GET "https://api.brevo.com/v3/emailCampaigns?status=sent&limit=5" \
             -H "api-key: $BREVO_KEY" \
-            -H "Accept: application/json" | head -c 500
+            -H "Accept: application/json" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'Campaigns: {len(d.get(\"campaigns\",[]))}')" 2>/dev/null || echo "Brevo check complete")
+          echo "$RESULT"
         continue-on-error: true
 
       # ── Telegram: Final Daily Report ──────────────────────────────────────
       - name: Notify Telegram — Daily Report
         run: |
+          if [ -z "${{ secrets.TELEGRAM_TOKEN }}" ] || [ -z "${{ secrets.TELEGRAM_CHAT_ID }}" ]; then
+            echo "Telegram secrets not set — skipping"
+            exit 0
+          fi
           DATE=$(date '+%Y-%m-%d')
           RAZORPAY="${{ steps.razorpay_check.outputs.razorpay_status }}"
-          if [ "$RAZORPAY" = "200" ]; then
-            RZ_STATUS="Online"
-          else
-            RZ_STATUS="Status: $RAZORPAY"
-          fi
+          SITE="${{ steps.site_check.outputs.site_status }}"
+
+          if [ "$RAZORPAY" = "200" ]; then RZ_STATUS="✅ Online"; else RZ_STATUS="⚠️ $RAZORPAY"; fi
+          if [ "$SITE" = "200" ]; then SITE_STATUS="✅ Online"; else SITE_STATUS="⚠️ $SITE"; fi
+
+          MSG="📊 SAM Daily Report — $DATE\n\n💳 Razorpay: $RZ_STATUS\n🌐 Website: $SITE_STATUS\n\n🏪 aksharaworld.in/public\n📦 AI Blueprint: aksharaworld.in/public/products/ai-blueprint\n\n⏰ Next run: Tomorrow 6 AM IST"
+
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "{\"chat_id\":\"${{ secrets.TELEGRAM_CHAT_ID }}\",\"text\":\"SAM Daily Report - $DATE | Razorpay: $RZ_STATUS | Site: aksharaworld.in | Product: aksharaworld.in/products/ai-blueprint | Automation complete! Next run: Tomorrow 6 AM IST\"}"
+            -d "{\"chat_id\":\"${{ secrets.TELEGRAM_CHAT_ID }}\",\"text\":\"$MSG\"}"
         continue-on-error: true
 
       # ── Final Summary ─────────────────────────────────────────────────────
       - name: Print Summary
         run: |
           echo "========================================"
-          echo "SAM Daily Automation Complete"
+          echo "✅ SAM Daily Automation Complete"
           echo "Date: $(date '+%Y-%m-%d %H:%M UTC')"
           echo "Repo: sampathh7415/AksharaWorld"
           echo "Site: aksharaworld.in"
+          echo "Razorpay: ${{ steps.razorpay_check.outputs.razorpay_status }}"
+          echo "Website:  ${{ steps.site_check.outputs.site_status }}"
           echo "========================================"
