@@ -52,6 +52,8 @@ export default function Footer() {
             <div className="space-y-2 text-xs text-slate-400 font-semibold">
               <Link href="/public/privacy" className="block hover:text-cyan-400 transition-colors">Privacy Policy</Link>
               <Link href="/public/terms" className="block hover:text-cyan-400 transition-colors">Terms of Service</Link>
+              <Link href="/public/shipping" className="block hover:text-cyan-400 transition-colors">Shipping Policy</Link>
+              <Link href="/public/refund" className="block hover:text-cyan-400 transition-colors">Refund Policy</Link>
               <p className="text-[10px] text-slate-500 leading-relaxed font-semibold pt-1">
                 Owner & Operator: Sampathkumar <br />
                 Address: Bengaluru, Karnataka, India
