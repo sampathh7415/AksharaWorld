@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 }
 
 // ── Helper used by other API routes to send Chat alerts ──
-export async function sendChatAlert(text: string): Promise<void> {
+async function sendChatAlert(text: string): Promise<void> {
   const url = DEFAULT_WEBHOOK;
   if (!url) return;
   await fetch(url, {
