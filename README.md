@@ -688,21 +688,44 @@ We have successfully achieved full system alignment, Next.js 15 type system comp
 
 ## 📊 4. Resource Details
 
-This section lists every live API credential, database persistent layer, DNS zone, and telemetry key currently running your business system:
+This section lists every live API credential, database persistent layer, DNS zone, telemetry key, ownership asset, and cloud subscription currently running your business system:
 
-### A. Databases & Persistence Resources
+### A. Core Ownership, Domains & Social Asset IDs
+*   **Main Domain**: `aksharaworld.in` (Live globally via Cloudflare DNS)
+*   **Owner Gmail Address**: `sampathh7415@gmail.com` (Gmail newsletter and communications hub)
+*   **WhatsApp Contact**: `+91 9740322413` (Direct support and operational alerts)
+*   **Instagram Profile**: `https://instagram.com/sampathh_7` (Handle: `@sampathh_7`)
+*   **YouTube Channel**: `https://youtube.com/@sampathkumar-aksharaworld` (Handle: `@sampathkumar-aksharaworld` / Uploader: `@AksharaAI`)
+*   **Facebook Page**: `https://www.facebook.com/aksharaworld` (Handle: `aksharaworld`)
+
+### B. Active Cloud Subscriptions Registry (Chrome & Cloud Audit)
+*   **Lovable.dev**: **Pro Lite Subscription (1 Year Staged, $0/mo)**
+    *   *Details:* Pro stacking unlocked via LinkedIn premium perks.
+    *   *Balance:* 300-credit base + 5 daily credit auto-refresh loop.
+    *   *Status / Expiry:* Active through **May 27, 2027**.
+*   **Helium AI**: **Pro Partner Program ($500 Credit Balance)**
+    *   *Details:* Multi-cloud developer credits stacking active.
+    *   *Status / Expiry:* Active for model runs and generation iterations.
+*   **Shopify Domain Registry**: Root domain integration active via A-record `23.227.38.65`.
+*   **Google Workspace**: Corporate email forwarding active across 5 MX routing maps.
+*   **Cloudflare Pages**: Free Edge Hosting Worker Tier.
+*   **Google Firebase**: Spark Plan (Free Firestore, Storage, and Auth tiers).
+*   **Brevo SMTP**: Free Email Marketing tier (300 outgoing newsletters/day).
+*   **Clerk Authentication**: Sandbox Free Tier.
+
+### C. Databases & Persistence Resources
 *   **Google Sheets Database (`SheetsDb`)**: Mapped to your Single Source of Truth Metrics ledger ([Spreadsheet 1yhdlHcayP5ZlzZnlr8neS6UMQcQIYqvipP0tek7E5oU](https://docs.google.com/spreadsheets/d/1yhdlHcayP5ZlzZnlr8neS6UMQcQIYqvipP0tek7E5oU/edit)).
     *   *Configuration:* Keyless dynamic logs post directly via custom Apps Script Webhook connector.
     *   *Tabs (8):* `DailyMetrics`, `Transactions`, `Subscribers`, `Content`, `SocialMedia`, `Videos`, `Automation`, `Errors`.
 *   **Google Firebase Firestore**: Mapped to free-tier Project `aksharaworld-481e8`.
     *   *Collections:* `orders`, `leads`, `subscribers`, `events`, `products`, `sessions`.
 
-### B. Monetization & Checkout Gateways
+### D. Monetization & Checkout Gateways
 *   **Razorpay Live Payment Gateway**: Active Merchant Account (`rzp_live_SpWOha5NSAiMqi`).
     *   *Active Webhook URL:* `https://aksharaworld.in/api/webhooks/razorpay` (gated via webhook secret).
     *   *Direct Checkout Links:* Deployed at ₹499 for Blueprint (`https://rzp.io/rzp/9O1zMeI`) and ₹999 for Launch Pilot.
 
-### C. Security, Telemetry & Authentication
+### E. Security, Telemetry & Authentication
 *   **Clerk Identity & Auth**: Sandbox application instance (`pk_test_c29jaWFsLXNoZWVwZG9nLTUyLmNsZXJrLmFjY291bnRzLmRldiQ`).
 *   **Telegram Admin Channel**: Bot `@Akshara23bot` connected to Administrator Chat ID `7125107324` pushing immediate captured transactions and error log notifications.
 *   **Google Analytics (GA4)**: Measure property `G-QZ4L9XW64F` tracking visitor paths and channels.
