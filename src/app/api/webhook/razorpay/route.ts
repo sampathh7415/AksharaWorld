@@ -11,12 +11,32 @@
  *   razorpay_payment_link_status — paid
  *   razorpay_signature
  */
+export const runtime = 'edge';
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || ''
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || ''
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || ''
+
+async function hmacSha256Hex(secret: string, data: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const secretKeyData = encoder.encode(secret);
+  const key = await crypto.subtle.importKey(
+    'raw',
+    secretKeyData,
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(data)
+  );
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 async function sendTelegram(text: string) {
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) return
@@ -42,10 +62,7 @@ export async function GET(req: NextRequest) {
   let isVerified = false
   if (RAZORPAY_KEY_SECRET && paymentId && linkId) {
     const payload = `${linkId}|${referenceId}|${status}|${paymentId}`
-    const expectedSig = crypto
-      .createHmac('sha256', RAZORPAY_KEY_SECRET)
-      .update(payload)
-      .digest('hex')
+    const expectedSig = await hmacSha256Hex(RAZORPAY_KEY_SECRET, payload);
     isVerified = signature === expectedSig
   }
 

@@ -7,8 +7,8 @@
  *  - payment.failed    → Telegram alert
  *  - payment.refunded  → Telegram alert
  */
+export const runtime = 'edge';
 import { NextResponse } from 'next/server'
-import crypto from 'crypto'
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN || ''
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || ''
@@ -16,6 +16,26 @@ const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || 'akshara_
 const GOOGLE_SHEETS_API_KEY = process.env.GOOGLE_SHEETS_API_KEY || ''
 const GOOGLE_SHEETS_SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID || ''
 const APPS_SCRIPT_WEBHOOK_URL = process.env.APPS_SCRIPT_WEBHOOK_URL || process.env.GOOGLE_SHEETS_WEBHOOK_URL || ''
+
+async function hmacSha256Hex(secret: string, data: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const secretKeyData = encoder.encode(secret);
+  const key = await crypto.subtle.importKey(
+    'raw',
+    secretKeyData,
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(data)
+  );
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 async function sendTelegram(text: string) {
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) return
@@ -64,11 +84,8 @@ export async function POST(req: Request) {
     const rawBody = await req.text()
     const signature = req.headers.get('x-razorpay-signature') || ''
 
-    // Verify Razorpay signature
-    const expectedSig = crypto
-      .createHmac('sha256', RAZORPAY_WEBHOOK_SECRET)
-      .update(rawBody)
-      .digest('hex')
+    // Verify Razorpay signature using Edge Web Crypto HMAC helper
+    const expectedSig = await hmacSha256Hex(RAZORPAY_WEBHOOK_SECRET, rawBody);
 
     if (signature !== expectedSig) {
       console.warn('⚠️ Razorpay Webhook: Signature mismatch')
