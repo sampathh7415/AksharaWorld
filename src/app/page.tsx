@@ -42,10 +42,10 @@ export default function HomePage() {
           {/* Action CTAs */}
           <div className="flex flex-col sm:flex-row items-center gap-4.5 mt-10 w-full sm:w-auto">
             <a
-              href="#products"
+              href="#services"
               className="w-full sm:w-auto px-8 py-4.5 bg-cyan-500 text-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-transform duration-300 shadow-[0_4px_30px_rgba(6,182,212,0.3)] text-center cursor-pointer"
             >
-              Get the Blueprint (₹499)
+              Explore Digital Services
             </a>
             <a
               href="/dashboard"
@@ -116,60 +116,60 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Product Catalog Showcase */}
-      <section id="products" className="py-24 md:py-28 px-6">
+      {/* Services Catalog Showcase */}
+      <section id="services" className="py-24 md:py-28 px-6">
         <div className="mx-auto max-w-7xl">
           
           <div className="text-center mb-20">
             <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest block mb-3">
-              Premium Solutions
+              Professional Services
             </span>
             <h2 className="text-3xl md:text-5xl font-black text-white" style={{ fontFamily: 'var(--font-outfit, sans-serif)' }}>
-              Acquire the Akshara Engine
+              Explore Our Digital Offerings
             </h2>
             <p className="text-xs text-slate-500 font-semibold max-w-lg mx-auto mt-4 leading-relaxed">
-              Get immediate, zero-friction access to verified source repositories, implementation guides, and direct Razorpay integrations.
+              We leverage zero-cost infrastructure and advanced Google AI layers to deliver high-quality, ATS-optimized, and creative digital solutions.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             
-            {/* Blueprint Product */}
+            {/* ATS Resume Pack */}
             <ProductCard
-              title="AI Autonomous Business Blueprint"
-              description="The complete, production-grade guide to deploying a self-healing digital business with ₹0 infra cost. Includes full code templates."
-              price="₹499"
-              originalPrice="₹1,499"
+              title="Resume ATS Optimization Suite"
+              description="Full document restructuring, translation, and ATS optimization directly within Google Docs to guarantee higher recruitment hits."
+              price="₹999"
+              originalPrice="₹2,999"
               isPopular={true}
-              badge="Best Value"
+              badge="Top Choice"
               checkoutUrl="https://rzp.io/rzp/9O1zMeI"
-              detailUrl="/public/products/ai-blueprint"
+              detailUrl="#"
               features={[
-                'Zero-Cost Micro-Task entry models',
-                'Edge JWT cookie middleware templates',
-                'Razorpay & Brevo dynamic api routes',
-                '50-point 20-year horizon roadmap config',
-                'Comprehensive Google Sheets db connectors',
-                'Direct Razorpay quick link deployment'
+                'Complete Google Docs ATS restructuring',
+                'Core skills mapping & keywords inject',
+                'Applicant Tracking System format tests',
+                'Professional layout & typography design',
+                'Delivery in PDF and editable outline',
+                '2-Hour turnaround target'
               ]}
             />
 
-            {/* Launch Pilot Product */}
+            {/* AI Avatar Pack */}
             <ProductCard
-              title="Launch Pilot Strategy Pack"
-              description="Guided blueprint deployment assets with ready-made content schemas, outbound triggers, and pre-packaged niche assets."
-              price="₹999"
-              originalPrice="₹2,999"
+              title="AI Avatar & 3D Character Design"
+              description="Get custom, high-fidelity Pixar-style 3D illustrations, promotional video mascots, and visual marketing assets for your brand."
+              price="₹2,499"
+              originalPrice="₹7,499"
               isPopular={false}
               checkoutUrl="https://rzp.io/rzp/9O1zMeI"
-              detailUrl="/public/products/launch-pilot"
+              detailUrl="#"
               features={[
-                '5 pre-configured high-margin niches',
-                'Outbound outreach WhatsApp templates',
-                'Premium SheetsDb administrative layouts',
-                'Direct WhatsApp operational feedback desk',
-                'Pre-configured GA4 measurement blueprints',
-                'Sam CEO interactive response prompt sets'
+                'Custom Pixar-style 3D avatar design',
+                'Multiple angles & high-fidelity renders',
+                'Perfect for ads & website chatbots',
+                'Transparent background assets (.png)',
+                '100% commercially licensed vector files',
+                'Direct coordinate files and source assets'
               ]}
             />
 

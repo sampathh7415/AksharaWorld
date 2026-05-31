@@ -67,16 +67,19 @@ export default function AksharaChatWidget() {
       let model: 'Flash' | 'Pro' | 'Omni' = 'Flash';
       const cleanText = text.toLowerCase();
 
-      if (cleanText.includes('blueprint') || cleanText.includes('purchase') || cleanText.includes('buy') || cleanText.includes('price')) {
-        responseText = 'The AI Autonomous Business Blueprint is our flagship product. It outlines how you can build a complete digital storefront, automated SEO blogging, and database syncing with ₹0 monthly SaaS fees! It utilizes Next.js, Google Sheets as a free database, Brevo API for webhooks, and Cloudflare Pages. You can buy it for only ₹499 via our Razorpay integration on the homepage.';
+      if (cleanText.includes('service') || cleanText.includes('offer') || cleanText.includes('pricing') || cleanText.includes('price')) {
+        responseText = 'Akshara World provides premium digital services backed by zero-cost frameworks. Our structured offerings include:\n1. Resume ATS Optimization (₹999) - Restructuring outlines directly in Google Docs for maximum recruiter hits.\n2. Resume Revamp Suite (₹1,499) - A complete redesign of your career portfolio.\n3. AI Avatar & 3D Character Design (₹2,499) - Pixar-style 3D models and custom corporate branding assets.\n4. Short-Form Video Production (₹4,999) - Programmatic advertising video assets for campaign scaling.\n\nYou can book any service directly on the storefront!';
+        model = 'Pro';
+      } else if (cleanText.includes('resume') || cleanText.includes('ats') || cleanText.includes('restruct')) {
+        responseText = 'Our Resume Building & Restructuring wings rewrite and format your resume inside Google Docs. We design layouts tailored to pass strict ATS (Applicant Tracking Systems) checks, optimizing keywords and headers. Work begins instantly upon booking, with a rapid 2 to 3-hour delivery target.';
         model = 'Pro';
       } else if (cleanText.includes('sam') || cleanText.includes('ceo') || cleanText.includes('brain')) {
-        responseText = 'Sam is our Autonomous AI CEO. He manages the entire business swarm across 8 departments (tentacles) like Content_Forge and Revenue_Vault. Sam runs on local-Gemma cognitive logic and Gemini Spark cloud servers, evaluating business performance daily. I coordinate directly with Sam, passing customer feedback and routing approvals to Sam\'s queue!';
+        responseText = 'Sam is our Autonomous AI CEO. He manages operations across all 8 specialized swarm wings (Content_Forge, Tech_Core, Revenue_Vault, etc.). Sam runs on local-Gemma cognitive logic and Google Gemini Spark cloud servers, coordinating files and database syncs natively. I coordinate directly with Sam, uploading support scorecards and queuing tickets for his approval!';
         model = 'Flash';
-      } else if (cleanText.includes('zero') || cleanText.includes('free') || cleanText.includes('cost')) {
-        responseText = 'Yes, Akshara World runs on a ₹0 infra model! We bypass expensive databases and CRM systems. Instead, we use Google Sheets (via custom API adapters) as a free ledger database, Brevo\'s free tier for transactional mail/webhooks, Google drawings for assets, and Cloudflare Pages for hosting. The entire setup is locked to ensure it never incurs charges.';
+      } else if (cleanText.includes('zero') || cleanText.includes('free') || cleanText.includes('cost') || cleanText.includes('model')) {
+        responseText = 'Akshara World runs on a ₹0 recurring infrastructure cost model. We utilize free-tier developer resources: Google Sheets as a transaction and logs database, Brevo SMTP for newsletters/webhooks, Google drawings for design assets, and Cloudflare Pages for secure, high-uptime edge hosting.';
         model = 'Flash';
-      } else if (cleanText.includes('refund') || cleanText.includes('track') || cleanText.includes('order')) {
+      } else if (cleanText.includes('refund') || cleanText.includes('track') || cleanText.includes('order') || cleanText.includes('transaction')) {
         setIsCoordinating(true);
         setIsTyping(false);
         
@@ -86,14 +89,14 @@ export default function AksharaChatWidget() {
           setIsTyping(true);
           
           setTimeout(() => {
-            const mockOrderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+            const mockOrderId = `SRV-${Math.floor(100000 + Math.random() * 900000)}`;
             setMessages((prev) => [
               ...prev,
               {
                 id: `akshara-resp-${Date.now()}`,
                 sender: 'akshara',
                 text: `[Coordinating with Sam CEO & Revenue_Vault completed successfully ✅] 
-I have queried our Google Sheets transaction database. If you have just purchased the Blueprint, Brevo has dispatched the download email. If you need a mock refund or order correction, I have queued high-priority ticket ${mockOrderId} in Sam's approval dashboard. Sam (local-Gemma model) will audit this shortly and execute via Brevo webhook sync!`,
+I have scanned our Google Sheets database ledger. If you have just booked a service (Resume Revamp or AI Avatar Design), Brevo has dispatched your confirmation email. For active service status modifications, I have logged high-priority ticket ${mockOrderId} in Sam's approvals dashboard. Sam (local-Gemma model) will review and sync via webhooks!`,
                 timestamp: new Date(),
                 modelUsed: 'Omni',
               }
@@ -107,7 +110,7 @@ I have queried our Google Sheets transaction database. If you have just purchase
         responseText = 'Akshara World holds premium enterprise resources, including Lovable Pro stacked active subscriptions (valid to May 27, 2027), Helium AI credits ($500 balance), and multiple active domains (aksharaworld.in, aksharaworld.com) fully secured inside our Cloudflare Nameservers and Shopify zone mappings.';
         model = 'Pro';
       } else {
-        responseText = 'I have analyzed your query through my Google cognitive layers. As Akshara World\'s customer coordinator, I can confirm we have fully operationalized our digital empire with 8 autonomous swarm departments. If you have specific inquiries about the ₹499 Blueprint, Razorpay integration, Google Sheets database connector, or Cloudflare staging, please let me know and I will retrieve the exact technical documentation for you!';
+        responseText = 'I have analyzed your query through my Google cognitive layers. As Akshara World\'s customer coordinator, I can confirm we have fully operationalized our digital services suite. If you have specific inquiries about our Resume ATS optimizations, AI-driven 3D Avatar mascot design, video production, or zero-cost scaling model, please let me know and I will help you instantly!';
         model = 'Flash';
       }
 
@@ -128,10 +131,10 @@ I have queried our Google Sheets transaction database. If you have just purchase
 
   const presetQuestions = [
     'What is Akshara World?',
-    'What is the ₹499 Blueprint?',
+    'What digital services do you offer?',
     'How does the ₹0 cost model work?',
     'Tell me about Sam CEO\'s brain',
-    'Track my purchase / Refund',
+    'Track my service order',
   ];
 
   return (

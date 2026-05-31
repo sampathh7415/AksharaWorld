@@ -14,10 +14,9 @@ By opening this repository, the **entire, complete digital business empire of Ak
 
 | URL | Purpose | Access |
 |-----|---------|--------|
-| [aksharaworld.in/public](https://aksharaworld.in/public) | Public Landing Page — logo, about, products | 🌍 Public |
+| [aksharaworld.in/public](https://aksharaworld.in/public) | Public Landing Page — logo, about, and services | 🌍 Public |
 | [aksharaworld.in](https://aksharaworld.in) | Business Command Center Dashboard | 🔒 Owner Only (Clerk Auth) |
-| [akshara-pulse.lovable.app](https://akshara-pulse.lovable.app/) | Full Product Catalog with pricing | 🌍 Public |
-| [aksharaworld.in/products/ai-blueprint](https://aksharaworld.in/products/ai-blueprint) | AI Productivity Blueprint product page | 🌍 Public |
+| [akshara-pulse.lovable.app](https://akshara-pulse.lovable.app/) | Full Services & Product Catalog with pricing | 🌍 Public |
 
 > **Deployment**: Cloudflare Pages (CI/CD via GitHub Actions on every push to `main`)
 > 
@@ -27,7 +26,15 @@ By opening this repository, the **entire, complete digital business empire of Ak
 
 ## 🎯 1. The Core Vision & Starting Point
 
-The primary objective of **Akshara World** is to operate, scale, and optimize a highly profitable digital business empire with **exactly ₹0 recurring capital expenditures** (no hosting costs, no paid database subscriptions, and no active payroll).
+The primary objective of **Akshara World** is to operate, scale, and optimize a highly profitable digital services business empire with **exactly ₹0 recurring capital expenditures** (no hosting costs, no paid database subscriptions, and no active payroll).
+
+### 🖥️ A Multi-Winged Services Strategy
+Akshara World is custom-engineered to provide comprehensive digital services to a diverse clientele, including everyday consumers, career professionals, and businesses requiring creative or technical assistance. Our core, zero-cost scalable service wings include:
+*   **Resume Building Suite**: Automated generation of custom-tailored, responsive career portfolios.
+*   **Resume Restructuring & ATS Optimizations**: Outlining, translating, and restructuring documents directly in Google Docs to maximize ATS compatibility.
+*   **AI-Driven Image & Graphic Creation**: Delivering Pixar-style 3D avatar characters, logo mockups, and corporate brand designs.
+*   **Short-Form Video Production for Ads**: Compiling programmatic marketing video assets and onboarding clips.
+*   **Affiliate Marketing Integrations**: Establishing automated traffic recommendation loops to scale digital passive earnings.
 
 ### 🖥️ Starting with the Dashboard
 Our entire business operations start, sync, and present through our **Unified Command Center Dashboard** (`/internal`). The dashboard serves as our primary control panel:
@@ -530,14 +537,14 @@ aws --endpoint-url=http://localhost:4566 s3 ls
 ```
 
 ### 🛒 Unified Google Merchant Center Integration
-We have successfully wired Google Merchant Center to your live digital product catalog.
-1. **Dynamic RSS XML Feed (`/api/google/merchant-feed`)**: Compiles and serves your products in standard XML RSS format, fully compatible with Google Merchant Center for auto-syncing shopping listings.
-2. **Real-time Panel Metrics API (`/api/merchant`)**: Backs the dashboard panel dynamically, rendering approval status, impressions, and clicks for all 5 real-time digital products currently deployed in your business:
-   - *Akshara Launch Pilot* (₹999) — `/public/products/launch-pilot`
-   - *AI Productivity Blueprint v1.0* (₹499) — `/public/products/ai-blueprint`
-   - *Akshara World Premium SEO Blueprint E-Book* (₹1,500) — `/products/seo-blueprint`
-   - *Niche Automation Scaffolding Bundle* (₹3,500) — `/products/niche-scaffolding`
-   - *Automated AI Blogger Script (Cloudflare Workers Edition)* (₹4,999) — `/products/ai-blogger-worker`
+We have successfully wired Google Merchant Center to your live digital services catalog.
+1. **Dynamic RSS XML Feed (`/api/google/merchant-feed`)**: Compiles and serves your active service offerings in standard XML RSS format, fully compatible with Google Merchant Center for auto-syncing shopping listings.
+2. **Real-time Panel Metrics API (`/api/merchant`)**: Backs the dashboard panel dynamically, rendering approval status, impressions, and clicks for the structured, data-driven digital services currently active in your business:
+   - *Resume ATS Optimization Service* (₹999) — `/products/resume-ats`
+   - *Professional Resume Revamp Suite* (₹1,499) — `/products/resume-revamp`
+   - *Custom AI Avatar & 3D Character Design* (₹2,499) — `/products/ai-avatar`
+   - *Document & Custom Presentation Formatting* (₹3,500) — `/products/doc-formatting`
+   - *Programmatic Short-Form Marketing Video Suite* (₹4,999) — `/products/video-ads`
 
 ---
 
@@ -722,8 +729,8 @@ This section lists every live API credential, database persistent layer, DNS zon
 
 ### D. Monetization & Checkout Gateways
 *   **Razorpay Live Payment Gateway**: Active Merchant Account (`rzp_live_SpWOha5NSAiMqi`).
-    *   *Active Webhook URL:* `https://aksharaworld.in/api/webhooks/razorpay` (gated via webhook secret).
-    *   *Direct Checkout Links:* Deployed at ₹499 for Blueprint (`https://rzp.io/rzp/9O1zMeI`) and ₹999 for Launch Pilot.
+*   *Active Webhook URL:* `https://aksharaworld.in/api/webhooks/razorpay` (gated via webhook secret).
+*   *Checkout Links:* Dynamically generated via Razorpay Quick Links linked directly to our data-driven digital services.
 
 ### E. Security, Telemetry & Authentication
 *   **Clerk Identity & Auth**: Sandbox application instance (`pk_test_c29jaWFsLXNoZWVwZG9nLTUyLmNsZXJrLmFjY291bnRzLmRldiQ`).
@@ -840,11 +847,20 @@ Once an operational workflow, database synchronization mechanism, Edge API routi
 Akshara acts as the unified, customer-facing AI Support Specialist and Help Center Coordinator for Akshara World, operating natively on the public website and administrative dashboard. She handles all customer relationships and helpdesk inquiries:
 1.  **Visual Avatar Persona:** Represented as a high-fidelity 3D mascot avatar directly inspired by the child Akshara (sitting on the floor, wearing a traditional gold-embroidered pink and white dress with a yellow top-knot flower). This mascot is deployed across all video advertisements and storefront layouts.
 2.  **3-Model Google Cognitive Brain:** Akshara's helpdesk logic is powered by a triple-layer Google AI engine to coordinate operations:
-    *   *Gemini Flash Layer:* Drives ultra-fast, natural, real-time responses inside customer chat windows.
+    *   *Gemini Flash Layer:* Drives ultra-fast, natural, real-time responses inside customer chat windows regarding our resume building, resume restructuring, and custom AI avatar design services.
     *   *Gemini Pro Layer:* Handles complex support tickets, analyzes database transaction issues, and schedules client appointments.
     *   *Gemini Omni Layer:* Generates dynamically formatted visual documentation, custom PDF receipt invoices, and video onboarding assets.
 3.  **Floating Conversational Hub:** Integrates a prominent floating chat component on all pages with the initial visual hook *"How can I help you?"*. Akshara has immediate access to 100% of the company's product specifications, shipping/refund rules, and verified ledger details to assist any client instantly.
 4.  **CEO-Swarm Interoperability:** Coordinates directly with **Sam, the AI CEO**, routing priority support queries, triggering automated refund requests for Sam's review, and logging customer satisfaction performance scores to the `DailyMetrics` Sheets ledger.
+
+### Directive X: Sequential Execution Workflow (Sam's Brain)
+Sam, the AI CEO, must operate strictly according to a sequential 6-step execution workflow whenever raw strategic ideas, video files, or detailed documentation are shared:
+1.  **Data Ingestion:** Ingest raw ideas, video assets, or documentation directly for strategic evaluation.
+2.  **System Safety & Verification:** Verify the input's authenticity, check for corrupted or fraudulent details, assess the core mechanics/value, and ensure it integrates cleanly without degrading or disrupting our existing, validated, and locked business processes.
+3.  **Risk & Planning Report:** Generate a comprehensive strategic plan detailing the advantages, disadvantages, and potential risks (security, operational, or latency issues) of the new initiative.
+4.  **Approval Gate:** Sam has absolutely no authority to execute a plan autonomously, edit files, or deploy configurations until the Owner grants explicit, formal approval.
+5.  **Autonomous Execution:** Once the Owner formally grants approval, Sam is fully authorized to deploy, execute, and sync the changes within our business infrastructure.
+6.  **Fraud & Security Monitoring:** Actively monitor all repository data and files. If fed an inaccurate, compromised, or fraudulent report, Sam must immediately halt operations and flag it with the warning: *"Sir, this file is verified as incorrect or fake."*
 
 ---
 
