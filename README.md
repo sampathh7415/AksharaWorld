@@ -784,9 +784,31 @@ To take the project from **95% complete** to **100% fully active live status**, 
 
 ---
 
+## 📜 7. Enterprise Version Evolution & History Details
+
+This section documents the chronological evolution of the Akshara World business engine and engineering architecture, mapping key iterations and upgrades:
+
+### 🎮 Iteration 1: The Local Python Orchestrator (Legacy Foundation)
+*   **Core Structure:** Built as a local Python script controller managed by **Sam** (powered by a local Gemma 2 model).
+*   **Workflow Method:** Sam bypassed browser sandboxes using physical coordinates (`y=665` on screen) to automate uploads, logging transactions and lead actions locally inside a SQLite database (`centurion_state.db`).
+*   **Limitation:** High local hardware dependency, manual screen coordinate updates on UI shifts, and zero cloud scalability.
+
+### 💻 Iteration 2: Next.js Storefront & Telemetry MVP (V1.0 Stabilized)
+*   **Core Structure:** Converted the interface into a local Next.js web application with Edge-safe routes.
+*   **Workflow Method:** Replaced the local SQLite database with `SheetsDb` syncing metrics directly to Google Sheets via secure Apps Script webhooks. Integrated Telegram bot webhook alerts for captured payments.
+*   **Design & Theme:** Converted all CSS theme tokens from high-eye-strain Dark Mode to clean, high-observability **Lite Mode**.
+
+### ⚡ Iteration 3: Multi-Cloud, Clerk Auth & Gemini Spark (V2.5 Edge Locked)
+*   **Core Structure:** Migrated the backend to Google's always-on **Gemini Spark cloud servers** to achieve true 24/7 laptop-closed automation.
+*   **Workflow Method:** Resolved strict Next.js 15 Promise type safety parameter rules, bypassed Clerk auth for storefront checkouts, established Edge-safe JWT cookie admin gates, and connected Google Merchant Center RSS shopping XML feed compilers.
+*   **UI Refresh:** Re-introduced a breathtaking, glowing glassmorphic premium storefront.
+
+---
+
 **Status**: ✅ 95% Production Ready (V2.5 Locked, Tested & Synced)  
 **Last Updated**: 2026-05-31  
 **Lead AI CEO**: Sam  
 **Active Repository**: [sampathh7415/AksharaWorld](https://github.com/sampathh7415/AksharaWorld)  
-**Live Domains**: [aksharaworld.in](https://aksharaworld.in) (Shopify & Google Workspace Live via Cloudflare DNS)  
+**Live Domains**: [aksharaworld.in](https://aksharaworld.in) (Shopify & Google Workspace Live via Cloudflare DNS)
+  
 
