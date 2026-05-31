@@ -20,6 +20,8 @@ By opening this repository, the **entire, complete digital business empire of Ak
 | [aksharaworld.in/products/ai-blueprint](https://aksharaworld.in/products/ai-blueprint) | AI Productivity Blueprint product page | 🌍 Public |
 
 > **Deployment**: Cloudflare Pages (CI/CD via GitHub Actions on every push to `main`)
+> 
+> 🧠 **Prompt Blueprint**: The reverse-engineered core instructions used to build the entire system are documented in [REVERSE_ENGINEERED_PROMPT.md](file:///G:/My%20Drive/Antigravity/REVERSE_ENGINEERED_PROMPT.md).
 
 ---
 

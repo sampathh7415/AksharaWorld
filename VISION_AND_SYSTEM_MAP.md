@@ -2,6 +2,8 @@
 
 Welcome to the central corporate manifest of **Akshara World**. This document serves as the absolute single source of truth explaining the **Octopus Business Strategy**, the 8 specialized AI departments (tentacles) revolving around our AI CEO **Sam**, individual departmental roadmaps, zero-cost Google products clusters, and the complete Google Drive folder directory map. 
 
+🧠 **Prompt Blueprint**: The reverse-engineered core instructions used to build the entire system are documented in [REVERSE_ENGINEERED_PROMPT.md](file:///G:/My%20Drive/Antigravity/REVERSE_ENGINEERED_PROMPT.md).
+
 ---
 
 ## 🎯 1. The Core Vision & Starting Point
