@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>Akshara World – Product Feed</title>
+    <link>https://aksharaworld.in</link>
+    <description>Digital products by Akshara World. AI automation blueprints and business strategy packs for Indian entrepreneurs.</description>
+    <language>en-in</language>
+
+    <item>
+      <g:id>akshara-ai-blueprint-v1</g:id>
+      <title>AI Autonomous Business Blueprint – Zero Cost Digital Empire</title>
+      <description>The complete production-grade guide to deploying a self-healing digital business with zero infra cost. Includes full code templates for Edge JWT middleware, Razorpay integration, Google Sheets database connectors, and a 50-point 20-year horizon roadmap config. Instant digital delivery.</description>
+      <link>https://aksharaworld.in/public/products/ai-blueprint</link>
+      <g:image_link>https://aksharaworld.in/og-image.jpg</g:image_link>
+      <g:price>499.00 INR</g:price>
+      <g:sale_price>499.00 INR</g:sale_price>
+      <g:availability>in_stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:brand>Akshara World</g:brand>
+      <g:mpn>AKW-BLUEPRINT-001</g:mpn>
+      <g:google_product_category>784</g:google_product_category>
+      <g:product_type>Media &gt; Books &gt; Computer Books</g:product_type>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:is_bundle>no</g:is_bundle>
+      <g:custom_label_0>digital-product</g:custom_label_0>
+      <g:custom_label_1>india-market</g:custom_label_1>
+      <g:shipping>
+        <g:country>IN</g:country>
+        <g:service>Digital Download – Instant</g:service>
+        <g:price>0.00 INR</g:price>
+      </g:shipping>
+    </item>
+
+    <item>
+      <g:id>akshara-launch-pilot-v1</g:id>
+      <title>Launch Pilot Strategy Pack – AI Business Deployment Kit</title>
+      <description>Guided blueprint deployment assets with ready-made content schemas, outbound triggers, and pre-packaged niche assets. Includes 5 pre-configured high-margin niches, WhatsApp outreach templates, SheetsDb layouts, GA4 measurement blueprints, and Sam CEO interactive prompt sets. Instant digital delivery.</description>
+      <link>https://aksharaworld.in/public/products/launch-pilot</link>
+      <g:image_link>https://aksharaworld.in/og-image.jpg</g:image_link>
+      <g:price>999.00 INR</g:price>
+      <g:sale_price>999.00 INR</g:sale_price>
+      <g:availability>in_stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:brand>Akshara World</g:brand>
+      <g:mpn>AKW-LAUNCHPILOT-001</g:mpn>
+      <g:google_product_category>784</g:google_product_category>
+      <g:product_type>Media &gt; Books &gt; Computer Books</g:product_type>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:is_bundle>no</g:is_bundle>
+      <g:custom_label_0>digital-product</g:custom_label_0>
+      <g:custom_label_1>india-market</g:custom_label_1>
+      <g:shipping>
+        <g:country>IN</g:country>
+        <g:service>Digital Download – Instant</g:service>
+        <g:price>0.00 INR</g:price>
+      </g:shipping>
+    </item>
+
+  </channel>
+</rss>
