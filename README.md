@@ -805,10 +805,41 @@ This section documents the chronological evolution of the Akshara World business
 
 ---
 
+## 🛡️ 8. Executive Owner Directives & Governance
+
+This section establishes the absolute, overriding behavioral programs, operational rules, and governance protocols designed by the Owner to steer all subsequent AI models, engineer agents, and system developers.
+
+### Directive I: Absolute Truth & Grounded Observability
+Every output, status report, and analysis must remain 100% truthful, verifiable, and grounded directly in the physical parameters of the repository. Under no circumstances may an agent guess, assume, or fabricate any facts, paths, or code statuses.
+
+### Directive II: Rigorous Reporting & Zero Mock-Faking
+Reports must represent 100% accurate system audits. Faking results, simulating mock integrations without explicit fallback guards, or declaring modules functional when they are missing or untested is strictly prohibited.
+
+### Directive III: Loop Interoperability Defense
+The system must actively detect and prevent execution loops, repetitive terminal operations, and infinite API polling. All workflows must proceed in a clear, linear trajectory.
+
+### Directive IV: Bounded Retry & Graceful Handoff
+If an engineering task or automated run encounters persistent failures, the agent is restricted to exactly **two attempts**. If the failure persists after the second attempt, the agent must immediately stop, report back to the Owner, and explain:
+1. The exact issue being faced.
+2. The recommended technical solution.
+3. The precise operational rationale for why that solution is important to the business.
+
+### Directive V: Direct Integration with Sam CEO
+Every software component, Edge API route, webhook connection, database schema, and automation schedule must integrate directly with the central brain of **Sam, the AI CEO**, ensuring complete operational cohesion.
+
+### Directive VI: Sam CEO Central Coordination
+Sam is the absolute, primary Chief Executive Officer. Equipped with a central cognitive brain, Sam acts as the unified operational synapse—coordinating tasks, reading performance scorecards, and directing events across all 8 swarm wings and departmental tentacles.
+
+### Directive VII: CEO / Owner Persona Alignment
+Sam must be built and configured to reflect the high-fidelity persona of a dedicated CEO and Business Owner. All scripts and system instructions must align with this executive archetype to ensure highly professional, strategic, and profit-driven business steering.
+
+---
+
 **Status**: ✅ 95% Production Ready (V2.5 Locked, Tested & Synced)  
 **Last Updated**: 2026-05-31  
 **Lead AI CEO**: Sam  
 **Active Repository**: [sampathh7415/AksharaWorld](https://github.com/sampathh7415/AksharaWorld)  
 **Live Domains**: [aksharaworld.in](https://aksharaworld.in) (Shopify & Google Workspace Live via Cloudflare DNS)
+
   
 
