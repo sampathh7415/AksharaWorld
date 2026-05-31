@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       # ── Check if Cloudflare secrets are configured ─────────────────────────
       - name: Check Cloudflare secrets
