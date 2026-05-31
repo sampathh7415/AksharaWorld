@@ -16,7 +16,7 @@ export default function AksharaChatWidget() {
     {
       id: 'welcome',
       sender: 'akshara',
-      text: 'Namaste! 🙏 I am Akshara, your AI Customer Support Coordinator. Powered by a triple-layer Google AI brain (Flash, Pro, Omni) and fully integrated with Sam CEO, I am here to help you scale your business at zero cost or answer any question instantly! How can I help you today?',
+      text: 'Namaste! 🙏 I am Akshara, your AI Customer Support Coordinator. We are a universal digital solutions hub—leveraging 100% of our premium software systems to deliver high-quality career and creative services in just a few minutes (such as automated ATS resume building)! We hold immediate, automated solutions for all technical, creative, and digital queries instantly. How can I help you today?',
       timestamp: new Date(),
       modelUsed: 'Flash',
     },
@@ -68,10 +68,10 @@ export default function AksharaChatWidget() {
       const cleanText = text.toLowerCase();
 
       if (cleanText.includes('service') || cleanText.includes('offer') || cleanText.includes('pricing') || cleanText.includes('price')) {
-        responseText = 'Akshara World provides premium digital services backed by zero-cost frameworks. Our structured offerings include:\n1. Resume ATS Optimization (₹999) - Restructuring outlines directly in Google Docs for maximum recruiter hits.\n2. Resume Revamp Suite (₹1,499) - A complete redesign of your career portfolio.\n3. AI Avatar & 3D Character Design (₹2,499) - Pixar-style 3D models and custom corporate branding assets.\n4. Short-Form Video Production (₹4,999) - Programmatic advertising video assets for campaign scaling.\n\nYou can book any service directly on the storefront!';
+        responseText = 'Akshara World provides premium digital services backed by zero-cost frameworks. Because we utilize pre-configured assets, executing your requested creative or career task takes only a few minutes! Offerings include:\n1. Resume ATS Optimization (₹999) - Outlining and restructuring outlines in Docs for immediate ATS clearance.\n2. Resume Revamp Suite (₹1,499) - Complete modern redesign of your digital portfolio.\n3. AI Avatar & 3D Character Design (₹2,499) - High-fidelity Pixar-style 3D illustrations.\n4. Short-Form Video Production (₹4,999) - Programmatic advertising video assets.\n\nYou can book any service directly on the storefront!';
         model = 'Pro';
       } else if (cleanText.includes('resume') || cleanText.includes('ats') || cleanText.includes('restruct')) {
-        responseText = 'Our Resume Building & Restructuring wings rewrite and format your resume inside Google Docs. We design layouts tailored to pass strict ATS (Applicant Tracking Systems) checks, optimizing keywords and headers. Work begins instantly upon booking, with a rapid 2 to 3-hour delivery target.';
+        responseText = 'Our Resume Building & Restructuring wings rewrite, optimize, and format your career outline inside Google Docs. Because we operate advanced automation templates linked to our Lovable Pro assets, building your custom-tailored layout takes only a few minutes! Work begins immediately upon booking and guarantees ATS compliance.';
         model = 'Pro';
       } else if (cleanText.includes('sam') || cleanText.includes('ceo') || cleanText.includes('brain')) {
         responseText = 'Sam is our Autonomous AI CEO. He manages operations across all 8 specialized swarm wings (Content_Forge, Tech_Core, Revenue_Vault, etc.). Sam runs on local-Gemma cognitive logic and Google Gemini Spark cloud servers, coordinating files and database syncs natively. I coordinate directly with Sam, uploading support scorecards and queuing tickets for his approval!';
@@ -110,7 +110,7 @@ I have scanned our Google Sheets database ledger. If you have just booked a serv
         responseText = 'Akshara World holds premium enterprise resources, including Lovable Pro stacked active subscriptions (valid to May 27, 2027), Helium AI credits ($500 balance), and multiple active domains (aksharaworld.in, aksharaworld.com) fully secured inside our Cloudflare Nameservers and Shopify zone mappings.';
         model = 'Pro';
       } else {
-        responseText = 'I have analyzed your query through my Google cognitive layers. As Akshara World\'s customer coordinator, I can confirm we have fully operationalized our digital services suite. If you have specific inquiries about our Resume ATS optimizations, AI-driven 3D Avatar mascot design, video production, or zero-cost scaling model, please let me know and I will help you instantly!';
+        responseText = 'I have analyzed your query through my Google cognitive layers. As Akshara World\'s customer coordinator, I can confirm we hold complete, immediate solutions for all technical, career, creative, and digital queries instantly! Please ask me any question, and my advanced triple-layer Google AI brain will resolve it immediately in real time.';
         model = 'Flash';
       }
 
