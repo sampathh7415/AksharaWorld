@@ -6,13 +6,14 @@ export const metadata: Metadata = {
   description: 'Your purchase was successful. Welcome to AI Productivity Blueprint!',
 }
 
-export default function ThankYouPage({
+export default async function ThankYouPage({
   searchParams,
 }: {
-  searchParams: { payment_id?: string; status?: string }
+  searchParams: Promise<{ payment_id?: string; status?: string }>
 }) {
-  const paymentId = searchParams.payment_id || ''
-  const status = searchParams.status || 'paid'
+  const resolvedParams = await searchParams
+  const paymentId = resolvedParams.payment_id || ''
+  const status = resolvedParams.status || 'paid'
 
   return (
     <main style={{
