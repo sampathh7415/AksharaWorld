@@ -8,7 +8,7 @@
 
 // Helper to convert string to ArrayBuffer
 function stringToArrayBuffer(str: string): ArrayBuffer {
-  return new TextEncoder().encode(str);
+  return new TextEncoder().encode(str).buffer as ArrayBuffer;
 }
 
 // Helper to convert ArrayBuffer to Base64URL
