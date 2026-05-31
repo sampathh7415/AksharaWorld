@@ -38,7 +38,7 @@ Our entire business operations start, sync, and present through our **Unified Co
 
 ## 🐙 2. The Octopus Strategy
 
-In the **Octopus Strategy**, the business operates as a unified organism. **Sam (AI CEO)** is the central head (the brain), and the **8 specialized AI departments** are the tentacles. All tentacles connect directly to Sam, executing micro-tasks and reporting logs back into the central synapse.
+In the **Octopus Strategy**, the business operates as a unified organism. **Sam (AI CEO)** is the central head (the brain), powered and hosted by **Google's always-on Gemini Spark cloud servers**, and the **8 specialized AI departments** are the tentacles. All tentacles connect directly to Sam, executing serverless micro-tasks and reporting logs back into the central synapse natively on Google Cloud even when your personal devices are powered off.
 
 ```mermaid
 graph TD
