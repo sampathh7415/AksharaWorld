@@ -732,6 +732,13 @@ This section lists every live API credential, database persistent layer, DNS zon
 *   **Google reCAPTCHA Enterprise**: score-based Site Key `6Lfv9vYsAAAAAH_t85p2PGbGHD1JsPbA2YyZ2Y85` screening booking forms and checkouts.
 *   **Google Search Console (GSC)**: Site verification token `OncBqpSQj_mCxvK-6s6w0bKFJCHTlCF8SXFdl_AhOks` monitoring index crawls.
 
+### F. Active AI Developer Tools & Coding Engines
+*   **Antigravity (Google DeepMind)**: Core agentic AI pair programming assistant executing strict compiles, AST refactor runs, and repository synchronizations.
+*   **VS Code**: Principal IDE workspace environment housing files, debugging terminals, and AST context search.
+*   **Gemini Omni**: Cognitive multimodal engine mapping custom prompts to visual graphics, layouts, and ad media.
+*   **Google Stitch**: Design canvas used to wire and prototype visual front-end interfaces.
+*   **Google Pomelli**: Copywriting assistant optimizing ad hooks, headlines, and SEO keyword descriptions.
+
 ---
 
 ## 🧠 5. The Reverse Engineered Prompt & Gemini Spark Cloud Blueprints
