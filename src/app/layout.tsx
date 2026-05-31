@@ -3,6 +3,7 @@ import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from '@cl
 import { Inter, Outfit } from 'next/font/google';
 import Script from 'next/script';
 import { ConsentBanner } from '../components/ConsentBanner';
+import AksharaChatWidget from '../components/AksharaChatWidget';
 import './globals.css';
 
 // ── Google Fonts (self-hosted by Next.js — zero layout shift) ──
@@ -162,6 +163,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           {/* ✅ Cookie Consent Banner — Google Consent Mode v2 */}
           <ConsentBanner />
+          {/* ✅ Floating AI Support Specialist Widget (Akshara) */}
+          <AksharaChatWidget />
         </ClerkProvider>
       </body>
     </html>

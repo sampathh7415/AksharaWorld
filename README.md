@@ -836,6 +836,16 @@ Sam must be built and configured to reflect the high-fidelity persona of a dedic
 ### Directive VIII: Sentinel Locking of Verified Processes
 Once an operational workflow, database synchronization mechanism, Edge API routing path, or payment webhook handler is created and verified to run perfectly, that correct process must be strictly locked. Subsequent software testing, developer refactoring, or cognitive updates are strictly prohibited from affecting, breaking, or altering these finalized, perfect processes in the future.
 
+### Directive IX: The AI Support Specialist (Akshara)
+Akshara acts as the unified, customer-facing AI Support Specialist and Help Center Coordinator for Akshara World, operating natively on the public website and administrative dashboard. She handles all customer relationships and helpdesk inquiries:
+1.  **Visual Avatar Persona:** Represented as a high-fidelity 3D mascot avatar directly inspired by the child Akshara (sitting on the floor, wearing a traditional gold-embroidered pink and white dress with a yellow top-knot flower). This mascot is deployed across all video advertisements and storefront layouts.
+2.  **3-Model Google Cognitive Brain:** Akshara's helpdesk logic is powered by a triple-layer Google AI engine to coordinate operations:
+    *   *Gemini Flash Layer:* Drives ultra-fast, natural, real-time responses inside customer chat windows.
+    *   *Gemini Pro Layer:* Handles complex support tickets, analyzes database transaction issues, and schedules client appointments.
+    *   *Gemini Omni Layer:* Generates dynamically formatted visual documentation, custom PDF receipt invoices, and video onboarding assets.
+3.  **Floating Conversational Hub:** Integrates a prominent floating chat component on all pages with the initial visual hook *"How can I help you?"*. Akshara has immediate access to 100% of the company's product specifications, shipping/refund rules, and verified ledger details to assist any client instantly.
+4.  **CEO-Swarm Interoperability:** Coordinates directly with **Sam, the AI CEO**, routing priority support queries, triggering automated refund requests for Sam's review, and logging customer satisfaction performance scores to the `DailyMetrics` Sheets ledger.
+
 ---
 
 **Status**: ✅ 95% Production Ready (V2.5 Locked, Tested & Synced)  
