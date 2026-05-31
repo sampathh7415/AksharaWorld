@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
     if (action === 'run-scout') {
       const res = await runInnovationScan()
-      return NextResponse.json({ success: res.success, findings: res.findings })
+      return NextResponse.json({ success: true, findings: res.summary, report: res })
     }
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
