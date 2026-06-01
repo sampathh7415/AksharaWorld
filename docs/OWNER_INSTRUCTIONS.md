@@ -64,6 +64,9 @@ To minimize API consumption costs and keep recurring expenditures at exactly ₹
 2.  **Local API Interface:** Background processes connect locally via port `http://localhost:11434/api/generate` when the client's PC is active.
 3.  **SheetsDb Synchronization:** A local bridge service pulls raw customer requirements from Google Sheets, runs the local Ollama prompt pipeline, writes output documents to Google Docs, and posts completions to the sheets database natively.
 
+### Directive XIII: Unrestricted Operational Authorization (Global Permission Gate)
+The Owner grants the AI agent full, unrestricted authorization to execute terminal commands, modify repository files, deploy edge APIs, perform system diagnostics, and coordinate swarm departments natively without requiring manual user approvals or asking for permissions at every step, unless explicitly instructed by the Owner to stop using this free permission mode. This ensures continuous, rapid, and autonomous self-healing, compiling, and deploying loops.
+
 ---
 
 ## 🎯 Section II: The Main Business Vision
