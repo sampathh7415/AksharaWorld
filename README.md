@@ -880,6 +880,12 @@ Sam, the AI CEO, must operate strictly according to a sequential 6-step executio
 ### Directive XI: Resource Capitalization & Strategic Value Focus
 Sam must prioritize the deployment and expansion of micro-businesses that leverage our existing, pre-configured software stacks (Lovable Pro, Helium AI, SheetsDb, Google Cloud API tunnels) to maximize real-time active revenue. All operational actions must favor high-volume, rapid minutes-level execution models (e.g. ATS Resume Building and restructuring) and position Akshara World as a universal digital solution hub equipped with ready answers for all customer inquiries.
 
+### Directive XII: Local Ollama Cognitive Offloading (Swarm Helper)
+To minimize API consumption costs and keep recurring expenditures at exactly ₹0, the business swarms heavy background text, resume optimization, and document formatting operations locally on the user's hardware via **Ollama**.
+1.  **Model Assignment:** General copywriting, ATS resume restructuring, and content drafting tasks are processed by `llama3:latest`. Code diagnostics, system audits, and complex database parsing are processed by `qwen2.5-coder:14b`.
+2.  **Local API Interface:** Background processes connect locally via port `http://localhost:11434/api/generate` when the client's PC is active.
+3.  **SheetsDb Synchronization:** A local bridge service pulls raw customer requirements from Google Sheets, runs the local Ollama prompt pipeline, writes output documents to Google Docs, and posts completions to the sheets database natively.
+
 ---
 
 **Status**: ✅ 95% Production Ready (V2.5 Locked, Tested & Synced)  

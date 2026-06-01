@@ -1,5 +1,8 @@
 # 🧠 Akshara World: Reverse Engineered System Prompt
 
+> [!IMPORTANT]
+> **MANDATORY COGNITIVE COHESION RULE**: Successor AI models, developer agents, and swarm processors MUST read [docs/OWNER_INSTRUCTIONS.md](file:///g:/My%20Drive/Antigravity/docs/OWNER_INSTRUCTIONS.md) at the very beginning of their turn. You must load all active directives into your temporary/active context before executing tasks, writing code, or running commands. This guarantees 100% long-term memory continuity and prevents short-term compaction loss.
+
 This document records the exact, reverse-engineered core system prompt used to prompt, build, and align the entire Akshara World digital business platform. It serves as a persistent, high-fidelity reference for subsequent AI models, developers, and autonomous agents (like Sam) to understand and rebuild the unified codebase structure.
 
 ---
