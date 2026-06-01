@@ -546,46 +546,54 @@ aws --endpoint-url=http://localhost:4566 s3 ls
 ### 🛒 Unified Google Merchant Center Integration
 We have successfully wired Google Merchant Center to your live digital services catalog.
 1. **Dynamic RSS XML Feed (`/api/google/merchant-feed`)**: Compiles and serves your active service offerings in standard XML RSS format, fully compatible with Google Merchant Center for auto-syncing shopping listings.
-2. **Real-time Panel Metrics API (`/api/merchant`)**: Backs the dashboard panel dynamically, rendering approval status, impressions, and clicks for the structured, data-driven digital services currently active in your business:
-   - *Resume ATS Optimization Service* (₹999) — `/products/resume-ats`
-   - *Professional Resume Revamp Suite* (₹1,499) — `/products/resume-revamp`
-   - *Custom AI Avatar & 3D Character Design* (₹2,499) — `/products/ai-avatar`
-   - *Document & Custom Presentation Formatting* (₹3,500) — `/products/doc-formatting`
-   - *Programmatic Short-Form Marketing Video Suite* (₹4,999) — `/products/video-ads`
+2. **Real-time Panel Metrics API (`/api/merchant`)**: Backs the dashboard panel dynamically, rendering approval status, impressions, and clicks for the structured, hyper-affordable digital services active in our business:
+   - *Pixar-Style 3D AI Avatar Design* (₹199) — `/products/ai-avatar`
+   - *ATS Resume Restructuring Suite* (₹299) — `/products/resume-ats`
+   - *Digital Event Invitation & RSVP Page* (₹499) — `/products/digital-invitation`
+   - *Smart Digital Business Card Website* (₹499) — `/products/digital-card`
+   - *Short-Form Social Promo Video Ad* (₹399) — `/products/video-ad`
+   - *Multi-Page Local Storefront Website* (₹999) — `/products/storefront-site`
 
 ---
 
 ## Business Services
 
-This section documents the structured software service prototypes, operational wing architectures, and the 20-year development roadmap designed for the Akshara World digital ecosystem.
+This section documents the structured, hyper-affordable digital service catalogs, operational wing architectures, and the development roadmap designed for the Akshara World digital ecosystem.
 
-### ⚡ 1. Zero-Cost Micro-Task Service Prototypes (Immediate Launch)
-To generate initial customer acquisition pipelines with minimal upfront hosting overhead, the platform utilizes five standard service prototypes built entirely on free-tier cloud architectures and Google Workspace APIs:
+### ⚡ 1. The Hyper-Affordable "Common Man" Services Catalog & Price List
+To democratize professional digital solutions for job seekers, students, local vendors, tea shops, and content creators, the platform offers a curated suite of high-fidelity micro-services. Because we utilize our pre-existing premium assets (Lovable Pro, Helium AI) and host 100% free on Cloudflare Pages, these services take only minutes to execute and yield 100% net profit margins:
 
-1. **Document & Slide Formatting Engine (`Revenue_Vault` Funnel)**
-   * *Service Prototype:* Automated conversion of plain client text files or raw outlines into formatted presentations using Google Slides and curated typography via Google Fonts.
-   * *Turnaround Target:* 2 Hours.
-   * *Next.js Telemetry Upsell:* Automatically registers completed project states and offers client-facing dashboards displaying content views.
+#### 📄 A. The Career Booster Wing (For Students & Job Seekers)
+*   **Service 1: ATS Resume Restructuring (₹299)**
+    *   *Description:* Outlining, editing, and restructuring career summaries inside Google Docs with advanced font hierarchies and keyword injection to clear strict ATS checks instantly.
+    *   *Turnaround:* 5 Minutes.
+*   **Service 2: Resume & Personal Portfolio Website Bundle (₹599)**
+    *   *Description:* The custom ATS Resume plus a beautiful, single-page animated personal portfolio site hosted forever on Cloudflare Pages with zero recurring costs.
+    *   *Turnaround:* 8 Minutes.
 
-2. **Resume ATS Optimization Service (`Content_Forge` Funnel)**
-   * *Service Prototype:* Translation, restructuring, and formatting of resume outlines within Google Docs to optimize for ATS (Applicant Tracking Systems) compatibility.
-   * *Turnaround Target:* 3 Hours.
-   * *Next.js Telemetry Upsell:* Sends delivery files containing custom portfolio site templates hosted on Cloudflare Pages.
+#### 💳 B. The Micro-Business Digital Wing (For Shop Owners & Street Vendors)
+*   **Service 3: Smart Digital Business Card Website (₹499)**
+    *   *Description:* A mobile-responsive web card containing tap-to-WhatsApp link buttons, service summaries, custom branding, and live Google Maps venue pins.
+    *   *Turnaround:* 5 Minutes.
+*   **Service 4: Multi-Page Local Storefront Website (₹999)**
+    *   *Description:* A beautiful 3-page custom-styled website (Home, Services, Contact Form) hosted forever with zero monthly software or server maintenance fees.
+    *   *Turnaround:* 15 Minutes.
 
-3. **Brand Vector Asset Generation (`Media_Studio` Funnel)**
-   * *Service Prototype:* Creation of customized vector diagrams, architectural wireframes, and SVGs inside Google Drawings.
-   * *Turnaround Target:* 1 Hour.
-   * *Next.js Telemetry Upsell:* Delivers assets with responsive embed widgets designed to load instantly via edge CDNs.
+#### 🎨 C. The Creative Branding Wing (For Content Creators & Freelancers)
+*   **Service 5: Pixar-Style 3D AI Avatar Design (₹199)**
+    *   *Description:* Generating polished, glossy 3D cartoon avatars on transparent backdrops from user reference photos, perfect for social media or gaming.
+    *   *Turnaround:* 3 Minutes.
+*   **Service 6: Digital Menu & Social Flyer Design (₹299)**
+    *   *Description:* Custom vector layouts and design sheets optimized for local restaurants, food stalls, home bakers, or freelancers.
+    *   *Turnaround:* 5 Minutes.
 
-4. **Short-Form Content Clipping (`Media_Studio` Funnel)**
-   * *Service Prototype:* Editing and rendering raw video footage into Vertical vertical formats suitable for YouTube Shorts and TikTok playlists.
-   * *Turnaround Target:* 4 Hours.
-   * *Next.js Telemetry Upsell:* Connects finished render files directly to FeedBurner RSS directories to automate multi-channel syndication.
-
-5. **API & System Prompt Optimization (`Tech_Core` Funnel)**
-   * *Service Prototype:* Designing structured prompt frameworks, system instructions, and JSON schemas for LLM-driven developer operations.
-   * *Turnaround Target:* 2 Hours.
-   * *Next.js Telemetry Upsell:* Integrates prompts directly with serverless Firebase Firestore triggers and edge routers.
+#### 🎥 D. Social Media & Event Promotion Wing (For Celebrations & Local Ads)
+*   **Service 7: Digital Event Invitation & RSVP Page (₹499)**
+    *   *Description:* Breathtaking landing pages featuring countdown timers, venues map links, photo gallery slideshows, and RSVP alerts.
+    *   *Turnaround:* 10 Minutes.
+*   **Service 8: Short-Form vertical Promo Video / Reel Ad (₹399)**
+    *   *Description:* High-impact 15–30 second programmatic vertical video reels with engaging typography and background tracks to scale local sales.
+    *   *Turnaround:* 8 Minutes.
 
 ---
 
