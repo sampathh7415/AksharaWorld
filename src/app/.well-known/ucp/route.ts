@@ -5,6 +5,8 @@
  * Allows Google AI Shopping agents to interact with your store
  */
 
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 
 export async function GET() {

@@ -1,31 +1,33 @@
 /**
  * POST /api/firebase/test — Test Firestore connection
- * Writes a test document and reads back recent docs
+ * Writes a test document and reads back recent docs using the Client SDK under Edge Runtime.
  */
-export const runtime = 'nodejs'; // Firestore requires Node.js runtime
+export const runtime = 'edge';
 import { NextRequest, NextResponse } from 'next/server';
+import { initializeApp, getApps } from 'firebase/app';
+import { getFirestore, collection, doc, setDoc, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 export async function POST(req: NextRequest) {
   try {
-    // Dynamic import to avoid edge runtime issues
-    const { initializeApp, getApps, getApp, cert } = await import('firebase-admin/app');
-    const { getFirestore }                          = await import('firebase-admin/firestore');
+    const firebaseConfig = {
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'aksharaworld-481e8',
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_ID,
+      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    };
 
-    // Initialize admin SDK if not already done
-    const adminApp = getApps().find(a => a.name === 'admin') ||
-      initializeApp({
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'aksharaworld-481e8',
-      }, 'admin');
-
-    const adminDb = getFirestore(adminApp);
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+    const db = getFirestore(app);
 
     // Write a test document
-    const testRef = adminDb.collection('system').doc('integration-test');
-    await testRef.set({
+    const testRef = doc(db, 'system', 'integration-test');
+    await setDoc(testRef, {
       tested:    new Date().toISOString(),
       source:    'akshara-dashboard',
       status:    'connected',
-      project:   'aksharaworld-481e8',
+      project:   firebaseConfig.projectId,
     });
 
     // Read recent documents from multiple collections
@@ -34,8 +36,9 @@ export async function POST(req: NextRequest) {
 
     for (const col of collections) {
       try {
-        const snap = await adminDb.collection(col).orderBy('timestamp', 'desc').limit(3).get();
-        snap.docs.forEach(d => {
+        const q = query(collection(db, col), orderBy('timestamp', 'desc'), limit(3));
+        const snap = await getDocs(q);
+        snap.forEach(d => {
           recentDocs.push({
             id:         d.id,
             collection: col,
@@ -48,12 +51,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Firestore connected!',
+      message: 'Firestore connected successfully via client SDK on Edge!',
       docs:    recentDocs.slice(0, 10),
     });
 
   } catch (e: any) {
-    // Client SDK fallback (when admin SDK not configured)
     return NextResponse.json({
       success: false,
       message: 'Enable Firestore in Firebase Console → Create database → Start in test mode',

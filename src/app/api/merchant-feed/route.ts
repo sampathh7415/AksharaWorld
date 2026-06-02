@@ -7,6 +7,8 @@
  * Standard: Google Content API for Shopping (RSS 2.0 + g: namespace)
  */
 
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 
 const BASE_URL = 'https://aksharaworld.in';

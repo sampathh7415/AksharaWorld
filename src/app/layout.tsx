@@ -21,6 +21,8 @@ const outfit = Outfit({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
 });
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   // ── Core SEO ──
   title:       'Akshara World – AI-Powered Autonomous Business | Zero Cost Digital Empire',
