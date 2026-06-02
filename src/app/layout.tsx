@@ -2,12 +2,10 @@ import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter, Outfit } from 'next/font/google';
 import Script from 'next/script';
-import dynamic from 'next/dynamic';
 import { ConsentBanner } from '../components/ConsentBanner';
 import AksharaChatWidget from '../components/AksharaChatWidget';
+import ClerkHeaderWrapper from '../components/ClerkHeaderWrapper';
 import './globals.css';
-
-const HeaderAuth = dynamic(() => import('../components/HeaderAuth'), { ssr: false });
 
 // ── Google Fonts (self-hosted by Next.js — zero layout shift) ──
 const inter = Inter({
@@ -131,7 +129,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gap: '8px',
             padding: '10px 20px',
           }}>
-            <HeaderAuth />
+            <ClerkHeaderWrapper />
           </header>
           {children}
           {/* ✅ Cookie Consent Banner — Google Consent Mode v2 */}
