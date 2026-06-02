@@ -12,6 +12,31 @@
  *   node scripts/local_ollama_bridge.js --dry-run    <- Run diagnostic connection checks
  */
 
+// Load environment variables from .env.local in the root directory without external dependencies
+const path = require('path');
+const fs = require('fs');
+try {
+  const envPath = path.resolve(__dirname, '../.env.local');
+  if (fs.existsSync(envPath)) {
+    const content = fs.readFileSync(envPath, 'utf8');
+    content.split(/\r?\n/).forEach(line => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) return;
+      const firstEqual = trimmed.indexOf('=');
+      if (firstEqual > 0) {
+        const key = trimmed.substring(0, firstEqual).trim();
+        let val = trimmed.substring(firstEqual + 1).trim();
+        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+          val = val.substring(1, val.length - 1);
+        }
+        process.env[key] = val;
+      }
+    });
+  }
+} catch (e) {
+  console.warn('Could not parse .env.local file:', e.message);
+}
+
 const http = require('http');
 
 // ── CONFIGURATION PARAMETERS ──
@@ -22,7 +47,7 @@ const CONFIG = {
   DEFAULT_CODE_MODEL: 'qwen2.5-coder:14b',
   SHEETS_DB_URL: 'https://docs.google.com/spreadsheets/d/1yhdlHcayP5ZlzZnlr8neS6UMQcQIYqvipP0tek7E5oU/edit', // Central SOT spreadsheet
   POLL_INTERVAL_MS: 30000, // Check for new tasks every 30 seconds
-  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || 'MOCK_TOKEN',
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_TOKEN || 'MOCK_TOKEN',
   TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || '7125107324'
 };
 

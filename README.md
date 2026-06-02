@@ -906,10 +906,54 @@ Sam, the AI CEO, must operate strictly according to a sequential 6-step executio
 Sam must prioritize the deployment and expansion of micro-businesses that leverage our existing, pre-configured software stacks (Lovable Pro, Helium AI, SheetsDb, Google Cloud API tunnels) to maximize real-time active revenue. All operational actions must favor high-volume, rapid minutes-level execution models (e.g. ATS Resume Building and restructuring) and position Akshara World as a universal digital solution hub equipped with ready answers for all customer inquiries.
 
 ### Directive XII: Local Ollama Cognitive Offloading (Swarm Helper)
-To minimize API consumption costs and keep recurring expenditures at exactly ₹0, the business swarms heavy background text, resume optimization, and document formatting operations locally on the user's hardware via **Ollama**.
-1.  **Model Assignment:** General copywriting, ATS resume restructuring, and content drafting tasks are processed by `llama3:latest`. Code diagnostics, system audits, and complex database parsing are processed by `qwen2.5-coder:14b`.
-2.  **Local API Interface:** Background processes connect locally via port `http://localhost:11434/api/generate` when the client's PC is active.
-3.  **SheetsDb Synchronization:** A local bridge service pulls raw customer requirements from Google Sheets, runs the local Ollama prompt pipeline, writes output documents to Google Docs, and posts completions to the sheets database natively.
+To minimize API consumption costs and keep recurring expenditures at exactly **₹0**, the business swarms heavy background text, resume optimization, and document formatting operations locally on the user's hardware via **Ollama**.
+
+#### 1. Swarm Architecture & Model Assignment
+*   **Text & Resume Optimizations**: General copywriting, ATS resume restructuring, and content drafting tasks are processed by **`llama3:latest`** (4.34 GB).
+*   **Technical & System Diagnostics**: Code diagnostics, system audits, structural parsing, and code-generation tasks are processed by **`qwen2.5-coder:14b`** (8.37 GB).
+*   **Local API Endpoint**: Port `http://localhost:11434` connects the background polling service directly to the running local Ollama instance on the client's PC.
+
+#### 2. Local Ollama Swarm Bridge (`scripts/local_ollama_bridge.js`)
+We designed and implemented a **dependency-free, pure-Node.js background service script** located at `scripts/local_ollama_bridge.js` to coordinate tasks between the central Google Sheets database (`SheetsDb`) and your local Ollama engines. 
+
+> [!NOTE]
+> **Zero-Dependency Core Design:** The bridge utilizes native Node.js core libraries (`http`, `path`, `fs`) and features a built-in lightweight `.env.local` parser. This ensures the background agent can run instantly on any machine without needing a slow or complex `npm/pnpm install` step.
+
+#### 3. How to Run the Swarm Bridge Service
+
+##### Run Diagnostics (Connection & Inference Checks)
+Run the script with the `--dry-run` flag to execute automatic tests checking connections, local models detection, and prompt generation accuracy:
+```bash
+node scripts/local_ollama_bridge.js --dry-run
+```
+*Expected output:*
+```text
+======================================================
+🐙 Akshara World: Local Ollama Bridge Diagnostics
+======================================================
+Checking local Ollama service at http://localhost:11434...
+
+✅ Local Ollama Connection: SUCCESSFUL
+Installed Local Swarm Models:
+  - llama3:latest (4.34 GB)
+  - qwen2.5-coder:14b (8.37 GB)
+
+Testing local text processing using model [llama3:latest]...
+✅ Local Text Pipeline: STABLE & ACCURATE
+
+Testing local code diagnostics using model [qwen2.5-coder:14b]...
+✅ Local Code & Reasoner Pipeline: STABLE & ACCURATE
+
+🎉 Diagnostics completed: ALL SYSTEM INTEGERS PASSED STABLE
+======================================================
+```
+
+##### Start the Active Polling Bridge
+To put the local swarm bridge into production to poll Google Sheets database ledger entries every 30 seconds, parse them locally via Ollama, write completed resume optimizations, and fire administrative notifications via your Telegram Bot:
+```bash
+node scripts/local_ollama_bridge.js
+```
+*Press `Ctrl+C` to terminate the active polling loop.*
 
 ### Directive XIII: Unrestricted Operational Authorization (Global Permission Gate)
 The Owner grants the AI agent full, unrestricted authorization to execute terminal commands, modify repository files, deploy edge APIs, perform system diagnostics, and coordinate swarm departments natively without requiring manual user approvals or asking for permissions at every step, unless explicitly instructed by the Owner to stop using this free permission mode. This ensures continuous, rapid, and autonomous self-healing, compiling, and deploying loops.
