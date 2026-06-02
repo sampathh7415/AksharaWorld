@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
-import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
 import { Inter, Outfit } from 'next/font/google';
 import Script from 'next/script';
+import dynamic from 'next/dynamic';
 import { ConsentBanner } from '../components/ConsentBanner';
 import AksharaChatWidget from '../components/AksharaChatWidget';
 import './globals.css';
+
+const HeaderAuth = dynamic(() => import('../components/HeaderAuth'), { ssr: false });
 
 // ── Google Fonts (self-hosted by Next.js — zero layout shift) ──
 const inter = Inter({
@@ -20,6 +23,8 @@ const outfit = Outfit({
   display: 'swap',
   weight: ['300', '400', '500', '600', '700', '800', '900'],
 });
+
+export const runtime = 'edge';
 
 export const metadata: Metadata = {
   // ── Core SEO ──
@@ -126,39 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gap: '8px',
             padding: '10px 20px',
           }}>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <button style={{
-                  background: 'rgba(59,130,246,0.15)',
-                  border: '1px solid rgba(59,130,246,0.4)',
-                  color: '#93c5fd',
-                  padding: '6px 16px',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                }}>
-                  Sign In
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button style={{
-                  background: 'rgba(59,130,246,0.9)',
-                  border: 'none',
-                  color: '#fff',
-                  padding: '6px 16px',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                }}>
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
+            <HeaderAuth />
           </header>
           {children}
           {/* ✅ Cookie Consent Banner — Google Consent Mode v2 */}
