@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from '@clerk/nextjs';
+import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { Inter, Outfit } from 'next/font/google';
 import Script from 'next/script';
 import { ConsentBanner } from '../components/ConsentBanner';
@@ -20,8 +20,6 @@ const outfit = Outfit({
   display: 'swap',
   weight: ['300', '400', '500', '600', '700', '800', '900'],
 });
-
-export const runtime = 'edge';
 
 export const metadata: Metadata = {
   // ── Core SEO ──
@@ -128,7 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gap: '8px',
             padding: '10px 20px',
           }}>
-            <Show when="signed-out">
+            <SignedOut>
               <SignInButton mode="modal">
                 <button style={{
                   background: 'rgba(59,130,246,0.15)',
@@ -157,10 +155,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Sign Up
                 </button>
               </SignUpButton>
-            </Show>
-            <Show when="signed-in">
+            </SignedOut>
+            <SignedIn>
               <UserButton />
-            </Show>
+            </SignedIn>
           </header>
           {children}
           {/* ✅ Cookie Consent Banner — Google Consent Mode v2 */}
