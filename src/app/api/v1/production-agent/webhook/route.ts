@@ -45,17 +45,17 @@ export async function POST(req: NextRequest) {
     // 2. Append to local task queue file (agent-daemon.ts watches this queue)
     // Dynamic import of fs/path protects Serverless Edge environments from import compilation dropouts
     try {
-      const fs = require('fs');
-      const path = require('path');
+      const fs = typeof window === 'undefined' ? eval('require')('fs') : null;
+      const path = typeof window === 'undefined' ? eval('require')('path') : null;
 
       const queueDir = path.join(process.cwd(), '.code-review-graph');
-      if (!fs.existsSync(queueDir)) {
+      if (fs && !fs.existsSync(queueDir)) {
         fs.mkdirSync(queueDir, { recursive: true });
       }
       const queuePath = path.join(queueDir, 'production-queue.json');
 
       let queue: ProductionTaskPayload[] = [];
-      if (fs.existsSync(queuePath)) {
+      if (fs && fs.existsSync(queuePath)) {
         try {
           queue = JSON.parse(fs.readFileSync(queuePath, 'utf8'));
         } catch {
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
         sourcePlatform: platform
       });
       
-      fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2), 'utf8');
+      fs?.writeFileSync(queuePath, JSON.stringify(queue, null, 2), 'utf8');
       console.log(`[Production Webhook] Successfully queued task ${payload.taskId} locally.`);
     } catch (e: any) {
       console.warn(`[Production Webhook] Local filesystem queuing bypassed (Serverless/Edge Environment): ${e.message}`);
