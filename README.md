@@ -968,5 +968,34 @@ The Owner grants the AI agent full, unrestricted authorization to execute termin
 **Active Repository**: [sampathh7415/AksharaWorld](https://github.com/sampathh7415/AksharaWorld)  
 **Live Domains**: [aksharaworld.in](https://aksharaworld.in) (Shopify & Google Workspace Live via Cloudflare DNS)
 
+---
+
+## Ollama integration
+
+This repository now includes:
+
+- `docker-compose.yml` with an `ollama` service at `http://localhost:11434`
+- `clients/python/query_ollama.py` and `clients/node/index.js` as example clients
+- `OLLAMA.md` with local run instructions
+- `.github/workflows/ollama-integration.yml` to validate the local Ollama stack and run both example clients in CI
+
+### Local run
+
+```powershell
+cd /Users/Lenovo/AksharaWorld-git
+docker compose -f docker-compose.yml up -d
+python clients/python/query_ollama.py --prompt "Hello Ollama" --model "llama2"
+cd clients/node
+npm install
+node index.js llama2 "Hello from Node"
+```
+
+### Notes
+
+- The Ollama Docker service persists data in the `ollama-storage` volume.
+- Use `OLLAMA_URL` to override the endpoint if needed.
+- If the model is not available locally, run `docker exec akshara-ollama ollama pull llama2`.
+
+
   
 

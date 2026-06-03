@@ -1,0 +1,49 @@
+name: Ollama integration
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start Ollama stack
+        run: |
+          docker compose -f docker-compose.yml up -d
+
+      - name: Wait for Ollama to become available
+        run: |
+          for i in {1..60}; do
+            if curl -sS -X POST -H "Content-Type: application/json" -d '{"model":"llama2","prompt":"ping"}' http://localhost:11434/api/generate --max-time 5 >/dev/null 2>&1; then
+              echo "Ollama ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Ollama did not become ready in time"
+          docker compose -f docker-compose.yml logs ollama || true
+          exit 1
+
+      - name: Run Python client
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r clients/python/requirements.txt
+          python3 clients/python/query_ollama.py --prompt "CI smoke test" --model "llama2"
+
+      - name: Run Node client
+        run: |
+          cd clients/node
+          npm ci
+          node index.js llama2 "CI smoke test"
+
+      - name: Tear down stack
+        if: always()
+        run: |
+          docker compose -f docker-compose.yml down || true
