@@ -15,6 +15,8 @@ services:
       - ./dashboard/.next:/app/dashboard/.next
     command: npm start
     restart: unless-stopped
+    depends_on:
+      - ollama
 
   akshara-dashboard:
     build:
@@ -30,6 +32,8 @@ services:
       - ./akshara-world-dashboard/.next:/app/akshara-world-dashboard/.next
     command: npm start
     restart: unless-stopped
+    depends_on:
+      - ollama
 
   # Optional: Nginx reverse proxy
   nginx:
@@ -43,6 +47,7 @@ services:
     depends_on:
       - dashboard
       - akshara-dashboard
+      - ollama
     restart: unless-stopped
 
   # Local AWS Emulation alternative via Floci
@@ -54,3 +59,27 @@ services:
     volumes:
       - ./data/floci:/app/data
     restart: unless-stopped
+
+  # Ollama - Local LLM Runtime
+  ollama:
+    image: ollama/ollama:latest
+    container_name: akshara-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-storage:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    restart: unless-stopped
+    # Uncomment below for GPU support (NVIDIA CUDA)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  ollama-storage:
+    driver: local
