@@ -60,8 +60,11 @@ Sam must prioritize the deployment and expansion of micro-businesses that levera
 
 ### Directive XII: Local Ollama Cognitive Offloading (Swarm Helper)
 To minimize API consumption costs and keep recurring expenditures at exactly ₹0, the business swarms heavy background text, resume optimization, and document formatting operations locally on the user's hardware via **Ollama**. 
-1.  **Model Assignment:** General copywriting, ATS resume restructuring, and content drafting tasks are processed by `llama3:latest`. Code diagnostics, system audits, and complex database parsing are processed by `qwen2.5-coder:14b`.
-2.  **Local API Interface:** Background processes connect locally via port `http://localhost:11434/api/generate` when the client's PC is active.
+1.  **Model Assignment:** 
+    *   **`gemma4:latest`** (8.95 GB): Deployed for advanced strategic planning, high-fidelity business copy synthesis, and complex customer request parsing.
+    *   **`llama3:latest`** (4.34 GB): Deployed for rapid general copywriting, ATS resume restructuring, and high-volume content drafting.
+    *   **`qwen2.5-coder:14b`** (8.37 GB): Deployed for system-wide code diagnostics, automated repo audits, and technical script verification.
+2.  **Local API Interface:** Background processes connect locally via port `http://localhost:11434` when the client's PC is active.
 3.  **SheetsDb Synchronization:** A local bridge service pulls raw customer requirements from Google Sheets, runs the local Ollama prompt pipeline, writes output documents to Google Docs, and posts completions to the sheets database natively.
 
 ### Directive XIII: Unrestricted Operational Authorization (Global Permission Gate)

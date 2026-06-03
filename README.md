@@ -909,6 +909,7 @@ Sam must prioritize the deployment and expansion of micro-businesses that levera
 To minimize API consumption costs and keep recurring expenditures at exactly **₹0**, the business swarms heavy background text, resume optimization, and document formatting operations locally on the user's hardware via **Ollama**.
 
 #### 1. Swarm Architecture & Model Assignment
+*   **Strategic Planning & Syntheses**: Deep semantic reasoning, business planning, and high-fidelity copy operations are processed by **`gemma4:latest`** (8.95 GB).
 *   **Text & Resume Optimizations**: General copywriting, ATS resume restructuring, and content drafting tasks are processed by **`llama3:latest`** (4.34 GB).
 *   **Technical & System Diagnostics**: Code diagnostics, system audits, structural parsing, and code-generation tasks are processed by **`qwen2.5-coder:14b`** (8.37 GB).
 *   **Local API Endpoint**: Port `http://localhost:11434` connects the background polling service directly to the running local Ollama instance on the client's PC.
@@ -935,6 +936,7 @@ Checking local Ollama service at http://localhost:11434...
 
 ✅ Local Ollama Connection: SUCCESSFUL
 Installed Local Swarm Models:
+  - gemma4:latest (8.95 GB)
   - llama3:latest (4.34 GB)
   - qwen2.5-coder:14b (8.37 GB)
 
