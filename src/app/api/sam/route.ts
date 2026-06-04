@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
         const reply = await callGeminiFallback(message);
         return NextResponse.json({ reply: `[Direct Gemini] ${reply}` });
       }
-    } catch (fallbackErr: any) {
+    } catch {
       const provider = IS_DEV ? 'Ollama' : 'Gemini';
       return NextResponse.json({
         reply: `[Error] Both Sam Brain and ${provider} fallback failed. Check connections. Error: ${e.message}`,

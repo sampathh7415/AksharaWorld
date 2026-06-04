@@ -1,7 +1,6 @@
 export const runtime = 'edge';
 import { NextRequest, NextResponse } from 'next/server';
 import { SheetsDb } from '../../../../lib/google/sheetsDb';
-import { DriveVault } from '../../../../lib/google/driveVault';
 import { GoogleAI } from '../../../../lib/google/googleAI';
 import { AnalyticsConsole } from '../../../../lib/google/analyticsConsole';
 

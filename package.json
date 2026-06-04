@@ -1,41 +1,12 @@
 {
-  "name": "dashboard",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "test:e2e": "playwright test"
-  },
-  "dependencies": {
-    "@clerk/nextjs": "^7.3.3",
-    "dotenv": "^17.4.2",
-    "firebase": "^11.0.2",
-    "firebase-admin": "^12.7.0",
-    "lucide-react": "^1.16.0",
-    "next": "^15.2.8",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pewdiepie-archdaemon/odysseus.git"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
-    "@playwright/test": "^1.49.0",
-    "playwright": "^1.49.0",
-    "@tailwindcss/postcss": "^4",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^6.0.2",
-    "eslint": "^9",
-    "eslint-config-next": "^15.2.8",
-    "jsdom": "^29.1.1",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "vitest": "^4.1.7"
+    "@antithesishq/bombadil": "^0.3.2"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.98.0"
   }
 }

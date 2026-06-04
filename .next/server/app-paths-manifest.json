@@ -1,0 +1,12 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/api/webhook/razorpay/route": "app/api/webhook/razorpay/route.js",
+  "/api/webhooks/razorpay/route": "app/api/webhooks/razorpay/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/api/firebase/test/route": "app/api/firebase/test/route.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/products/ai-blueprint/page": "app/products/ai-blueprint/page.js",
+  "/products/ai-blueprint/thank-you/page": "app/products/ai-blueprint/thank-you/page.js"
+}

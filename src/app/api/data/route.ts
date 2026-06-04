@@ -13,7 +13,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Razorpay keys missing' }, { status: 500 })
     }
 
-    const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64')
+    const auth = btoa(`${keyId}:${keySecret}`)
     
     // 1. Fetch Real Razorpay Data
     const [paymentsRes, paymentLinksRes] = await Promise.all([

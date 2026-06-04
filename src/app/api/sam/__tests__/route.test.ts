@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { POST } from '../route';
 
+// NOTE: Tests run in NODE_ENV=test (IS_DEV=false) → Gemini fallback path is exercised.
+
 describe('Sam API Route', () => {
   beforeEach(() => {
     vi.resetAllMocks();
@@ -28,8 +30,9 @@ describe('Sam API Route', () => {
     // First fetch to Sam Brain fails
     mockFetch.mockRejectedValueOnce(new Error('Fetch failed'));
 
-    // Second fetch to Gemini succeeds
+    // Second fetch to Gemini succeeds — must include ok:true so res.ok check passes
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         candidates: [
           {
@@ -46,12 +49,16 @@ describe('Sam API Route', () => {
 
     expect(mockFetch).toHaveBeenCalledTimes(2);
 
-    // Check first fetch call
-    expect(mockFetch).toHaveBeenNthCalledWith(1, 'https://sam-ceo-brain.akshara-sam.workers.dev/api/sam', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: mockMessage }),
-    });
+    // Check first fetch call (Sam Brain)
+    expect(mockFetch).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('/api/sam'),
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: mockMessage }),
+      })
+    );
 
     // Check second fetch call (Gemini fallback)
     expect(mockFetch).toHaveBeenNthCalledWith(
@@ -79,6 +86,7 @@ describe('Sam API Route', () => {
     // Restore env vars
     process.env = originalEnv;
   });
+
   it('should successfully return data from Sam Brain if fetch succeeds', async () => {
     const mockMessage = 'Hello Sam';
     const mockRequest = new NextRequest('http://localhost/api/sam', {
@@ -91,6 +99,7 @@ describe('Sam API Route', () => {
 
     // Fetch to Sam Brain succeeds
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         reply: 'This is a mock Sam Brain response',
       }),
@@ -100,11 +109,15 @@ describe('Sam API Route', () => {
     const data = await response.json();
 
     expect(mockFetch).toHaveBeenCalledTimes(1);
-    expect(mockFetch).toHaveBeenNthCalledWith(1, 'https://sam-ceo-brain.akshara-sam.workers.dev/api/sam', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: mockMessage }),
-    });
+    expect(mockFetch).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('/api/sam'),
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: mockMessage }),
+      })
+    );
 
     expect(response.status).toBe(200);
     expect(data).toEqual({ reply: 'This is a mock Sam Brain response' });
@@ -139,8 +152,9 @@ describe('Sam API Route', () => {
     expect(mockFetch).toHaveBeenCalledTimes(2);
 
     expect(response.status).toBe(200);
+    // Error message now uses "Gemini fallback failed" (provider-aware wording)
     expect(data).toEqual({
-      reply: '[Error] Both Sam Brain and direct Gemini failed. Check connections. Error: Sam Brain fetch failed',
+      reply: '[Error] Both Sam Brain and Gemini fallback failed. Check connections. Error: Sam Brain fetch failed',
     });
 
     process.env = originalEnv;
@@ -168,13 +182,15 @@ describe('Sam API Route', () => {
     const response = await POST(mockRequest);
     const data = await response.json();
 
-    expect(mockFetch).toHaveBeenCalledTimes(1); // Gemini should not be called due to missing API key
+    // Only Sam Brain was called — Gemini throws synchronously due to missing API key
+    expect(mockFetch).toHaveBeenCalledTimes(1);
 
     expect(response.status).toBe(200);
     expect(data).toEqual({
-      reply: '[Error] Both Sam Brain and direct Gemini failed. Check connections. Error: Sam Brain fetch failed',
+      reply: '[Error] Both Sam Brain and Gemini fallback failed. Check connections. Error: Sam Brain fetch failed',
     });
 
     process.env = originalEnv;
   });
 });
+

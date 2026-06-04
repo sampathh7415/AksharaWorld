@@ -1,0 +1,16 @@
+# Task: Open and demonstrate Claude Opus 4.7 Browser Demo
+
+## Checklist
+- [x] Open local HTML file: `index.html`
+- [x] Verify UI elements (sidebar, chips, chat area)
+- [x] Click 'Summarize content' quick-start chip
+- [ ] Wait for AI response
+- [ ] Capture screenshot of the interaction
+- [ ] Summarize functionality
+
+## Findings
+- Successfully opened the local file using the absolute path.
+- Interface looks professional with a sidebar, "Quick start" chips, and a chat input.
+- Elements confirmed: "Summarize content", "Reel caption", "Explain simply", "Rewrite pro" chips.
+- Interaction: Clicked "Summarize content", message "Summarize the following content in simple language for beginners" was sent.
+- Status: "Thinking..." state active.

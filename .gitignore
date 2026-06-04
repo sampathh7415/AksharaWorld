@@ -1,105 +1,92 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+!static/js/editor/build/
+venv/
+.venv/
+*.egg
 
-# dependencies
-/node_modules
-/package-lock.json
-/pnpm-lock.yaml
-/yarn.lock
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Environment
+.env
+.env.bak.*
+!.env.example
 
-# testing
-/coverage
+# Data — all user data stays local
+data/
+!services/hwfit/data/
+!services/hwfit/data/hf_models.json
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
 
-# next.js
-/.next/
-/out/
+# Node
+node_modules/
+services/node_modules/
+services/data/
 
-# production
-/build
+# IDE / Editor
+.aider*
+.claude/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# misc
+# Test capture artifacts (browser session dumps may contain personal content)
+.playwright-mcp/
+
+# OS
 .DS_Store
-*.pem
+Thumbs.db
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# Build artifacts
+*.cache
+cache/
+output.txt.txt
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# Antigravity/Gemini System Files
-/brain/
-/conversations/
-/browser_recordings/
-/implicit/
-/knowledge/
-/scratch/
-/antigravity-app/
-/node_modules_old_*/
-/mcp_config.json
-/installation_id
-/annotations/
-/html_artifacts/
-*.png
+# Media (uploaded/generated)
 *.jpg
 *.jpeg
+*.png
 *.gif
-/docker-compose.yml
-/Dockerfile
-/nginx.conf
+*.bmp
+*.webp
+*.tiff
+*.pdf
 
-# local code review graph
-.code-review-graph/
+# …except shipped demo assets in docs/ that the README links to.
+!docs/*.jpg
+!docs/*.jpeg
+!docs/*.png
+!docs/*.gif
+!docs/*.webp
+# …and curated docs/ subfolder assets (e.g. accessibility before/after shots).
+!docs/**/*.png
+!docs/**/*.jpg
+!docs/**/*.gif
+!docs/**/*.webp
 
-# Local databases & logs
-*.sqlite
-*.db
-openhuman-memory.json
-production-queue.json
-production-history.json
-*.mock
+# Reports and temp files
+reports/
+tasks/
+scripts/compound/*.json
+research_data/
+**/search_analytics.json
 
-# Floci persistent storage data
-/data/floci/
+# Internal dev/review notes — not for public repo
+dev-docs/
+# Windows-port working docs (local only, not for public repo)
+docs/windows-port/
 
-# Playwright Test Outputs
-/playwright-report/
-/test-results/
-/test-results-snapshots/
-*.trace
-
-# Local Netlify folder
-.netlify
-
-# Agent & Editor Tool Folders (local only, never commit)
-.claude/
-.cursor/
-.gemini/
-.kiro/
-.qoder/
-.vscode/
-.opencode.json
-.windsurfrules
-.mcp.json
-CLAUDE.md
-QODER.md
-
-# Old / corrupted node_modules backups
-/node_modules_old/
-/node_modules_corrupted_*/
+# Local config
+compound.config.json
+*.error.log
+_scratch/
+mcp_config.json

@@ -1,0 +1,45 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Opus Demo
+Professional workspace
+[0] (126,198)<button class='new-chat-btn' id='newChatBtn'>New conversation />
+	[1] (78,198)<span >+ />
+[2] (125,278)<div  />
+	[3] (105,278)<span >New conversation />
+[4] (125,321)<div  />
+	[5] (166,321)<span >Summarize the following content in simple lan... />
+[6] (126,409)<button class='clear-history-btn' id='clearBtn'>Clear history />
+MODEL INFO
+Model
+Claude Opus 4.7
+Provider
+Puter.js
+Interface
+Custom demo
+DISCLAIMER
+This is a custom browser demo for educational testing. It is not affiliated with Anthropic's official products.
+[7] (126,899)<button class='theme-toggle' id='themeToggle' />
+	[8] (49,899)<span >🌙 />
+	[9] (90,899)<span >Dark mode />
+Claude Opus 4.7
+Clean demo interface for on-screen walkthroughs
+Live
+Demo mode
+Quick start
+Select a starter prompt or type your own below.
+anthropic/claude-opus-4-7
+[10] (341,317)<button class='chip'>Summarize content />
+[11] (446,317)<button class='chip'>Reel caption />
+[12] (540,317)<button class='chip'>Explain simply />
+[13] (632,317)<button class='chip'>Rewrite pro />
+CLAUDE
+Welcome to the Claude Opus 4.7 demo interface.
+Try a quick-start chip above, or type a prompt — summaries, rewrites, code explanations, and creative drafts all work well.
+[14] (575,850)<textarea id='userInput' placeholder='Ask something — e.g. Explain this concept in simple terms…' />
+Send
+Short, practical prompts look best in demos.
+Claude is thinking...
+
+</current_dom>
