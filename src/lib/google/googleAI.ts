@@ -1,11 +1,12 @@
 /**
- * 🧠 GOOGLE AI TOOLS SUITE — Powered by Gemini API
+ * 🧠 GOOGLE AI TOOLS SUITE — Local-aware AI execution
  * Tools: Flow (Veo video), Vids, Illuminate (audio), Pomelli (ad copy),
  *        Jules (code review), Stitch (UI layout)
- * Uses GEMINI_API_KEY — already configured in .env.local
+ * Dev  → Ollama  (OLLAMA_BASE_URL / OLLAMA_MODEL)
+ * Prod → Gemini  (GEMINI_API_KEY)
  */
 
-import { resilientFetch } from '../resilience';
+import { callLocalAI } from '../ai/provider';
 
 export interface AIJob {
   id: string;
@@ -19,33 +20,8 @@ export interface AIJob {
   createdAt: string;
 }
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_URL     = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-
-/* ─────────────────────────────────────────────
-   Core Gemini call
-───────────────────────────────────────────── */
-async function callGemini(systemPrompt: string, userPrompt: string): Promise<string> {
-  if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
-
-  const data = await resilientFetch<any>(
-    `${GEMINI_URL}?key=${GEMINI_API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          { role: 'user', parts: [{ text: `${systemPrompt}\n\nTask: ${userPrompt}` }] }
-        ],
-        generationConfig: { temperature: 0.8, maxOutputTokens: 1024 },
-      }),
-      timeout: 30000,
-      retries: 3,
-    }
-  );
-
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
-}
+// Provider routing is handled by src/lib/ai/provider.ts
+// callLocalAI() → Ollama in dev, Gemini in prod
 
 /* ─────────────────────────────────────────────
    Tool-specific prompts
@@ -94,11 +70,11 @@ export class GoogleAI {
     };
     localAIJobs.unshift(newJob);
 
-    // Run Gemini in background
+    // Run AI job in background (Ollama in dev, Gemini in prod)
     (async () => {
       try {
         const systemPrompt = TOOL_SYSTEM_PROMPTS[tool];
-        const result = await callGemini(systemPrompt, prompt);
+        const result = await callLocalAI(systemPrompt, prompt);
 
         newJob.status   = 'completed';
         newJob.result   = result;
