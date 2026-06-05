@@ -1,0 +1,16 @@
+﻿{
+  "name": "sam-desktop",
+  "version": "1.0.0",
+  "description": "Sam AI Agent Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --remote-debugging-port=9222"
+  },
+  "dependencies": {
+    "electron": "^latest",
+    "ollama": "^0.5.0",
+    "axios": "^1.6.0",
+    "sqlite3": "^5.1.6"
+  }
+}

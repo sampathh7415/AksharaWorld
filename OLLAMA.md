@@ -5,7 +5,7 @@ This repository already includes an `ollama` service in `docker-compose.yml`.
 ## Start the local stack
 
 ```powershell
-cd /Users/Lenovo/AksharaWorld-git
+cd "G:\My Drive\Antigravity"
 docker compose -f docker-compose.yml up -d
 ```
 

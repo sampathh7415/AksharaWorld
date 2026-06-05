@@ -1,6 +1,8 @@
 export const runtime = 'edge';
 import { NextResponse } from 'next/server';
 
+import { callLocalAI } from '@/lib/ai/provider';
+
 const SAM_BRAIN_URL = process.env.SAM_BRAIN_URL || process.env.NEXT_PUBLIC_SAM_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';
 
 interface SamRequest {
@@ -13,10 +15,12 @@ interface SamResponse {
   action?: string;
 }
 
+const SAM_SYSTEM_PROMPT = `You are Sam, AI CEO of Akshara World. Be concise, action-oriented, and make strategic business decisions using your multi-model capability.`;
+
 /**
  * 🤖 SAM BRAIN CEO INTERFACE
  * Routes user queries to Sam AI CEO for autonomous business decisions
- * Integrated with Cloudflare Worker backend
+ * Integrated with Cloudflare Worker backend or local Ollama in dev
  */
 export async function POST(request: Request) {
   try {
@@ -29,6 +33,27 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Local-first development routing
+    if (process.env.NODE_ENV === 'development') {
+      const reply = await callLocalAI(SAM_SYSTEM_PROMPT, message, 'sam');
+      console.log('[Sam Local Decision]', {
+        query: message,
+        reply,
+        confidence: 0.95,
+        timestamp: new Date().toISOString(),
+      });
+      return NextResponse.json(
+        {
+          status: 'success',
+          reply,
+          confidence: 0.95,
+          action: 'sam_local_response',
+        },
+        { status: 200 }
+      );
+    }
+
 
     // Call Sam Brain Cloudflare Worker
     const samResponse = await fetch(`${SAM_BRAIN_URL}/ask`, {

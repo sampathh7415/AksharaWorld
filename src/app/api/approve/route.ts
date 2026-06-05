@@ -1,6 +1,9 @@
 export const runtime = 'edge';
 import { NextResponse } from 'next/server';
 
+import { SheetsDb } from '../../../lib/google/sheetsDb';
+import { sendTelegramAlert } from '../../../lib/telegram';
+
 interface ApprovalRequest {
   id: string;
   action: 'approve' | 'reject';
@@ -9,7 +12,7 @@ interface ApprovalRequest {
 /**
  * 🔏 APPROVAL DECISION LOGGER
  * Handles approval/rejection of pending business decisions
- * Currently logs to console (TODO: Persist to Supabase)
+ * Updates SheetsDb queue and alerts the owner on Telegram
  */
 export async function POST(request: Request) {
   try {
@@ -23,19 +26,25 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: Integrate Supabase persistence here
-    // For now, just log the decision
+    // Update state in Google Sheets / local queue state
+    const mappedStatus = action === 'approve' ? 'approved' : 'rejected';
+    await SheetsDb.updateQueueStatus(id, mappedStatus);
+
     const approvalRecord = {
       id,
-      action,
+      action: mappedStatus,
       timestamp: new Date().toISOString(),
-      approvedBy: 'admin', // TODO: Get from JWT
+      approvedBy: 'admin',
     };
 
     console.log('[Approval Logger]', approvalRecord);
 
-    // 🔔 TODO: Send Telegram notification on approval
-    // await sendTelegramNotification(`✅ Decision logged: ${id} → ${action}`);
+    // Send Telegram notification
+    try {
+      await sendTelegramAlert(`<b>[Decision Logged]</b>\nID: <code>${id}</code>\nAction: <b>${mappedStatus.toUpperCase()}</b>\nTimestamp: <i>${approvalRecord.timestamp}</i>`);
+    } catch (tgErr: any) {
+      console.warn('[Telegram Alert Failed]', tgErr.message);
+    }
 
     return NextResponse.json(
       {
@@ -53,3 +62,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

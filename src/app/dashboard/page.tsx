@@ -9,6 +9,7 @@ const NAV = [
   { id: '30dayops', icon: '📋', label: '30-Day Ops' },
   { id: 'departments', icon: '🏢', label: 'Departments' },
   { id: 'approvals', icon: '✅', label: 'Approvals Queue' },
+  { id: 'jobs', icon: '🤖', label: 'AI Jobs Queue' },
   { id: 'sam', icon: '💬', label: 'Chat with Sam' },
   { id: 'resources', icon: '⚙️', label: 'Resource Inventory' },
   { id: 'changelog', icon: '📜', label: 'Change Log' },
@@ -43,7 +44,13 @@ const RESOURCES = [
   ['GitHub', 'GitHub', 'Code', 'Connected', 'Free', 'green'],
   ['Razorpay Gateway', 'Razorpay', 'Payments', 'Connected', 'Live', 'green'],
   ['Telegram Webhook', 'Telegram', 'Alerts', 'Active', 'Free', 'green'],
+  ['Ollama Sam (qwen3.6)', 'Ollama (Local)', 'AI (CEO Reasoning)', 'Active', 'Free (Local)', 'green'],
+  ['Ollama Stitch (qwen3.6)', 'Ollama (Local)', 'AI (UI Design)', 'Active', 'Free (Local)', 'green'],
+  ['Ollama Creative (gemma4)', 'Ollama (Local)', 'AI (Generative)', 'Active', 'Free (Local)', 'green'],
+  ['Ollama Code (qwen2.5-coder)', 'Ollama (Local)', 'AI (Engineering)', 'Active', 'Free (Local)', 'green'],
+  ['Ollama Fast (llama3)', 'Ollama (Local)', 'AI (Fast queries)', 'Active', 'Free (Local)', 'green'],
 ];
+
 
 function now() { 
   return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); 
@@ -69,6 +76,9 @@ export default function Dashboard() {
     { id: 'APR-004', dept: 'Revenue_Vault', title: 'Sheets Webhook Sync', desc: 'Authorize daily Apps Script log entry transaction backup sync', status: 'pending' },
     { id: 'APR-005', dept: 'Growth_Engine', title: 'WhatsApp Outbound Thread', desc: 'Activate WhatsApp notification pipeline trigger for leads list', status: 'pending' },
   ]);
+
+  // AI Jobs Queue State
+  const [aiJobs, setAiJobs] = useState<any[]>([]);
 
   const router = useRouter();
 
@@ -102,7 +112,18 @@ export default function Dashboard() {
     } catch (err) {
       console.warn('Failed to fetch real-time telemetry:', err);
     }
+
+    try {
+      const jobsRes = await fetch('/api/google/ai-jobs');
+      if (jobsRes.ok) {
+        const jobs = await jobsRes.json();
+        setAiJobs(jobs);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch AI jobs telemetry:', err);
+    }
   };
+
 
   const handleLogout = async () => {
     setLoading(true);
@@ -492,6 +513,54 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* TAB 5: AI JOBS QUEUE */}
+        {active === 'jobs' && (
+          <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-6">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">🤖 Google AI Suite & local model jobs queue</span>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-white/5 text-slate-500 font-bold uppercase tracking-wider text-[10px] pb-4">
+                    <th className="pb-4">Job ID</th>
+                    <th className="pb-4">Tool</th>
+                    <th className="pb-4">Model Used</th>
+                    <th className="pb-4">Output File</th>
+                    <th className="pb-4">Status</th>
+                    <th className="pb-4 text-right">Time Index</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.02] text-slate-300 font-medium">
+                  {aiJobs.map((job: any, i: number) => (
+                    <tr key={i} className="hover:bg-white/[0.01]">
+                      <td className="py-4 font-mono text-cyan-400">{job.id}</td>
+                      <td className="py-4 text-white font-bold">{job.tool}</td>
+                      <td className="py-4 font-mono text-slate-400">{job.model || 'unknown'}</td>
+                      <td className="py-4 font-mono text-slate-300">{job.outputName}</td>
+                      <td className="py-4">
+                        <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold ${
+                          job.status === 'completed' 
+                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                            : job.status === 'rendering' 
+                            ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 animate-pulse'
+                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                        }`}>
+                          {job.status}
+                        </span>
+                      </td>
+                      <td className="py-4 text-right text-slate-500">{new Date(job.createdAt).toLocaleTimeString()}</td>
+                    </tr>
+                  ))}
+                  {aiJobs.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-slate-500">No active AI jobs queued.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* TAB 6: RESOURCE INVENTORY */}
         {active === 'resources' && (
           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-6">
@@ -532,26 +601,49 @@ export default function Dashboard() {
         {/* TAB 7: CHANGE LOG */}
         {active === 'changelog' && (
           <div className="max-w-2xl mx-auto w-full p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-6">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">📜 Engineering Version Changelog</span>
-            <div className="space-y-6 font-semibold text-xs leading-relaxed text-slate-300">
-              <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
-                <div className="flex justify-between items-center text-[10px] text-cyan-400 font-bold uppercase tracking-wider">
-                  <span>Version 2.2 Release</span>
-                  <span>30-May-2026</span>
-                </div>
-                <p>Restructured Next.js layouts, added secure cookie-based JWT edge authentication middleware, and implemented real-time analytics aggregation api endpoints.</p>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">📜 Engineering Version Changelog & system logs</span>
+            
+            <div className="space-y-4">
+              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest block">System Execution Logs (Google Sheets / Local Ledger)</span>
+              <div className="space-y-3 font-semibold text-xs leading-relaxed text-slate-300">
+                {(data?.systemLogs || []).map((log: any, i: number) => (
+                  <div key={i} className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                    <div className="flex justify-between items-center text-[10px] text-cyan-400 font-bold uppercase tracking-wider">
+                      <span>{log.department}</span>
+                      <span className="text-slate-500">{new Date(log.timestamp).toLocaleString()}</span>
+                    </div>
+                    <p className="text-slate-300 font-medium">{log.message}</p>
+                  </div>
+                ))}
+                {(!data?.systemLogs || data.systemLogs.length === 0) && (
+                  <p className="text-slate-500 text-center py-4">No system logs loaded.</p>
+                )}
               </div>
+            </div>
 
-              <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
-                <div className="flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                  <span>Version 2.1 Release</span>
-                  <span>28-May-2026</span>
+            <div className="border-t border-white/5 pt-6 space-y-6">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Version Releases</span>
+              <div className="space-y-6 font-semibold text-xs leading-relaxed text-slate-300">
+                <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                  <div className="flex justify-between items-center text-[10px] text-cyan-400 font-bold uppercase tracking-wider">
+                    <span>Version 2.2 Release</span>
+                    <span>30-May-2026</span>
+                  </div>
+                  <p>Restructured Next.js layouts, added secure cookie-based JWT edge authentication middleware, and implemented real-time analytics aggregation api endpoints.</p>
                 </div>
-                <p>Wired sheetsDb backend to Google Apps Script webhook api, added payment capture webhook hooks, and connected Google Merchant feeds.</p>
+
+                <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                  <div className="flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                    <span>Version 2.1 Release</span>
+                    <span>28-May-2026</span>
+                  </div>
+                  <p>Wired sheetsDb backend to Google Apps Script webhook api, added payment capture webhook hooks, and connected Google Merchant feeds.</p>
+                </div>
               </div>
             </div>
           </div>
         )}
+
       </main>
     </div>
   );
