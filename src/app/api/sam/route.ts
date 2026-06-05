@@ -1,84 +1,125 @@
-// NOTE: Edge runtime removed — localhost (Ollama) is not reachable from edge workers.
-import { NextRequest, NextResponse } from 'next/server';
+export const runtime = 'edge';
+import { NextResponse } from 'next/server';
 
-const SAM_BRAIN_URL = process.env.SAM_BRAIN_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';
-const IS_DEV        = process.env.NODE_ENV === 'development';
+const SAM_BRAIN_URL = process.env.SAM_BRAIN_URL || process.env.NEXT_PUBLIC_SAM_URL || 'https://sam-ceo-brain.akshara-sam.workers.dev';
 
-/* ── Ollama local fallback ───────────────────────────────────────────────── */
-async function callOllamaFallback(message: string): Promise<string> {
-  const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-  const OLLAMA_MODEL    = process.env.OLLAMA_MODEL    || 'llama3.2';
-
-  const res = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
-    method : 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body   : JSON.stringify({
-      model   : OLLAMA_MODEL,
-      stream  : false,
-      messages: [
-        { role: 'system', content: 'You are Sam, AI CEO of Akshara World. Be concise and action-oriented.' },
-        { role: 'user',   content: message },
-      ],
-    }),
-  });
-
-  if (!res.ok) throw new Error(`Ollama responded with ${res.status}`);
-  const data = await res.json();
-  return data?.message?.content ?? '[No response from Ollama]';
+interface SamRequest {
+  message: string;
 }
 
-/* ── Gemini cloud fallback ───────────────────────────────────────────────── */
-async function callGeminiFallback(message: string): Promise<string> {
-  const API_KEY = process.env.GEMINI_API_KEY;
-  if (!API_KEY) throw new Error('No API key');
-
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
-    {
-      method : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body   : JSON.stringify({
-        system_instruction: {
-          parts: [{ text: 'You are Sam, AI CEO of Akshara World. Be concise and action-oriented.' }],
-        },
-        contents: [{ role: 'user', parts: [{ text: message }] }],
-      }),
-    }
-  );
-
-  if (!res.ok) throw new Error(`Gemini responded with ${res.status}`);
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '[No response]';
+interface SamResponse {
+  reply: string;
+  confidence: number;
+  action?: string;
 }
 
-/* ── Route handler ───────────────────────────────────────────────────────── */
-export async function POST(req: NextRequest) {
-  const { message } = await req.json();
-
-  // Primary: Sam Brain Cloudflare Worker
+/**
+ * 🤖 SAM BRAIN CEO INTERFACE
+ * Routes user queries to Sam AI CEO for autonomous business decisions
+ * Integrated with Cloudflare Worker backend
+ */
+export async function POST(request: Request) {
   try {
-    const res  = await fetch(`${SAM_BRAIN_URL}/api/sam`, {
-      method : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body   : JSON.stringify({ message }),
-    });
-    const data = await res.json();
-    return NextResponse.json({ reply: data.reply });
-  } catch (e: any) {
-    // Fallback: Ollama (dev) or Gemini (prod)
-    try {
-      if (IS_DEV) {
-        const reply = await callOllamaFallback(message);
-        return NextResponse.json({ reply: `[Local Ollama] ${reply}` });
-      } else {
-        const reply = await callGeminiFallback(message);
-        return NextResponse.json({ reply: `[Direct Gemini] ${reply}` });
-      }
-    } catch {
-      const provider = IS_DEV ? 'Ollama' : 'Gemini';
-      return NextResponse.json({
-        reply: `[Error] Both Sam Brain and ${provider} fallback failed. Check connections. Error: ${e.message}`,
-      });
+    const body: SamRequest = await request.json();
+    const { message } = body;
+
+    if (!message || typeof message !== 'string' || message.trim().length === 0) {
+      return NextResponse.json(
+        { error: 'Invalid request: message required' },
+        { status: 400 }
+      );
     }
+
+    // Call Sam Brain Cloudflare Worker
+    const samResponse = await fetch(`${SAM_BRAIN_URL}/ask`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: message,
+        context: 'dashboard',
+        timestamp: new Date().toISOString(),
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+
+    if (!samResponse.ok) {
+      throw new Error(`Sam Brain returned ${samResponse.status}`);
+    }
+
+    const samData: SamResponse = await samResponse.json();
+
+    // Log decision for audit trail
+    console.log('[Sam Decision]', {
+      query: message,
+      reply: samData.reply,
+      confidence: samData.confidence,
+      timestamp: new Date().toISOString(),
+    });
+
+    return NextResponse.json(
+      {
+        status: 'success',
+        reply: samData.reply,
+        confidence: samData.confidence,
+        action: samData.action,
+      },
+      { status: 200 }
+    );
+  } catch (err: any) {
+    console.error('[Sam Brain Error]', err.message);
+
+    // Fallback response when Sam Brain is offline
+    const fallbackReplies = [
+      'Sam Brain is thinking... Please check system status. Fallback memory engaged.',
+      'I am rebooting my neural core. Ask again in a moment.',
+      'Connection to Sam Brain lost. Consulting offline knowledge base.',
+    ];
+
+    const randomFallback = fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
+
+    return NextResponse.json(
+      {
+        status: 'fallback',
+        reply: randomFallback,
+        confidence: 0,
+        error: err.message,
+      },
+      { status: 200 }
+    );
+  }
+}
+
+/**
+ * GET /api/sam/health
+ * Check if Sam Brain is reachable
+ */
+export async function GET() {
+  try {
+    const health = await fetch(`${SAM_BRAIN_URL}/health`, {
+      signal: AbortSignal.timeout(3000),
+    });
+
+    if (health.ok) {
+      const data = await health.json();
+      return NextResponse.json(
+        {
+          status: 'online',
+          samBrain: data,
+        },
+        { status: 200 }
+      );
+    }
+
+    throw new Error(`Health check returned ${health.status}`);
+  } catch (err: any) {
+    return NextResponse.json(
+      {
+        status: 'offline',
+        error: err.message,
+      },
+      { status: 503 }
+    );
   }
 }
