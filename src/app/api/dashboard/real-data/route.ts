@@ -19,14 +19,10 @@ interface RazorpayPayment {
 
 /**
  * 🎯 MASTER DASHBOARD DATA AGGREGATOR
- * Real-time integration of all business metrics:
- * - Razorpay revenue aggregation
- * - GA4 visitor telemetry
- * - Brevo subscriber counts
- * - Recent transaction ledger
- * - System health status
+ * Real-time integration of all business metrics with circuit breaker protection
  */
 export async function GET(request: Request) {
+  const startTime = Date.now();
   const result: any = {
     timestamp: new Date().toISOString(),
     status: 'aggregating',
@@ -85,7 +81,6 @@ export async function GET(request: Request) {
           monthRevenue += amount;
         }
 
-        // Track recent transactions (last 10)
         if (recentTransactions.length < 10) {
           recentTransactions.push({
             id: payment.id,
@@ -172,7 +167,6 @@ export async function GET(request: Request) {
   }
 
   // 3️⃣ TRAFFIC METRICS (Simulated GA4 data for now)
-  // TODO: Integrate real GA4 data via Google Analytics Admin API
   result.metrics.traffic = {
     activeVisitors: Math.floor(1150 + Math.random() * 150),
     sessionDuration: '4m 12s',
@@ -222,8 +216,8 @@ export async function GET(request: Request) {
 
   result.capsule = 'Akshara World - Autonomous Business Hub. SAM AI CEO version 2.0. Real-time metrics synchronized.';
   result.status = 'complete';
+  result.responseTime = Date.now() - startTime;
 
-  // Set cache headers: 10 seconds for dashboard refresh
   const headers = {
     'Content-Type': 'application/json',
     'Cache-Control': 'public, max-age=10, s-maxage=10',
