@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter, Outfit } from 'next/font/google';
 import Script from 'next/script';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ConsentBanner } from '../components/ConsentBanner';
 import AksharaChatWidget from '../components/AksharaChatWidget';
 import ClerkHeaderWrapper from '../components/ClerkHeaderWrapper';
@@ -136,6 +137,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ConsentBanner />
           {/* ✅ Floating AI Support Specialist Widget (Akshara) */}
           <AksharaChatWidget />
+          {/* ✅ Vercel Speed Insights — Performance monitoring */}
+          <SpeedInsights />
         </ClerkProvider>
       </body>
     </html>
