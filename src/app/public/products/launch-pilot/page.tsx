@@ -19,6 +19,7 @@ const TIERS = [
     badge: 'bg-amber-50 text-amber-700',
     border: 'border-amber-200',
     highlight: false,
+    link: 'EARLYBIRD_LINK_PENDING',
   },
   {
     name: 'Standard',
@@ -28,6 +29,7 @@ const TIERS = [
     badge: 'bg-indigo-50 text-indigo-700',
     border: 'border-indigo-300',
     highlight: true,
+    link: 'STANDARD_LINK_PENDING',
   },
   {
     name: 'Premium',
@@ -37,6 +39,7 @@ const TIERS = [
     badge: 'bg-slate-100 text-slate-700',
     border: 'border-slate-300',
     highlight: false,
+    link: 'https://rzp.io/rzp/mYWik9r2',
   },
 ];
 
@@ -79,7 +82,7 @@ export default function LaunchPilotPage() {
               <div className="text-3xl font-black mb-1">{t.price}</div>
               <div className="text-lg font-bold text-slate-700 mb-6">{t.name}</div>
               <a
-                href="https://rzp.io/rzp/9O1zMeI"
+                href={t.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`block w-full text-center py-3 rounded-2xl font-bold text-white bg-gradient-to-r ${t.color} hover:opacity-90 transition-opacity`}
@@ -122,7 +125,7 @@ export default function LaunchPilotPage() {
           <h2 className="text-3xl font-black mb-3">Ready to start?</h2>
           <p className="text-white/70 mb-8 text-lg">First 5 seats at ₹999 early-bird. Then ₹1,500 standard.</p>
           <a
-            href="https://rzp.io/rzp/9O1zMeI"
+            href="EARLYBIRD_LINK_PENDING"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-10 py-4 bg-white text-indigo-700 font-black rounded-2xl hover:bg-indigo-50 transition-colors shadow-xl"

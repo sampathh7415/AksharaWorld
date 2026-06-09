@@ -95,7 +95,7 @@ export default function LandingPage() {
                className="px-8 py-4 rounded-full bg-white text-black font-bold hover:bg-cyan-400 transition-colors shadow-xl">
               🚀 View Full Offer
             </a>
-            <a href="https://rzp.io/rzp/9O1zMeI" target="_blank" rel="noopener noreferrer"
+            <a href="https://rzp.io/rzp/mYWik9r2" target="_blank" rel="noopener noreferrer"
                className="px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold hover:opacity-90 transition-opacity">
               Pay with Razorpay →
             </a>
