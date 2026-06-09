@@ -37,3 +37,20 @@ This repository has an active code knowledge graph.
 *   **Frontend**: Next.js 16 (React 19), TypeScript, and **Vanilla CSS** (defined in `style.css` and local `.css` files). Do NOT inject TailwindCSS unless explicitly requested.
 *   **Backend**: Python 3.14 FastAPI local daemon (`sam/main.py`) running on port `8765`, SQLite vector memory using `fastembed`, and Electron desktop wrapper (`sam-desktop/`).
 *   **Windows Environment**: Always support PowerShell compatibility. Use `;` instead of `&&` for chain commands, and use standard Windows paths.
+
+---
+
+## 📐 5. VIBE-CODING FILE-DRIVEN ARCHITECTURE
+This project strictly enforces the "Vibe Coder" file-driven development architecture. You must adhere to the following rules:
+
+### A. Mandated Files
+You must maintain the following 4 files in the project root:
+1. **`prd.md`**: Defines the MVP scope, target audience, and explicit "Out of Scope" restrictions to prevent feature creep.
+2. **`implementation_plan.md`**: A chronological technical checklist broken down by phases (Setup -> Database -> Backend -> Frontend UI).
+3. **`task_today.md`**: Isolates the current 2-hour task focus. Refuse coding requests unless the target file/task matches the active task in `task_today.md`.
+4. **`audit.md`**: A checklist verification script to verify no orphaned files or Windows absolute path prefix bugs exist before code validation.
+
+### B. Execution Rules
+* **Task Locking**: Refuse to execute code modifications or terminal executions unless they directly correspond to the active task outlined in `task_today.md`.
+* **VibeUI Frontend Standard**: When writing frontend code, prioritize clean, highly responsive, modular layout components with standard styling patterns. Avoid raw, ad-hoc inline styling; use consistent CSS classes.
+* **Defensive Pathing**: NEVER write or execute absolute Windows path prefixes (e.g. `C:\...`) in Node.js/Python imports, dynamic imports, or settings configurations. Utilize relative paths (e.g., `./` or `../`) or proper URL schemas (e.g., `file:///C:/...`) to avoid ESM loader errors.
