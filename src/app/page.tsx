@@ -142,7 +142,7 @@ export default function HomePage() {
               originalPrice="₹2,999"
               isPopular={true}
               badge="Top Choice"
-              checkoutUrl="https://rzp.io/rzp/9O1zMeI"
+              checkoutUrl="https://rzp.io/rzp/0TOrciXs"
               detailUrl="#"
               features={[
                 'Complete Google Docs ATS restructuring',
@@ -161,7 +161,7 @@ export default function HomePage() {
               price="₹2,499"
               originalPrice="₹7,499"
               isPopular={false}
-              checkoutUrl="https://rzp.io/rzp/9O1zMeI"
+              checkoutUrl="https://rzp.io/rzp/99EGjtLi"
               detailUrl="#"
               features={[
                 'Custom Pixar-style 3D avatar design',

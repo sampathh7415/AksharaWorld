@@ -3,13 +3,13 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PHASE-0-PAYMENT-LINKS
+* **Task ID**: PHASE-0-PAYMENT-LINKS-FINAL
 * **Target Files**:
-  - `src/app/public/products/ai-blueprint/page.tsx`
+  - `src/app/page.tsx`
   - `src/app/public/products/launch-pilot/page.tsx`
-  - `src/app/public/page.tsx`
-* **Focus Goal**: Update Razorpay payment link description via API, fix redirects/CTAs in frontend pages, and commit to main.
-* **Start Time**: 2026-06-09T22:50:00+05:30
+  - `src/app/public/products/ai-blueprint/page.tsx`
+* **Focus Goal**: Complete all Razorpay payment link configuration for all products and push to main.
+* **Start Time**: 2026-06-09T23:01:00+05:30
 
 ---
 
