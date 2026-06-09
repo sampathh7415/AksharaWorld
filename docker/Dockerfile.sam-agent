@@ -1,0 +1,46 @@
+# ============================================================
+# docker/Dockerfile.sam-agent — Sam Python agent container
+# ============================================================
+FROM python:3.12-slim AS base
+
+LABEL maintainer="Akshara World <info@aksharaworld.in>"
+LABEL description="Sam AI Agent daemon"
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    git \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Non-root user
+RUN useradd -m -u 1000 sam
+WORKDIR /app
+RUN chown sam:sam /app
+
+# Python dependencies
+COPY requirements.txt requirements-sam.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-sam.txt
+
+# Install Playwright for browse() tool
+RUN python -m playwright install chromium --with-deps 2>/dev/null || true
+
+USER sam
+
+# Copy application code
+COPY --chown=sam:sam sam/ ./sam/
+COPY --chown=sam:sam core/ ./core/ 2>/dev/null || true
+COPY --chown=sam:sam src/ ./src/ 2>/dev/null || true
+
+# Data directory
+RUN mkdir -p /app/sam-data
+
+EXPOSE 8765
+
+HEALTHCHECK --interval=10s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -sf http://localhost:8765/api/health || exit 1
+
+CMD ["python", "-m", "sam.main"]

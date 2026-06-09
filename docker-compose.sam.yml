@@ -1,0 +1,143 @@
+# ============================================================
+# docker-compose.sam.yml — Sam local agent one-command setup
+#
+# Usage:
+#   docker compose -f docker-compose.sam.yml up -d
+#
+# Prerequisites:
+#   1. Copy sam.env.example → sam.env and fill in your values.
+#   2. Install Docker Desktop with GPU support (optional).
+#   3. Run: mkdir -p sam-data/voice
+#      Download voice models to sam-data/voice/ (see sam.env.example)
+# ============================================================
+
+services:
+
+  # ── Ollama: Local LLM server ─────────────────────────────────────────────
+  ollama:
+    image: docker.io/ollama/ollama:latest
+    container_name: sam-ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_NUM_PARALLEL=2
+      - OLLAMA_MAX_LOADED_MODELS=2
+    # GPU support: uncomment the block matching your hardware
+    # ── NVIDIA ───────────────────────────────────────────────
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    # ── AMD (ROCm) ───────────────────────────────────────────
+    # devices:
+    #   - /dev/kfd:/dev/kfd
+    #   - /dev/dri:/dev/dri
+    # group_add:
+    #   - video
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:11434/api/tags || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # ── Ollama model pull: pulls qwen3.6 on first run ───────────────────────
+  ollama-pull:
+    image: docker.io/ollama/ollama:latest
+    container_name: sam-ollama-pull
+    volumes:
+      - ollama-models:/root/.ollama
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+        echo 'Pulling models…';
+        ollama pull ${SAM_MODEL:-qwen3.6} &&
+        ollama pull ${SAM_MODEL_FAST:-llama3:8b} &&
+        echo 'Models ready.';
+      "
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    restart: on-failure
+
+  # ── Sam Agent: Python FastAPI backend ────────────────────────────────────
+  sam-agent:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.sam-agent
+    container_name: sam-agent
+    ports:
+      - "${SAM_BIND:-127.0.0.1}:${SAM_PORT:-8765}:8765"
+    volumes:
+      - ./sam-data:/app/sam-data:z
+      - ./sam:/app/sam:z            # live-reload dev mode
+    env_file:
+      - sam.env
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - SAM_DATA_DIR=/app/sam-data
+      - SAM_MEMORY_DB=/app/sam-data/sam.db
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8765/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+  # ── Sam Voice: Node.js Whisper + Piper microservice ──────────────────────
+  # Note: Microphone access requires --device /dev/snd on Linux.
+  # For Windows/Mac, run the voice service natively (not in Docker).
+  sam-voice:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.sam-voice
+    container_name: sam-voice
+    ports:
+      - "127.0.0.1:8178:8178"   # Whisper server
+    volumes:
+      - ./sam-data/voice:/app/voice:z
+    env_file:
+      - sam.env
+    environment:
+      - SAM_AGENT_URL=http://sam-agent:8765
+    # Uncomment for Linux microphone access:
+    # devices:
+    #   - /dev/snd:/dev/snd
+    depends_on:
+      sam-agent:
+        condition: service_healthy
+    restart: unless-stopped
+    profiles:
+      - voice   # Only starts when: docker compose --profile voice up
+
+  # ── ChromaDB: Vector store (reused from main compose if running) ─────────
+  chromadb:
+    image: docker.io/chromadb/chroma:latest
+    container_name: sam-chromadb
+    ports:
+      - "127.0.0.1:8100:8000"
+    volumes:
+      - chromadb-data:/chroma/chroma
+    environment:
+      - ANONYMIZED_TELEMETRY=FALSE
+    restart: unless-stopped
+    profiles:
+      - rag   # Only starts when: docker compose --profile rag up
+
+volumes:
+  ollama-models:
+    name: sam-ollama-models
+  chromadb-data:
+    name: sam-chromadb-data
