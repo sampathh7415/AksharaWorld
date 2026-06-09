@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -108,7 +111,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .vercel/output/static --project-name=akshara-dashboard
+          command: pages deploy .vercel/output/static --project-name=aksharaworld
 
       # ── Summary ───────────────────────────────────────────────────────────
       - name: Deployment summary
