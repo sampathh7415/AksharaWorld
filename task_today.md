@@ -3,15 +3,13 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PATH-RESOLVE-001
+* **Task ID**: PHASE-0-CLEANUP
 * **Target Files**:
-  - `src/builtin_mcp.py`
-  - `src/lib/BackupService.ts`
-  - `services/antigravity/agent.ts`
-  - `core/platform_compat.py`
-  - `.vscode/settings.json`
-* **Focus Goal**: Resolve all absolute path violations and package manager/lockfile conflicts permanently.
-* **Start Time**: 2026-06-09T22:18:00+05:30
+  - `package.json`
+  - `NEW_PLAN.md`
+  - `src/app/page.tsx`
+* **Focus Goal**: Phase 0 package.json fix, NEW_PLAN.md creation, search Razorpay links, close PRs.
+* **Start Time**: 2026-06-09T22:35:00+05:30
 
 ---
 
