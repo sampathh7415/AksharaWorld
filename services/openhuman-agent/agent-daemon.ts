@@ -59,7 +59,8 @@ export class OpenHumanAgentDaemon {
     try {
       let queue: ProductionTask[] = [];
       try {
-        queue = JSON.parse(fs.readFileSync(this.queuePath, 'utf8'));
+        const queueData = await fs.promises.readFile(this.queuePath, 'utf8');
+        queue = JSON.parse(queueData);
       } catch {
         return;
       }
@@ -72,12 +73,11 @@ export class OpenHumanAgentDaemon {
       const geminiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
       let history: ProductionTask[] = [];
-      if (fs.existsSync(this.historyPath)) {
-        try {
-          history = JSON.parse(fs.readFileSync(this.historyPath, 'utf8'));
-        } catch {
-          history = [];
-        }
+      try {
+        const historyData = await fs.promises.readFile(this.historyPath, 'utf8');
+        history = JSON.parse(historyData);
+      } catch {
+        history = [];
       }
 
       for (const task of queue) {
@@ -120,8 +120,8 @@ export class OpenHumanAgentDaemon {
       }
 
       // Save processed history & clear queue
-      fs.writeFileSync(this.historyPath, JSON.stringify(history, null, 2), 'utf8');
-      fs.writeFileSync(this.queuePath, JSON.stringify([], null, 2), 'utf8');
+      await fs.promises.writeFile(this.historyPath, JSON.stringify(history, null, 2), 'utf8');
+      await fs.promises.writeFile(this.queuePath, JSON.stringify([], null, 2), 'utf8');
 
     } catch (e: any) {
       console.error(`[OpenHuman Daemon] Production queue processing failed: ${e.message}`);
@@ -176,16 +176,15 @@ export class OpenHumanAgentDaemon {
   private async indexToStorage(events: EventPayload[]): Promise<void> {
     try {
       let currentMemories: EventPayload[] = [];
-      if (fs.existsSync(this.jsonPath)) {
-        try {
-          currentMemories = JSON.parse(fs.readFileSync(this.jsonPath, 'utf8'));
-        } catch {
-          currentMemories = [];
-        }
+      try {
+        const data = await fs.promises.readFile(this.jsonPath, 'utf8');
+        currentMemories = JSON.parse(data);
+      } catch {
+        currentMemories = [];
       }
 
       currentMemories = [...events, ...currentMemories].slice(0, 100);
-      fs.writeFileSync(this.jsonPath, JSON.stringify(currentMemories, null, 2), 'utf8');
+      await fs.promises.writeFile(this.jsonPath, JSON.stringify(currentMemories, null, 2), 'utf8');
       console.log(`[OpenHuman Daemon] Successfully indexed ${events.length} events to solid-state memory.`);
     } catch (e: any) {
       console.error(`[OpenHuman Daemon] Storage indexing failed: ${e.message}`);

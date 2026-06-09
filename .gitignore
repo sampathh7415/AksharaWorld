@@ -91,3 +91,4 @@ compound.config.json
 _scratch/
 mcp_config.json
 .vercel
+.next/
