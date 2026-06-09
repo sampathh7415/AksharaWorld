@@ -13,11 +13,11 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   const tokenObj = cookieStore.get('admin_token');
   const token = tokenObj?.value;
   
-  const authSecret = process.env.AUTH_SECRET || 'akshara_jwt_secret_token_2026';
+  const authSecret = process.env.AUTH_SECRET;
   
   let authenticated = false;
   
-  if (token) {
+  if (token && authSecret) {
     const verified = await verifyJWT(token, authSecret);
     if (verified && verified.role === 'admin') {
       authenticated = true;

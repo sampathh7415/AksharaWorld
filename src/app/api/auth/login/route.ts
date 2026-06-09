@@ -6,8 +6,12 @@ export async function POST(req: NextRequest) {
   try {
     const { password } = await req.json();
     
-    const adminPassword = process.env.ADMIN_PASSWORD || 'akshara_admin_2026';
-    const authSecret = process.env.AUTH_SECRET || 'akshara_jwt_secret_token_2026';
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const authSecret = process.env.AUTH_SECRET;
+
+    if (!adminPassword || !authSecret) {
+      return NextResponse.json({ success: false, error: 'Server misconfiguration: Authentication secrets not configured' }, { status: 500 });
+    }
     
     if (password !== adminPassword) {
       return NextResponse.json({ success: false, error: 'Incorrect administrative password' }, { status: 401 });
