@@ -2,9 +2,9 @@
  * 🤖 AI PROVIDER — Multi-Model Router
  *
  * Layer 1 Brain (README.md):
- *   qwen3.6          → Sam's reasoning / CEO brain / Stitch UI design
+ *   qwen3            → Sam's reasoning / CEO brain / Stitch UI design
  *   gemma4           → Creative / generative tasks (Flow, Vids, Illuminate, Pomelli)
- *   llama3           → Fast lightweight ops (data, health, simple queries)
+ *   llama3.2:1b      → Fast lightweight ops (data, health, simple queries)
  *   qwen2.5-coder:14b → Code tasks (Jules code review, Tech_Core)
  *
  * Environment routing:
@@ -35,8 +35,9 @@ const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
 
 const OLLAMA_MODELS: Record<OllamaTask, string> = {
   // Primary CEO brain — biggest, smartest
-  sam:       process.env.OLLAMA_MODEL_SAM       || 'qwen3.6',
-  stitch:    process.env.OLLAMA_MODEL_STITCH    || 'qwen3.6',
+  // 'qwen3' is the correct Ollama Hub name (not 'qwen3.6')
+  sam:       process.env.OLLAMA_MODEL_SAM       || 'qwen3',
+  stitch:    process.env.OLLAMA_MODEL_STITCH    || 'qwen3',
 
   // Creative & generative — Google's Gemma
   flow:      process.env.OLLAMA_MODEL_CREATIVE  || 'gemma4',
@@ -48,8 +49,8 @@ const OLLAMA_MODELS: Record<OllamaTask, string> = {
   jules:     process.env.OLLAMA_MODEL_CODE      || 'qwen2.5-coder:14b',
 
   // Fast/lightweight — general ops
-  fast:      process.env.OLLAMA_MODEL_FAST      || 'llama3',
-  default:   process.env.OLLAMA_MODEL_FAST      || 'llama3',
+  fast:      process.env.OLLAMA_MODEL_FAST      || 'llama3.2:1b',
+  default:   process.env.OLLAMA_MODEL_FAST      || 'llama3.2:1b',
 };
 
 /* ── Ollama caller ───────────────────────────────────────────────────────── */
