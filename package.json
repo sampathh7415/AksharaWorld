@@ -21,9 +21,11 @@
     "react-dom": "^19.0.0-rc-0"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@playwright/test": "^1.60.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vercel": "^54.10.2"
   }
 }
