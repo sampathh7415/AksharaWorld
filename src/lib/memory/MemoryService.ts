@@ -3,6 +3,8 @@
  * Inspired by jcode DNA
  */
 
+import { logger } from '../monitoring/logger';
+
 export interface MemoryNode {
   id: string;
   content: string;
@@ -34,7 +36,7 @@ export class MemoryService {
    */
   public async commitToMemory(node: MemoryNode): Promise<void> {
     this.nodes.push(node);
-    console.log(`[MemoryGraph] Committed: ${node.id} - ${node.content.substring(0, 50)}...`);
+    logger.info(`[MemoryGraph] Committed: ${node.id} - ${node.content.substring(0, 50)}...`);
     // Future: Persist to Supabase or Pinecone here
   }
 
