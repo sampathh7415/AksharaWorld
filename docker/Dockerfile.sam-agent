@@ -26,14 +26,14 @@ COPY requirements.txt requirements-sam.txt ./
 RUN pip install --no-cache-dir -r requirements.txt -r requirements-sam.txt
 
 # Install Playwright for browse() tool
-RUN python -m playwright install chromium --with-deps 2>/dev/null || true
+RUN python -m playwright install chromium --with-deps
 
 USER sam
 
 # Copy application code
 COPY --chown=sam:sam sam/ ./sam/
-COPY --chown=sam:sam core/ ./core/ 2>/dev/null || true
-COPY --chown=sam:sam src/ ./src/ 2>/dev/null || true
+COPY --chown=sam:sam core/ ./core/
+COPY --chown=sam:sam src/ ./src/
 
 # Data directory
 RUN mkdir -p /app/sam-data
