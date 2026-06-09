@@ -17,16 +17,20 @@ venv/
 
 # Data — all user data stays local
 data/
+sam-data/
 !services/hwfit/data/
 !services/hwfit/data/hf_models.json
 logs/
 *.log
 *.db
+*.db-wal
+*.db-shm
 *.sqlite
 *.sqlite3
 
 # Node
 node_modules/
+.*node_modules*_ignored/
 services/node_modules/
 services/data/
 
