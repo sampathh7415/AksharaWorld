@@ -5,6 +5,7 @@
 - [ ] Initialize local database files or verification scripts without absolute drive paths.
 - [ ] Validate Node.js and Python environments for Windows PowerShell compatibility.
 - [ ] Run `audit.md` sanity checks.
+- [ ] Register task specification (`SPEC.md`) and execution plan (`PLAN.md`).
 
 ---
 

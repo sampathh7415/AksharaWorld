@@ -30,3 +30,4 @@ To prevent feature creep, the following features and enhancements are **explicit
 * **Frontend Design**: Vanilla CSS (modular, responsive layout components) with clean VibeUI paradigms. No TailwindCSS.
 * **Backend**: FastAPI (Python 3.14) local daemon + SQLite memory + Electron desktop wrapper.
 * **Environment**: Absolute paths like `C:\...` or `G:\...` are prohibited. Use relative paths or ESM-safe URLs.
+* **Documentation**: Clean Vibe-Coding structure using task specification (`SPEC.md`) and execution plan (`PLAN.md`).

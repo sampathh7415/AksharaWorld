@@ -8,6 +8,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as os from 'os';
 import { execSync } from 'child_process';
 
 interface AuditMetrics {
@@ -28,7 +29,7 @@ export class AntigravityHarness {
   constructor() {
     this.outputDir = path.join(process.cwd(), '.code-review-graph');
     this.logPath = path.join(this.outputDir, 'antigravity-diagnostics.json');
-    this.stagingPath = 'C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\node_modules_build';
+    this.stagingPath = path.join(os.homedir(), '.gemini', 'antigravity', 'scratch', 'node_modules_build');
     this.ensureStorage();
   }
 

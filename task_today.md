@@ -3,12 +3,15 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: [e.g. TASK-001]
+* **Task ID**: PATH-RESOLVE-001
 * **Target Files**:
-  - `[File 1 Path]`
-  - `[File 2 Path]`
-* **Focus Goal**: [Description of the single 2-hour focus goal]
-* **Start Time**: [Timestamp]
+  - `src/builtin_mcp.py`
+  - `src/lib/BackupService.ts`
+  - `services/antigravity/agent.ts`
+  - `core/platform_compat.py`
+  - `.vscode/settings.json`
+* **Focus Goal**: Resolve all absolute path violations and package manager/lockfile conflicts permanently.
+* **Start Time**: 2026-06-09T22:18:00+05:30
 
 ---
 
@@ -20,7 +23,7 @@
 ---
 
 ## Checklist for Current Task
-- [ ] Task Setup: Read necessary context without modifying anything.
-- [ ] Task Execution: Perform changes on target files.
-- [ ] Task Verification: Run local tests/sanity checks.
-- [ ] Task Audit: Execute `audit.md` checks.
+- [x] Task Setup: Read necessary context without modifying anything.
+- [x] Task Execution: Perform changes on target files.
+- [x] Task Verification: Run local tests/sanity checks.
+- [x] Task Audit: Execute `audit.md` checks.

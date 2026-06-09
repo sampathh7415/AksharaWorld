@@ -142,8 +142,8 @@ _WINDOWS_BASH_ROOT_ENV_VARS = (
     "LocalAppData",
 )
 _WINDOWS_BASH_DEFAULT_ROOTS = (
-    r"C:\Program Files\Git",
-    r"C:\Program Files (x86)\Git",
+    os.environ.get("SystemDrive", "C:") + "\\Program Files\\Git",
+    os.environ.get("SystemDrive", "C:") + "\\Program Files (x86)\\Git",
 )
 _WINDOWS_BASH_RELATIVE_PATHS = (
     ("bin", "bash.exe"),

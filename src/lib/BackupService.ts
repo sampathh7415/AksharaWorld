@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export class BackupService {
-  private static DRIVE_PATH = 'G:\\My Drive\\Akshara World';
+  private static DRIVE_PATH = ['G:', 'My Drive', 'Akshara World'].join(path.sep);
 
   public static async saveToDrive(folder: string, filename: string, content: string): Promise<void> {
     try {

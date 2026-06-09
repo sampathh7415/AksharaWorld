@@ -28,9 +28,10 @@ def _find_npx() -> str:
         # Minimal-PATH fallbacks: npm's global bin lives under %APPDATA%\npm,
         # and node's installer dir carries npx.cmd alongside node.exe.
         appdata = os.environ.get("APPDATA", os.path.expanduser("~"))
+        program_files = os.environ.get("ProgramFiles") or (os.environ.get("SystemDrive", "C:") + "\\Program Files")
         for candidate in (
             os.path.join(appdata, "npm", "npx.cmd"),
-            r"C:\Program Files\nodejs\npx.cmd",
+            os.path.join(program_files, "nodejs", "npx.cmd"),
         ):
             if os.path.isfile(candidate):
                 return candidate
