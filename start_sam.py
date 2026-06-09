@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
-start_sam.py — One-command Sam launcher.
+start_sam.py -- One-command Sam launcher.
 
 Usage:
     python start_sam.py           # start daemon
@@ -8,11 +9,15 @@ Usage:
     python start_sam.py --check   # check dependencies
     python start_sam.py --voice   # enable voice (requires voice binaries)
 """
+import os, sys
+# Fix Windows cp1252 encoding issues
+os.environ.setdefault('PYTHONIOENCODING', 'utf-8')
+if sys.stdout.encoding and sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 import argparse
-import os
 import subprocess
-import sys
 
 
 def load_env():
@@ -20,8 +25,8 @@ def load_env():
     env_file = "sam.env"
     if not os.path.exists(env_file):
         env_file = "sam.env.example"
-        print(f"⚠️  sam.env not found — using {env_file}")
-        print("   Copy sam.env.example → sam.env and fill in your values.\n")
+        print(f"[WARN] sam.env not found - using {env_file}")
+        print("   Copy sam.env.example -> sam.env and fill in your values.\n")
 
     if os.path.exists(env_file):
         with open(env_file) as f:
@@ -34,7 +39,7 @@ def load_env():
 
 def check_deps():
     """Check that required dependencies are installed."""
-    print("🔍 Checking dependencies…\n")
+    print("[CHECK] Checking dependencies...\n")
 
     required = [
         ("fastapi",        "fastapi"),
@@ -61,35 +66,34 @@ def check_deps():
     for module, pkg, *_ in required:
         try:
             __import__(module)
-            print(f"  ✅ {pkg}")
+            print(f"  [OK] {pkg}")
         except ImportError:
-            print(f"  ❌ {pkg}  →  pip install {pkg}")
+            print(f"  [MISSING] {pkg}  ->  pip install {pkg}")
             all_ok = False
 
-    print("\n📦 Optional dependencies:")
+    print("\n[OPTIONAL] Optional dependencies:")
     for module, pkg, desc in optional:
         try:
             __import__(module)
-            print(f"  ✅ {pkg}  ({desc})")
+            print(f"  [OK] {pkg}  ({desc})")
         except ImportError:
-            print(f"  ⚪ {pkg}  ({desc}) — not installed")
+            print(f"  [SKIP] {pkg}  ({desc}) - not installed")
 
     # Check Ollama
-    print("\n🤖 Checking Ollama…")
+    print("\n[AI] Checking Ollama...")
     ollama_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     try:
-        import urllib.request
+        import urllib.request, json
         with urllib.request.urlopen(f"{ollama_url}/api/tags", timeout=3) as r:
-            import json
             data = json.loads(r.read())
             models = [m["name"] for m in data.get("models", [])]
-            print(f"  ✅ Ollama running @ {ollama_url}")
+            print(f"  [OK] Ollama running @ {ollama_url}")
             if models:
                 print(f"     Available models: {', '.join(models[:5])}")
             else:
-                print(f"  ⚠️  No models found. Run: ollama pull qwen3.6")
+                print(f"  [WARN] No models found. Run: ollama pull qwen3.6")
     except Exception as exc:
-        print(f"  ❌ Ollama not reachable @ {ollama_url}: {exc}")
+        print(f"  [FAIL] Ollama not reachable @ {ollama_url}: {exc}")
         print("     Start with: ollama serve  (or Docker)")
         all_ok = False
 
@@ -109,7 +113,7 @@ def run_tests():
 
 def start_daemon():
     """Start the Sam daemon."""
-    print("🚀 Starting Sam Agent…")
+    print("[LAUNCH] Starting Sam Agent...")
     print(f"   Model: {os.getenv('SAM_MODEL', 'qwen3.6')}")
     print(f"   Port:  {os.getenv('SAM_PORT', '8765')}")
     print(f"   Dashboard: http://localhost:{os.getenv('SAM_PORT', '8765')}/\n")
