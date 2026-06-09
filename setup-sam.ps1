@@ -49,7 +49,8 @@ $packages = @(
     "psutil",
     "langchain",
     "langgraph",
-    "langchain-community"
+    "langchain-community",
+    "fastembed"
 )
 foreach ($pkg in $packages) {
     $result = pip show ($pkg -split "\[")[0] 2>&1
@@ -107,7 +108,7 @@ if ($Start) {
     Write-Host ""
     $env:PYTHONIOENCODING = "utf-8"
     $env:HF_HUB_DISABLE_SYMLINKS = "1"
-    python -m sam.main
+    python start_sam.py
 }
 
 Write-Host ""

@@ -34,7 +34,8 @@ def load_env():
                 line = line.strip()
                 if line and not line.startswith("#") and "=" in line:
                     key, _, val = line.partition("=")
-                    os.environ.setdefault(key.strip(), val.strip())
+                    val_clean = val.partition("#")[0].strip()
+                    os.environ.setdefault(key.strip(), val_clean)
 
 
 def check_deps():
