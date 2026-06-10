@@ -1,22 +1,5 @@
 {
-  "name": "akshara-dashboard",
-  "type": "javascript",
-  "account_id": "",
-  "workers_dev": true,
-  "routes": [],
-  "build": {
-    "command": "npm run build",
-    "cwd": "."
-  },
-  "env": {
-    "production": {
-      "name": "akshara-dashboard-prod",
-      "routes": [
-        {
-          "pattern": "dashboard.aksharaworld.in",
-          "zone_name": "aksharaworld.in"
-        }
-      ]
-    }
-  }
+  "name": "aksharaworld-main",
+  "compatibility_date": "2024-01-01",
+  "pages_build_output_dir": ".next"
 }
