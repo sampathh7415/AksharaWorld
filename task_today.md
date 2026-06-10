@@ -3,11 +3,12 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PHASE-0-NETLIFY-503-FIX
+* **Task ID**: PHASE-0-OLLAMA-PORT-FIX
 * **Target Files**:
-  - `netlify.toml`
-* **Focus Goal**: Fix Netlify 503 error by removing legacy Next.js plugin and updating configurations.
-* **Start Time**: 2026-06-10T05:55:00+05:30
+  - `src/lib/ai/provider.ts`
+  - `.docker/config.json`
+* **Focus Goal**: Stop the native Windows Ollama service, restart Docker Ollama container, prevent native Ollama auto-start, update Sam API URL, and configure Docker MCP.
+* **Start Time**: 2026-06-10T06:15:00+05:30
 
 ---
 
@@ -20,6 +21,6 @@
 
 ## Checklist for Current Task
 - [x] Task Setup: Read necessary context without modifying anything.
-- [x] Task Execution: Perform changes on target files.
-- [/] Task Verification: Run local tests/sanity checks.
+- [/] Task Execution: Perform changes on target files.
+- [ ] Task Verification: Run local tests/sanity checks.
 - [ ] Task Audit: Execute `audit.md` checks.
