@@ -3,13 +3,11 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PHASE-0-PAYMENT-LINKS-FINAL
+* **Task ID**: PHASE-0-NETLIFY-503-FIX
 * **Target Files**:
-  - `src/app/page.tsx`
-  - `src/app/public/products/launch-pilot/page.tsx`
-  - `src/app/public/products/ai-blueprint/page.tsx`
-* **Focus Goal**: Complete all Razorpay payment link configuration for all products and push to main.
-* **Start Time**: 2026-06-09T23:01:00+05:30
+  - `netlify.toml`
+* **Focus Goal**: Fix Netlify 503 error by removing legacy Next.js plugin and updating configurations.
+* **Start Time**: 2026-06-10T05:55:00+05:30
 
 ---
 
@@ -23,5 +21,5 @@
 ## Checklist for Current Task
 - [x] Task Setup: Read necessary context without modifying anything.
 - [x] Task Execution: Perform changes on target files.
-- [x] Task Verification: Run local tests/sanity checks.
-- [x] Task Audit: Execute `audit.md` checks.
+- [/] Task Verification: Run local tests/sanity checks.
+- [ ] Task Audit: Execute `audit.md` checks.
