@@ -18,27 +18,27 @@ export async function initializeDatabase() {
     console.log('[Database] Initializing schema...');
 
     // 1. Approvals table
-    await supabase.rpc('create_approvals_table', {}).catch(() => {
+    await Promise.resolve(supabase.rpc('create_approvals_table', {})).catch(() => {
       console.log('[Database] Approvals table may already exist');
     });
 
     // 2. Transactions cache table
-    await supabase.rpc('create_transactions_table', {}).catch(() => {
+    await Promise.resolve(supabase.rpc('create_transactions_table', {})).catch(() => {
       console.log('[Database] Transactions table may already exist');
     });
 
     // 3. Metrics history table
-    await supabase.rpc('create_metrics_table', {}).catch(() => {
+    await Promise.resolve(supabase.rpc('create_metrics_table', {})).catch(() => {
       console.log('[Database] Metrics table may already exist');
     });
 
     // 4. Chat history table
-    await supabase.rpc('create_chat_table', {}).catch(() => {
+    await Promise.resolve(supabase.rpc('create_chat_table', {})).catch(() => {
       console.log('[Database] Chat table may already exist');
     });
 
     // 5. System events/audit log table
-    await supabase.rpc('create_events_table', {}).catch(() => {
+    await Promise.resolve(supabase.rpc('create_events_table', {})).catch(() => {
       console.log('[Database] Events table may already exist');
     });
 

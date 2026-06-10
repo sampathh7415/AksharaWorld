@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   // ✅ Webpack mode: stable across all environments including Google Drive paths.
@@ -7,6 +8,10 @@ const nextConfig: NextConfig = {
 
   // fs/crypto are Node.js built-ins; excluded from Edge Runtime automatically.
   serverExternalPackages: ['fs', 'crypto'],
+  outputFileTracingRoot: path.resolve(__dirname),
+  experimental: {
+    forceSwcTransforms: true,
+  },
 };
 
 export default nextConfig;

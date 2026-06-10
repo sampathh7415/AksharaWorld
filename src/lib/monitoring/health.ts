@@ -3,7 +3,7 @@
  * Tracks all component statuses and performance metrics
  */
 
-import { executeWithCircuitBreaker, getCircuitStatus } from './circuitBreaker';
+import { executeWithCircuitBreaker, getCircuitStatus } from '../resilience/circuitBreaker';
 
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'critical';

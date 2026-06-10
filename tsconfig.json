@@ -41,6 +41,9 @@
     "agentmemory",
     "sam-brain",
     "sam-brain-api",
-    "antigravity-app"
+    "antigravity-app",
+    "mobile-app",
+    "tests",
+    "scratch"
   ]
 }
