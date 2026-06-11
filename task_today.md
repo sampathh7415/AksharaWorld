@@ -3,16 +3,15 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PHASE-0-FINAL-CLEANUP
+* **Task ID**: PHASE-0-DNS-GA4-STANDARDIZATION
 * **Target Files**:
   - `task_today.md`
-  - `docs/SYSTEM_STATUS.md`
-  - `docs/DASHBOARD_PROGRESS.md`
-  - `src/lib/sam/pipeline.config.ts`
-  - `docs/SOCIAL_MEDIA_STATUS.md`
+  - `src/app/layout.tsx`
+  - `src/lib/analytics.ts`
+  - `src/components/ConsentBanner.tsx`
   - `implementation_plan.md`
-* **Focus Goal**: Complete Phase 0 remaining tasks: GA4 audit, status documentation updates, Sam verifiedTools config, and social media status checklist.
-* **Start Time**: 2026-06-11T06:45:00+05:30
+* **Focus Goal**: Update DNS records for aksharaworld.in to point to Cloudflare Pages, clean up Netlify records, and standardize GA4 variables.
+* **Start Time**: 2026-06-11T06:50:00+05:30
 
 ---
 
