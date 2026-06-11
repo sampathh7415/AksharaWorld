@@ -7,6 +7,7 @@
  * Uses dynamic require for Edge runtime compatibility to avoid filesystem import build crashes.
  */
 
+export const runtime = 'edge';
 import { NextRequest, NextResponse } from 'next/server';
 import { SheetsDb } from '../../../../../lib/google/sheetsDb';
 

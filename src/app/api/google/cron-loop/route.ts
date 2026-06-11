@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { NextRequest, NextResponse } from 'next/server';
 import { SheetsDb } from '../../../../lib/google/sheetsDb';
 import { GoogleAI } from '../../../../lib/google/googleAI';
