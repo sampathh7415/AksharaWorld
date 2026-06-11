@@ -37,5 +37,6 @@
 ## Phase 5: Verification & Reality Check
 - [ ] Run Postman verification sandbox collections.
 - [ ] Trigger EAS local native build profile checks (`eas.json`).
-- [ ] Execute `audit.md` script to catch orphaned assets and path bugs.
+- [x] Execute `audit.md` script to catch orphaned assets and path bugs.
+- [x] Register new files: [pipeline.config.ts](file:///g:/My%20Drive/Antigravity/src/lib/sam/pipeline.config.ts) and [SOCIAL_MEDIA_STATUS.md](file:///g:/My%20Drive/Antigravity/docs/SOCIAL_MEDIA_STATUS.md).
 - [ ] Final commit & push.

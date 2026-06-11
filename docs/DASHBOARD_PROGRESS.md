@@ -16,7 +16,7 @@
 
 ### Framework & Technology
 - **Name**: dashboard
-- **Framework**: Next.js 16.2.6
+- **Framework**: Next.js 15.2.8
 - **React Version**: 19.2.4
 - **Port**: 3000
 - **TypeScript**: ✅ Yes
@@ -127,7 +127,7 @@ Total: 18 endpoint directories ✅
 ✅ Production: Ready for 'npm run build && npm start'
 ✅ Dependencies: 327 packages installed
 ✅ TypeScript: Compiled and ready
-✅ Next.js: v16.2.6 optimized
+✅ Next.js: v15.2.8 optimized
 ```
 
 ### Performance Metrics
@@ -356,7 +356,7 @@ Health Check:      curl http://localhost:3000/api/health
 ## 📊 QUICK STATS
 
 ### Main Dashboard
-- **Framework**: Next.js 16.2.6
+- **Framework**: Next.js 15.2.8
 - **API Endpoints**: 18
 - **AI Departments**: 8
 - **Theme**: LITE MODE ✅

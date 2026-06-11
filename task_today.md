@@ -3,19 +3,16 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PHASE-0-CLOUDFLARE-MIGRATION
+* **Task ID**: PHASE-0-FINAL-CLEANUP
 * **Target Files**:
-  - `netlify.toml`
-  - `.cloudflare/pages.json`
-  - `wrangler.json`
-  - `public/_redirects`
-  - `package.json`
-  - `next.config.ts`
-  - `tsconfig.json`
-  - `src/lib/db/supabase.ts`
-  - `src/lib/monitoring/health.ts`
-* **Focus Goal**: Migrate the project deployment from Netlify to Cloudflare Pages by updating configurations.
-* **Start Time**: 2026-06-10T06:41:00+05:30
+  - `task_today.md`
+  - `docs/SYSTEM_STATUS.md`
+  - `docs/DASHBOARD_PROGRESS.md`
+  - `src/lib/sam/pipeline.config.ts`
+  - `docs/SOCIAL_MEDIA_STATUS.md`
+  - `implementation_plan.md`
+* **Focus Goal**: Complete Phase 0 remaining tasks: GA4 audit, status documentation updates, Sam verifiedTools config, and social media status checklist.
+* **Start Time**: 2026-06-11T06:45:00+05:30
 
 ---
 

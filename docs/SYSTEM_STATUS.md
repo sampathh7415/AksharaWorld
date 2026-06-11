@@ -38,7 +38,7 @@ G:\My Drive\Antigravity\
 │   │   ├── globals.css                 ✓ LITE MODE theme
 │   │   └── layout.tsx
 │   ├── .next/                          ✓ Production build (ready)
-│   ├── next.config.ts                  ✓ Next.js 16 config
+│   ├── next.config.ts                  ✓ Next.js 15.2.8 config
 │   └── package.json                    ✓ Dependencies ready
 │
 ├── 🎨 akshara-world-dashboard/          (Modern Dashboard)
@@ -164,10 +164,11 @@ G:\My Drive\Antigravity\
 | **Gemini API** | Optional | AI | Env: GEMINI_API_KEY |
 | **Supabase** | Optional | Database | Env: NEXT_PUBLIC_SUPABASE_URL |
 | **Clerk Auth** | Optional | Auth | Env: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY |
-| **Telegram Bot** | Awaiting Config | Messaging | /api/telegram |
+| **Telegram Bot** | 100% (message delivered confirmed) | Messaging | /api/telegram |
 | **YouTube API** | Awaiting Config | Publishing | /api/youtube-shorts |
 | **Instagram API** | Awaiting Config | Publishing | /api/instagram-reels |
-| **Razorpay** | Awaiting Config | Payments | /api/razorpay |
+| **Razorpay** | 95% (live keys verified) | Payments | /api/razorpay |
+| **Pipeline Config** | 100% | Config | src/lib/sam/pipeline.config.ts |
 
 ---
 
@@ -199,7 +200,7 @@ POST /api/sam                   ✓ Sam AI chat (with cloud fallback)
 ### Dashboard 1: Main Command Center
 
 **Technology Stack**
-- Framework: Next.js 16.2.6
+- Framework: Next.js 15.2.8
 - Runtime: React 19.2.4
 - Styling: Tailwind CSS v4 + Custom CSS variables
 - API: 15+ RESTful endpoints
