@@ -3,15 +3,16 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PHASE-0-DNS-GA4-STANDARDIZATION
+* **Task ID**: PHASE-0-CLOUDFLARE-BUILD-FIX
 * **Target Files**:
   - `task_today.md`
-  - `src/app/layout.tsx`
-  - `src/lib/analytics.ts`
-  - `src/components/ConsentBanner.tsx`
+  - `wrangler.json`
   - `implementation_plan.md`
-* **Focus Goal**: Update DNS records for aksharaworld.in to point to Cloudflare Pages, clean up Netlify records, and standardize GA4 variables.
-* **Start Time**: 2026-06-11T06:50:00+05:30
+  - `src/app/api/google/ai-jobs/route.ts`
+  - `src/app/api/google/cron-loop/route.ts`
+  - `src/app/api/v1/production-agent/webhook/route.ts`
+* **Focus Goal**: Fix Cloudflare Pages deployment by rebuilding using next-on-pages and deploying .vercel/output/static.
+* **Start Time**: 2026-06-11T07:35:00+05:30
 
 ---
 
