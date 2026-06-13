@@ -72,7 +72,7 @@ export default function ContactPage() {
             {[
               { icon: '✉️', label: 'Email Support', value: 'sampathh7415@gmail.com', href: 'mailto:sampathh7415@gmail.com' },
               { icon: '💼', label: 'Business Inquiries', value: 'admin@aksharaworld.in', href: 'mailto:admin@aksharaworld.in' },
-              { icon: '💬', label: 'Telegram', value: '@Akshara23bot', href: 'https://t.me/Akshara23bot' },
+              { icon: '💬', label: 'Telegram', value: '@Akshu23bot', href: 'https://t.me/Akshu23bot' },
             ].map(item => (
               <a
                 key={item.label}

@@ -51,7 +51,7 @@ Staging/scratch folders (`aksharaworld-staging`, `node_modules_build`, `.gemini\
 - All 5 Razorpay payment links correctly priced and wired
 - `package.json` fixed (Next 15.2.8, React 18, Supabase removed)
 - GA4 verified (`G-QZ4L9XW64F`)
-- Telegram bot (`@Akshara23bot`), Google Sheets webhook, Ollama (5 models), FastAPI (port 8765) — all verified live with real API calls
+- Telegram bot (`@Akshu23bot`), Google Sheets webhook, Ollama (5 models), FastAPI (port 8765) — all verified live with real API calls
 - Pipeline config (`src/lib/sam/pipeline.config.ts`) created — tool routing map
 - 30 stale PRs closed
 - Exposed Razorpay secret removed from `wrangler.toml`, regenerated

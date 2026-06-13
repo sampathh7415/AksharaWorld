@@ -20,7 +20,7 @@ The business must operate at **zero fixed monthly cost**. Never recommend or con
 *   **Email Sending**: Gmail SMTP via free Google Apps Script webhooks (100 daily limit per account).
 *   **System Logs & Transactions**: Appended to Google Sheets database ledger via Apps Script.
 *   **Cloud Edge Routing**: Cloudflare Workers (Free tier: 100,000 requests/day).
-*   **Mobile Alerts & Approvals**: Telegram Bot API (`@Akshara23bot`) — 100% free.
+*   **Mobile Alerts & Approvals**: Telegram Bot API (`@Akshu23bot`) — 100% free.
 *   **E-Commerce Payments**: Razorpay Gateway (2% per transaction fee, no fixed cost).
 *   **Content & Hosting**: Google Blogger (free CMS), YouTube (free media hosting), Vercel/Netlify (free hosting plans).
 

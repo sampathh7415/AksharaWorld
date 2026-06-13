@@ -71,7 +71,7 @@ Implement the following three high-performance automated workflows inside your G
 
 ### 📧 Workflow 2: Automated Lead Auto-Responder
 *   **Task**: Monitor Gmail for incoming customer contact forms and inquiry emails.
-*   **Skill**: Send a polite transactional reply immediately to establish engagement, and send a high-priority alert to the administrator's Telegram bot (`@Akshara23bot`) for human review.
+*   **Skill**: Send a polite transactional reply immediately to establish engagement, and send a high-priority alert to the administrator's Telegram bot (`@Akshu23bot`) for human review.
 *   **Auto-Reply Template**:
     ```text
     Hi, thanks for reaching out to Akshara World. I have received your message and will get back to you within 24 hours with all the details you need.

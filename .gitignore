@@ -10,9 +10,12 @@ venv/
 .venv/
 *.egg
 
-# Environment
+# Environment — ALL secrets must stay local, never committed
 .env
+.env.*
+.env.local
 .env.bak.*
+sam.env
 !.env.example
 
 # Data — all user data stays local

@@ -10,6 +10,6 @@
 | Threads | EXISTS | pending | No |
 | X (Twitter) | EXISTS | pending | No |
 | LinkedIn | NOT CREATED | - | No |
-| Telegram | EXISTS | @Akshara23bot | YES - LIVE |
+| Telegram | EXISTS | @Akshu23bot | YES - LIVE |
 
 LinkedIn creation is a manual step - owner must create at linkedin.com/company/aksharaworld
