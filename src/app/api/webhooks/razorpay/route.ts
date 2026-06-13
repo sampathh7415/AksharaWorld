@@ -103,6 +103,14 @@ export async function POST(req: Request) {
     const method = payment.method || 'N/A'
     const paymentId = payment.id || 'N/A'
 
+    // Map amount to product name
+    const productName: string = (
+      amount === 999     ? 'Resume ATS Optimization Suite' :
+      amount === 2499    ? 'AI Avatar & 3D Character Design' :
+      amount === 1       ? 'Test Payment' :
+      `Unknown Product (₹${amount})`
+    )
+
     if (event === 'payment.captured') {
       await sendTelegram(
         `💰 <b>New Revenue — ₹${amount} received!</b>\n\n` +
@@ -110,10 +118,10 @@ export async function POST(req: Request) {
         `📧 Customer: ${email}\n` +
         `💳 Method: ${method.toUpperCase()}\n` +
         `📅 Date: ${date} ${time} IST\n\n` +
-        `🛒 Product: AI Productivity Blueprint\n` +
-        `✅ Revenue recorded!`
+        `🛒 Product: ${productName}\n` +
+        `✅ Revenue recorded in Sheets!`
       )
-      await logToSheets([date, time, paymentId, email, `₹${amount}`, 'captured'])
+      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'captured'])
     }
 
     if (event === 'payment.failed') {
@@ -122,9 +130,10 @@ export async function POST(req: Request) {
         `🆔 Payment ID: ${paymentId}\n` +
         `📧 Customer: ${email}\n` +
         `💳 Method: ${method.toUpperCase()}\n` +
+        `🛒 Product: ${productName}\n` +
         `📅 Date: ${date} ${time} IST`
       )
-      await logToSheets([date, time, paymentId, email, `₹${amount}`, 'failed'])
+      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'failed'])
     }
 
     if (event === 'payment.refunded') {
@@ -132,10 +141,11 @@ export async function POST(req: Request) {
         `🔄 <b>Payment Refunded</b>\n\n` +
         `🆔 Payment ID: ${paymentId}\n` +
         `📧 Customer: ${email}\n` +
+        `🛒 Product: ${productName}\n` +
         `💵 Refund Amount: ₹${amount}\n` +
         `📅 Date: ${date} ${time} IST`
       )
-      await logToSheets([date, time, paymentId, email, `₹${amount}`, 'refunded'])
+      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'refunded'])
     }
 
     return NextResponse.json({ received: true, event })

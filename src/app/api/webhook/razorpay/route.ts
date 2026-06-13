@@ -74,8 +74,8 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  // Redirect to thank you page
-  const thankyouUrl = new URL('/products/ai-blueprint/thank-you', req.url)
+  // Redirect to generic thank-you page
+  const thankyouUrl = new URL('/public/thank-you', req.url)
   thankyouUrl.searchParams.set('payment_id', paymentId)
   thankyouUrl.searchParams.set('status', status)
 
