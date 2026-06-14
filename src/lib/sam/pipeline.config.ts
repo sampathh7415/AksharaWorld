@@ -34,6 +34,14 @@ export const pipelineConfig = {
       tool: "Google Drive + Razorpay",
       flow: "payment_success -> drive_link_email -> sheets_log",
       status: "pending_first_product"
+    },
+    socialMediaAutomation: {
+      tool: "Meta Graph API + YouTube API + X API + Pinterest API",
+      service: "services/social-media/daily_runner.py",
+      schedule: "daily_7am",
+      platforms: ["instagram", "facebook", "threads", "youtube", "x", "pinterest"],
+      status: "building",
+      contentSource: "docs/INSTAGRAM_CONTENT_WEEK1.md"
     }
   }
 };

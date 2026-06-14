@@ -1,0 +1,7 @@
+# Gmail Bot — gitignore
+tokens/
+credentials.json
+*.json
+__pycache__/
+*.pyc
+.env
