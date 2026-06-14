@@ -128,7 +128,32 @@ Staging/scratch folders (`aksharaworld-staging`, `node_modules_build`, `.gemini\
 | 4.6 | AdSense activated once content threshold met |
 | 4.7 | **Expand beyond hero product** — once Resume ATS has 5-10 reviews, actively market Tier 2/3 products |
 
-**🔒 LOCK CONDITION:** 100+ organic visitors/month, AdSense approved, all 9 platforms (incl. LinkedIn) actively posted to by Sam.
+### Phase 4 Sub-Strategy: Instagram Comment-to-DM Revenue Funnel
+
+**How it works:**
+Sam creates a Reel → posts to Instagram → caption says "Comment BLUEPRINT to get the free guide" → CreatorFlow auto-DMs the Razorpay link → customer pays → Google Drive delivers the PDF → Sam logs the sale to Sheets → Telegram alert fires.
+
+**Products for this funnel:**
+- Resume ATS Mastery Guide (PDF) — ₹299 (lead magnet)
+- Career Acceleration Blueprint (PDF) — ₹499
+- AI Tools for Job Seekers Guide (PDF) — ₹399
+These complement the ₹999 done-for-you service (content → service upsell)
+
+**Tools used (all existing except CreatorFlow):**
+- SearXNG + Brave API + Tavily → Reddit/forum research (already in stack)
+- Ollama qwen3.6 + Gemini API → content writing (already in stack)
+- Google Drive → PDF storage and delivery link (already in stack)
+- Razorpay payment links → checkout (already in stack)
+- Instagram → traffic (account exists)
+- CreatorFlow free tier (500 DMs/month) → NEW, free, add to stack
+
+**Sam's role:**
+- Innovation_Scout extended: weekly Reddit scan for job-seeker pain points
+- Sam drafts e-book content using Gemini/Ollama
+- Sam generates Reel content daily
+- Sam monitors CreatorFlow triggers and logs DM conversions to Sheets
+
+**🔒 LOCK CONDITION:** 100+ organic visitors/month, AdSense approved, all 9 platforms (incl. LinkedIn) actively posted to by Sam. **Additionally:** At least 1 PDF product live on Razorpay, at least 1 CreatorFlow automation active on Instagram, first PDF sale logged in Sheets.
 
 ---
 

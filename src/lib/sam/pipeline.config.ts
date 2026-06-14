@@ -13,6 +13,27 @@ export const pipelineConfig = {
       schedule: "daily_8am",
       output: "telegram_digest",
       status: "live"
+    },
+    instagramFunnel: {
+      tool: "CreatorFlow + Instagram",
+      tier: "free_500_dms_per_month",
+      trigger: "comment_keyword",
+      keyword: "BLUEPRINT",
+      action: "auto_dm_razorpay_link",
+      status: "pending_setup",
+      url: "https://creatorflow.so"
+    },
+    contentResearch: {
+      tool: "SearXNG + Brave + Reddit",
+      purpose: "weekly_pain_point_scan",
+      output: "ebook_draft_via_ollama",
+      schedule: "weekly_sunday_6am",
+      status: "pending_activation"
+    },
+    pdfDelivery: {
+      tool: "Google Drive + Razorpay",
+      flow: "payment_success -> drive_link_email -> sheets_log",
+      status: "pending_first_product"
     }
   }
 };
