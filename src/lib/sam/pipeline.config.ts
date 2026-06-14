@@ -5,6 +5,14 @@ export const pipelineConfig = {
     ollama: { status: "live", models: 5, verified: true },
     fastAPI: { status: "live", port: 8765, verified: true },
     razorpay: { status: "live", mode: "production", verified: true },
-    cloudflarePages: { status: "live", url: "6439de63.aksharaworld-main.pages.dev", verified: true }
+    cloudflarePages: { status: "live", url: "6439de63.aksharaworld-main.pages.dev", verified: true },
+    email: {
+      tool: "Gmail API + Gemini summarization",
+      accounts: 3,
+      handler: "services/email-bot/main.py",
+      schedule: "daily_8am",
+      output: "telegram_digest",
+      status: "live"
+    }
   }
 };

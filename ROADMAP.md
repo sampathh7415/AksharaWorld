@@ -93,6 +93,7 @@ Staging/scratch folders (`aksharaworld-staging`, `node_modules_build`, `.gemini\
 | 2.7 | Generate original Akshara mascot — illustrated character, placed on site as customer guide |
 | 2.8 | Connect Sam to all social media APIs (Meta Graph, YouTube, X, Pinterest, LinkedIn) |
 | 2.9 | Auto-start script — Docker, Ollama, FastAPI daemon launch on Windows boot |
+| 2.10 | Email intelligence — daily Gmail digest (3 accounts) summarized by Gemini, delivered to @Akshu23bot at 8AM | ✅ DONE |
 
 **🔒 LOCK CONDITION:** Heartbeat runs continuously from boot with zero manual start. Sam completes one full order — start to finish — triggered only by a Telegram message. **First 10 Sam-handled orders require owner approval before reaching the customer; order 11+ can be autonomous if the first 10 succeeded.**
 
