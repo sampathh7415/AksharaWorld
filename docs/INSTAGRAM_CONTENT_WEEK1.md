@@ -6,6 +6,143 @@
 
 ---
 
+## DAY 0 — Launch Blessing Post (Publish FIRST — before campaign begins)
+
+> *This is not a sales post. This is the inaugural post — a moment of gratitude and intention.*
+> *Publish this before Day 1 of the BLUEPRINT campaign.*
+
+---
+
+### TASK 3 — Ganesh Vandana (Text Overlay — Opening of Reel)
+
+Display these two lines as the opening text overlay, in Devanagari + English transliteration:
+
+```
+वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।
+निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
+
+Vakratunda Mahakaya Suryakoti Samaprabha
+Nirvighnam Kuru Me Deva Sarvakaryeshu Sarvada
+```
+
+*Meaning: "O Lord with the curved trunk and mighty form, radiant as ten million suns —
+grant me freedom from obstacles in all my endeavours, always."*
+
+**Overlay style notes:**
+- Font: Traditional serif or Devanagari script font (use Noto Serif Devanagari — free on Google Fonts)
+- Colour: Deep gold (#C9A84C) text on dark background, or white on a warm saffron gradient
+- Duration: Show for 4–5 seconds at the start before transitioning to founder frame
+
+---
+
+### TASK 1 — Reel Script & Production Guide (20–30 Seconds)
+
+**Format:** Slow, dignified. No rush. This is a blessing post, not content marketing.
+**Visual style:** Warm, golden tones. Natural light. Clean, respectful.
+
+---
+
+#### Scene 1 — [0–5 sec] | Vandana Overlay
+
+**Visual:** Black or deep saffron background with the Ganesh Vandana text appearing slowly (fade in).
+
+**Audio:** *"Shri Ganesh Stuti"* by MS Subbulakshmi
+*(Free on YouTube Music / available as reuse-allowed audio on Instagram's library — search "Ganesh stuti instrumental")*
+**Alternative free audio:** Search Instagram Reels audio library for:
+- "Jai Ganesh Deva" (instrumental)
+- "Ganpati Bappa" (soft flute version)
+- Any instrumental Bhupali raag (devotional, no lyrics)
+
+**Text overlay:** The Vandana lines (Devanagari + transliteration)
+
+---
+
+#### Scene 2 — [5–15 sec] | Founder on Camera
+
+**Visual:** You, seated calmly. Plain white or light kurta preferred. Warm natural light (morning light from window). AksharaWorld logo visible somewhere in background — subtle, not forced.
+
+**No voiceover needed.** Let the music carry it.
+
+**Text overlays (appear one at a time, slow fade):**
+
+```
+Line 1: "Starting something with purpose."
+Line 2: "AksharaWorld — built for every Indian professional."
+Line 3: "Shubharambha. 🙏"
+```
+
+*(Shubharambha = auspicious beginning — a word that feels natural in both Kannada and Hindi)*
+
+---
+
+#### Scene 3 — [15–25 sec] | Closing Frame
+
+**Visual:** Hold on the AksharaWorld logo (still frame or slow zoom in).
+**Final text overlay:**
+
+```
+"aksharaworld.in"
+"Knowledge. Growth. Opportunity."
+```
+
+**Fade out. Music fades gently.**
+
+---
+
+**Director notes:**
+- Shoot in portrait mode (9:16), 1080p minimum
+- Do NOT use flash or harsh lighting — warm, soft, morning light only
+- No talking required — the text overlays carry the message
+- Keep transitions simple: slow fades, no jump cuts, no fast edits
+- Total duration: 20–25 seconds is ideal. Do not rush.
+- Add auto-captions via Instagram but remove them for this post — the Sanskrit text is the caption
+
+---
+
+### TASK 2 — Instagram Caption
+
+```
+Shubharambha. 🙏
+
+Every great work begins with a blessing.
+
+Today, AksharaWorld takes its first step —
+built with the belief that every Indian professional
+deserves access to the right knowledge, the right tools,
+and the right opportunities.
+
+This is for the first-generation professionals,
+the job seekers, the career switchers,
+the ones who are figuring it out —
+just like I was.
+
+Blessings first. Work always.
+
+Jai Ganesh. 🙏🌼
+
+#GaneshaBlessings #Ganpati #JaiGanesh #AksharaWorld
+#IndianStartup #NewBeginnings #Shubharambha #IndianFounder
+#MadeInIndia #StartupIndia #KarnatakaStartup #BhartiyaUdyami
+#IndianProfessionals #CareerInIndia #DigitalIndia
+#FirstPost #LaunchDay #WithBlessings #Akshara #VandeMatar
+```
+
+**Caption notes:**
+- Opening word "Shubharambha" is the hook — visible before "more" on small screens
+- No product links, no Razorpay, no BLUEPRINT — this is a values post only
+- The closing "Jai Ganesh. 🙏🌼" is the emotional anchor
+- Hashtag mix: devotional (#GaneshaBlessings, #Ganpati, #JaiGanesh) + startup (#IndianStartup, #StartupIndia, #KarnatakaStartup) + audience (#IndianProfessionals, #CareerInIndia) + moment (#FirstPost, #LaunchDay, #NewBeginnings)
+
+---
+
+**Post timing recommendation:**
+- Publish on a Tuesday or Wednesday morning, 7–9 AM IST (Ganesh is traditionally worshipped on Tuesdays)
+- Let this post breathe for 24 hours before Day 1 campaign content goes live
+- Pin this post to your profile after publishing
+
+---
+
+
 ## TASK 1 — Launch Reel Script (15 Seconds)
 
 **Format:** Talking-head, screen-recording your laptop/dashboard in background.  
