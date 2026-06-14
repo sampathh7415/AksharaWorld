@@ -254,4 +254,21 @@ def run():
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    run()
+    import sys
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dry-run', action='store_true')
+    args = parser.parse_args()
+    
+    if args.dry_run:
+        print("[DRY RUN] Would execute daily runner, but skipping actual execution.")
+        try:
+            content = get_today_content()
+            if content:
+                print(f"[DRY RUN] Content to post: Day {content['day']} - {content.get('title', '')}")
+            else:
+                print("[DRY RUN] No content scheduled for today.")
+        except Exception as e:
+            print(f"[DRY RUN] Error loading content: {e}")
+    else:
+        run()
