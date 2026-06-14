@@ -74,6 +74,9 @@ Staging/scratch folders (`aksharaworld-staging`, `node_modules_build`, `.gemini\
 | 1.6 | Deliver first 2-3 orders manually using Ollama (qwen3.6/gemma4) — these become Sam's first training examples |
 | 1.7 | Every delivered order logged in full detail in Sheets |
 
+> **✅ Pipeline status as of June 13:**
+> Webhook pipeline verified: payment.captured + payment.authorized both returning 200 OK as of June 13. Telegram bot migrated to @Akshu23bot. Email bot live at 8AM daily.
+
 **🔒 LOCK CONDITION:** At least one real paid order, legal pages live, fully logged in Sheets, delivered to a real customer.
 
 ---

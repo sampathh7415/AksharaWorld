@@ -2,7 +2,8 @@
 
 | Platform | Status | URL | Sam Connected |
 |----------|--------|-----|---------------|
-| Instagram | EXISTS | pending | No |
+| Instagram | EXISTS | pending | Partial - CreatorFlow connected |
+| CreatorFlow | CONNECTED | app.creatorflow.so | YES - BLUEPRINT automation pending |
 | YouTube | EXISTS | @AksharaAI | No |
 | Facebook | EXISTS | pending | No |
 | WhatsApp Business | EXISTS | +91 9740322413 | Partial |
