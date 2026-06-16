@@ -121,6 +121,16 @@ def route_task(
         result = route_task('creative', 'Write a marketing tagline for AksharaWorld')
     """
     model = MODEL_ROLES.get(task_type.lower(), MODEL_ROLES[DEFAULT_ROLE])
+    available = list_models()
+    if available and model not in available:
+        base_model = model.split(':')[0]
+        match = next((m for m in available if m.startswith(base_model)), None)
+        if match:
+            model = match
+        else:
+            fallback = available[0]
+            print(f"[OllamaRouter] ⚠️ Model {model} not found locally. Falling back to {fallback}.")
+            model = fallback
     print(f"[OllamaRouter] → {task_type} task → {model}")
     return call_ollama(model, prompt, system=system, timeout=timeout)
 

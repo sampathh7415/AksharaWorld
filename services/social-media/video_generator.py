@@ -24,7 +24,7 @@ VIDEOS_DIR  = REPO_ROOT / "assets" / "videos"
 
 # FFmpeg binary (installed via winget)
 _FFMPEG_CANDIDATES = [
-    r"C:\Users\Lenovo\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe",
+    os.path.join(os.environ.get("LOCALAPPDATA", ""), r"Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe"),
     "ffmpeg",  # if on PATH after shell restart
 ]
 
