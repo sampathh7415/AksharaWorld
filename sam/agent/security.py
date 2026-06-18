@@ -236,9 +236,9 @@ class SecurityManager:
     def is_allowed_user(self, user_id: str) -> bool:
         """Return True if `user_id` is in the Telegram allowlist."""
         if not self._allowed_ids:
-            # No whitelist configured → warn and allow (open mode)
-            logger.warning("[Security] No TELEGRAM_ALLOWED_IDS set — allowing all users!")
-            return True
+            # No whitelist configured → block all users
+            logger.warning("[Security] No TELEGRAM_ALLOWED_IDS set — blocking all users!")
+            return False
         return str(user_id) in self._allowed_ids
 
     def assert_allowed_user(self, user_id: str) -> None:
