@@ -49,7 +49,7 @@ except:
 print("\n--- ENVIRONMENT VARIABLES ---")
 env_path = ".env.local"
 if os.path.exists(env_path):
-    with open(env_path) as f:
+    with open(env_path, encoding="utf-8") as f:
         lines = f.readlines()
     configured = []
     missing = []

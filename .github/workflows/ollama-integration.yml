@@ -16,7 +16,7 @@ jobs:
 
       - name: Start Ollama stack
         run: |
-          docker compose -f docker-compose.yml up -d
+          docker compose -f docker-compose.sam.yml up -d ollama
 
       - name: Wait for Ollama to become available
         run: |
@@ -28,7 +28,7 @@ jobs:
             sleep 2
           done
           echo "Ollama did not become ready in time"
-          docker compose -f docker-compose.yml logs ollama || true
+          docker compose -f docker-compose.sam.yml logs ollama || true
           exit 1
 
       - name: Run Python client
@@ -46,4 +46,4 @@ jobs:
       - name: Tear down stack
         if: always()
         run: |
-          docker compose -f docker-compose.yml down || true
+          docker compose -f docker-compose.sam.yml down || true

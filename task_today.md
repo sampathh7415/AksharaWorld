@@ -3,16 +3,14 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: PHASE-0-CLOUDFLARE-BUILD-FIX
+* **Task ID**: META-CREDENTIALS-SETUP
 * **Target Files**:
   - `task_today.md`
-  - `wrangler.json`
-  - `implementation_plan.md`
-  - `src/app/api/google/ai-jobs/route.ts`
-  - `src/app/api/google/cron-loop/route.ts`
-  - `src/app/api/v1/production-agent/webhook/route.ts`
-* **Focus Goal**: Fix Cloudflare Pages deployment by rebuilding using next-on-pages and deploying .vercel/output/static.
-* **Start Time**: 2026-06-11T07:35:00+05:30
+  - `.env.local`
+  - `docs/META_SETUP_GUIDE.md`
+  - `services/social-media/video_generator.py`
+* **Focus Goal**: Get Meta API credentials (Page Access Token, Page ID, Instagram Business Account ID) and save to .env.local, and fix FFmpeg absolute path violation.
+* **Start Time**: 2026-06-14T19:25:00+05:30
 
 ---
 
@@ -24,7 +22,8 @@
 ---
 
 ## Checklist for Current Task
-- [x] Task Setup: Read necessary context without modifying anything.
-- [x] Task Execution: Perform changes on target files.
-- [x] Task Verification: Run local tests/sanity checks.
+- [x] Task Setup: Read necessary context and retrieve short-lived tokens from browser.
+- [x] Task Execution: Fetch Instagram Account ID and generate long-lived token, update `.env.local`.
+- [x] Task Verification: Verify credentials using test scripts.
 - [x] Task Audit: Execute `audit.md` checks.
+
