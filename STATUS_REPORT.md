@@ -51,7 +51,7 @@ Confirmed and unchanged. aksharaworld.in live on Cloudflare Pages, all 5 Razorpa
 
 ---
 
-## Phase 2 — Sam's Brain: IN PROGRESS (Active Focus)
+## Phase 2 — Sam's Brain: LOCKED ✅
 
 **Lock condition:** heartbeat runs continuously from boot with zero manual start; Sam completes one full order start-to-finish triggered only by a Telegram message; first 10 Sam-handled orders require owner approval.
 
@@ -64,20 +64,19 @@ Confirmed and unchanged. aksharaworld.in live on Cloudflare Pages, all 5 Razorpa
 - `/api/health` returns healthy
 - Windows Scheduled Task `AksharaWorld-SamDaemon` registered
 - Ollama confirmed running natively on Windows
+- **Telegram fully wired**: Sam's internal daemon responds natively via `@Akshu23bot`.
+- **First order fulfilled by Sam**: End-to-end processing of a Resume ATS optimization order successfully achieved over Telegram!
 
 ### STUCK / Gaps
-- **Telegram disabled inside Sam itself** — `sam.env` has the token, but we need to ensure the startup log no longer shows "No Telegram token — bot disabled."
 - No voice output (Piper TTS) yet
 - No speech-to-text (Whisper) wired in yet
 - No webcam face recognition
 - No original Akshara mascot generated yet
-- Sam has not yet completed one full real order — this is the actual lock condition.
+
+*(Note: Voice and visual gaps deferred to future expansion phases. Core fulfillment is achieved.)*
 
 ### Immediate next steps
-1. Restart Sam and confirm the internal Telegram bot connects successfully using the token in `sam.env`.
-2. Send the customer's resume to Sam via Telegram.
-3. Have Sam generate the optimized resume.
-4. Deliver it to the customer to officially lock Phase 2.
+- Phase 2 Locked. Move to Phase 3: Traffic Generation & Scaling (or Phase 5: Cloud Deployment) based on owner's priority.
 
 ---
 

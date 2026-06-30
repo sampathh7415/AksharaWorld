@@ -20,8 +20,8 @@
 ---
 
 ## Checklist for Current Task
-- [ ] Confirm Sam's Telegram bot connects successfully on startup.
-- [ ] Forward the customer's resume to Sam via Telegram.
-- [ ] Sam analyzes and generates the optimized resume.
-- [ ] Deliver the result to the customer.
+- [x] Confirm Sam's Telegram bot connects successfully on startup.
+- [x] Forward the customer's resume to Sam via Telegram.
+- [x] Sam analyzes and generates the optimized resume.
+- [x] Deliver the result to the customer.
 
