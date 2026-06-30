@@ -3,14 +3,12 @@
 > **IMPORTANT**: AI agent Sam must refuse to execute code modifications, script executions, or terminal commands unless they directly match/reference the active task specified below.
 
 ## Active Task Window
-* **Task ID**: META-CREDENTIALS-SETUP
+* **Task ID**: SAM-FULFILLMENT-TEST
 * **Target Files**:
-  - `task_today.md`
-  - `.env.local`
-  - `docs/META_SETUP_GUIDE.md`
-  - `services/social-media/video_generator.py`
-* **Focus Goal**: Get Meta API credentials (Page Access Token, Page ID, Instagram Business Account ID) and save to .env.local, and fix FFmpeg absolute path violation.
-* **Start Time**: 2026-06-14T19:25:00+05:30
+  - `sam/main.py`
+  - `sam.env`
+* **Focus Goal**: Have Sam handle the first real customer order (Resume ATS Optimization) end-to-end via Telegram to lock Phase 2.
+* **Start Time**: 2026-06-30T22:00:00+05:30
 
 ---
 
@@ -22,8 +20,8 @@
 ---
 
 ## Checklist for Current Task
-- [x] Task Setup: Read necessary context and retrieve short-lived tokens from browser.
-- [x] Task Execution: Fetch Instagram Account ID and generate long-lived token, update `.env.local`.
-- [x] Task Verification: Verify credentials using test scripts.
-- [x] Task Audit: Execute `audit.md` checks.
+- [ ] Confirm Sam's Telegram bot connects successfully on startup.
+- [ ] Forward the customer's resume to Sam via Telegram.
+- [ ] Sam analyzes and generates the optimized resume.
+- [ ] Deliver the result to the customer.
 
