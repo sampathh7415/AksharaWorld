@@ -189,3 +189,21 @@ Result: Identified and flagged 3 dead webhooks for manual deletion, kept the 1 r
 ---
 
 *(New entries get appended below this line as more steps are verified working)*
+
+---
+
+### 10 Recommended AI Developer MCP Plugins — verified June 30
+What: A validated stack of MCP servers and plugins for full-stack AI development
+How: Integrate the following combination to cover context, documentation, code, and testing:
+1. Serena: Codebase understanding, files, dependencies.
+2. Context7: Latest framework and library documentation.
+3. GitHub MCP: Read repositories, issues, PRs, and code directly.
+4. PostgreSQL MCP: Inspect schemas and analyze databases.
+5. Playwright / Puppeteer MCP: Browser testing, automation, scraping.
+6. Docker MCP: Inspect containers, logs, services.
+7. Sequential Thinking & Memory Bank: Structured reasoning and cross-session context.
+8. Filesystem MCP: Local project files and folders access.
+
+**Best Combination:**
+Serena (Codebase) + Context7 (Docs) + GitHub MCP (Repo) + PostgreSQL MCP (Database) + Playwright MCP (Browser). This covers almost everything needed for full-stack development and matches our environment's goals perfectly.
+Result: A complete feedback loop where the AI can read code, check syntax, push changes, verify data, and visually test the UI.
