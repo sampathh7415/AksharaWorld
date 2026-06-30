@@ -37,27 +37,27 @@ async function hmacSha256Hex(secret: string, data: string): Promise<string> {
     .join('');
 }
 
-async function sendTelegram(text: string) {
-  if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) return
-  await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+async function sendTelegram(text: string, token: string, chatId: string) {
+  if (!token || !chatId) return
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'HTML' }),
+    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
   })
 }
 
-async function logToSheets(row: string[]) {
+async function logToSheets(row: string[], webhookUrl: string, apiKey: string, sheetId: string) {
   // Try Apps Script Webhook first (zero-cost, no API key required)
-  if (APPS_SCRIPT_WEBHOOK_URL) {
+  if (webhookUrl) {
     try {
       const payload = {
         type: 'revenue',
         paymentId: row[2], // row[2] = paymentId
         amount: parseFloat(row[4].replace(/[^\d.]/g, '')), // row[4] = amount
-        status: row[5] || 'captured', // row[5] = status
-        notes: `Customer: ${row[3] || 'N/A'} (Logged via Webhook)` // row[3] = email
+        status: row[6] || 'captured', // row[6] = status (fixed from row[5])
+        notes: `Customer: ${row[3] || 'N/A'} - Product: ${row[5]} (Logged via Webhook)` // row[3] = email, row[5] = productName
       }
-      await fetch(APPS_SCRIPT_WEBHOOK_URL, {
+      await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -69,8 +69,8 @@ async function logToSheets(row: string[]) {
   }
 
   // Fallback to Google Sheets API Key if present
-  if (GOOGLE_SHEETS_API_KEY && GOOGLE_SHEETS_SPREADSHEET_ID) {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_SPREADSHEET_ID}/values/Transactions!A:F:append?valueInputOption=USER_ENTERED&key=${GOOGLE_SHEETS_API_KEY}`
+  if (apiKey && sheetId) {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Transactions!A:G:append?valueInputOption=USER_ENTERED&key=${apiKey}`
     await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -84,8 +84,16 @@ export async function POST(req: Request) {
     const rawBody = await req.text()
     const signature = req.headers.get('x-razorpay-signature') || ''
 
+    // Read environment variables at runtime
+    const telegramToken = process.env.TELEGRAM_TOKEN || ''
+    const telegramChatId = process.env.TELEGRAM_CHAT_ID || ''
+    const razorpaySecret = process.env.RAZORPAY_WEBHOOK_SECRET || 'akshara_secret_2026'
+    const sheetsApiKey = process.env.GOOGLE_SHEETS_API_KEY || ''
+    const sheetsId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID || ''
+    const appsScriptUrl = process.env.APPS_SCRIPT_WEBHOOK_URL || process.env.GOOGLE_SHEETS_WEBHOOK_URL || ''
+
     // Verify Razorpay signature using Edge Web Crypto HMAC helper
-    const expectedSig = await hmacSha256Hex(RAZORPAY_WEBHOOK_SECRET, rawBody);
+    const expectedSig = await hmacSha256Hex(razorpaySecret, rawBody);
 
     if (signature !== expectedSig) {
       console.warn('⚠️ Razorpay Webhook: Signature mismatch')
@@ -119,9 +127,10 @@ export async function POST(req: Request) {
         `💳 Method: ${method.toUpperCase()}\n` +
         `📅 Date: ${date} ${time} IST\n\n` +
         `🛒 Product: ${productName}\n` +
-        `✅ Revenue recorded in Sheets!`
+        `✅ Revenue recorded in Sheets!`,
+        telegramToken, telegramChatId
       )
-      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'captured'])
+      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'captured'], appsScriptUrl, sheetsApiKey, sheetsId)
     }
 
     if (event === 'payment.failed') {
@@ -131,9 +140,10 @@ export async function POST(req: Request) {
         `📧 Customer: ${email}\n` +
         `💳 Method: ${method.toUpperCase()}\n` +
         `🛒 Product: ${productName}\n` +
-        `📅 Date: ${date} ${time} IST`
+        `📅 Date: ${date} ${time} IST`,
+        telegramToken, telegramChatId
       )
-      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'failed'])
+      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'failed'], appsScriptUrl, sheetsApiKey, sheetsId)
     }
 
     if (event === 'payment.refunded') {
@@ -143,9 +153,10 @@ export async function POST(req: Request) {
         `📧 Customer: ${email}\n` +
         `🛒 Product: ${productName}\n` +
         `💵 Refund Amount: ₹${amount}\n` +
-        `📅 Date: ${date} ${time} IST`
+        `📅 Date: ${date} ${time} IST`,
+        telegramToken, telegramChatId
       )
-      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'refunded'])
+      await logToSheets([date, time, paymentId, email, `₹${amount}`, productName, 'refunded'], appsScriptUrl, sheetsApiKey, sheetsId)
     }
 
     return NextResponse.json({ received: true, event })
