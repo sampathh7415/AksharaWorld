@@ -28,6 +28,22 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+# Load environment variables from sam.env if available (needed for direct scheduled task execution)
+def _load_env():
+    env_file = Path(__file__).resolve().parent.parent / "sam.env"
+    if not env_file.exists():
+        env_file = Path("sam.env")
+    if env_file.exists():
+        with open(env_file, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, _, val = line.partition("=")
+                    val_clean = val.partition("#")[0].strip()
+                    os.environ.setdefault(key.strip(), val_clean)
+
+_load_env()
+
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=os.getenv("SAM_LOG_LEVEL", "INFO"),
