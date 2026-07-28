@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* Google Fonts loaded via next/font/google in layout.tsx (self-hosted, zero layout shift) */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
